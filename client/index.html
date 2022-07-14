@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link type="text/css" rel="stylesheet" href="./css/index.css">
+  <script  type="module" src="js/index.js"></script>
+  <script  type="text/javascript" src="./js/geoAPI.js"></script>
+  <script  type="text/javascript" src="./js/controller-copy.js"></script>
+
+</head>
+<body>
+
+<div id="home-container" class="home-container">
+
+  <!--  NAV BAR  -->
+  <nav id="navbar">
+
+    <div id="navbar-container">
+      <ul id="nav-menu">
+        <li class="nav-items"><a href="#" >Home</a></li>
+        <li class="nav-items"><a href="#" >About</a></li>
+        <li class="nav-items"><a href="#" >Contact</a></li>
+      </ul>
+    </div>
+
+  </nav>
+
+
+  <!--  INTRO  -->
+  <div class="intro-container" >
+
+    <div class="intro">
+      <h1>Where on Earth is Waldo?</h1>
+      <p>Welcome! Waldo is on the run and we must catch him before he escapes.
+        Use your geographical knowledge to find Waldo before he escapes!
+      </p>
+      <button class="btn" onclick="setTimeout('start()', 1500)">Help Find Waldo</button>
+      <!-- ADDED setTimeout so all arrays have a chance to be given data into -->
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- INPUTS -->
+<div id="answer-container" class="hide answer-container" >
+
+  <h1>Where's Waldo?</h1>
+
+  <div id="answer-input">
+    <input id="answer-text" class="" type="text" placeholder="Enter Country" onkeypress="onEnter(this)" />
+    <input id="answer-button" class="btn answer-button" type="button" value="Answer"  onclick="answer(this)" />
+    <input id="next-button" class="btn next-button" type="button" value="Next"  onclick="next(this)" />
+    <!--    <button class="btn">Answer</button>-->
+  </div>
+
+</div>
+
+
+<!-- HINT LAYOUT -->
+<!--<div id="hints-div" class="hid hints-div">-->
+
+<div id="hints-container" class="hide hints-container" >
+
+  <!--
+          OLDER
+         <h2>Waldo's Last Known Location</h2>
+
+          <div id="show-hints">
+
+              <input class="btn" type="button" value="Get Hint">
+              <div> Remaining Hints : </div>
+
+          </div>
+
+          <ul id="hints-ul">
+              <li>Hint 1</li>
+              <li>Hint 2</li>
+              <li>Hint 3</li>
+          </ul>-->
+
+  <div id="hints-header">
+
+    <h2 id="location-title-h2">Waldo's Last Known Location</h2>
+
+    <div id="show-hints">
+
+      <input class="btn" type="button" value="Get Hint"  onclick="getHint()">
+      <div id="remaining-hints-div"> Remaining Hints : <span id="remaining-hints-count"></span> </div>
+
+    </div>
+
+  </div>
+
+
+  <div id="hints-div"> </div>
+
+</div>
+
+<!--</div>-->
+
+<div id="sun-background" ></div>
+<div id="moon-background" ></div>
+<!-- WHERE WE'LL BE WRITING THE FUNCTIONALITIES -->
+<!--<script type="text/javascript" src="./js/threejs/OrbitControls.js"></script>-->
+
+<!--<script type="importmap">
+        {
+            "imports": {
+                "OrbitControls":"./js/threejs/OrbitControls.js",
+            }
+        }
+</script>-->
+<!--<script  type="module" src="./js/index.js"></script>-->
+
+</body>
+</html>

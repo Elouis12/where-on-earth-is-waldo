@@ -1,0 +1,60 @@
+1. ISSUE USING THE CDN WITHOUT WEBPACK AND NODE JS ( o use OrbitControls or other core functionalities )
+
+
+      SOLUTION 1 :
+
+         <script type="module">
+
+
+              import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
+
+              import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+
+                // write code here
+          </script>
+
+      SOLUTION 2 :
+
+         <script type="module" src="index.js"></script>
+
+         *inside your index.js file*
+         [
+
+              import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
+
+              import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+
+               // write code here
+
+         ]
+
+
+
+2. OBJECT WAS STRETCHING WHEN SCREEN SIZE CHANGED
+
+        SOLUTION
+            "was using camera.aspectRation instead of camera.aspect"
+
+
+
+3. USING MULTIPLE CDNS
+
+
+    1. import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
+       import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+       import Stats from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/libs/stats.module.js';
+
+    2. import { ACESFilmicToneMapping, import2, import3 } from 'https://cdn.skypack.dev/three@0.141.0';
+
+
+4. SHEEN NOT SHOWING
+
+    SOLUTION :
+
+        change the version of to '0.137'
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.137/build/three.module.js';
+
+
+
+
+5.

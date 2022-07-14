@@ -1,0 +1,61 @@
+GOAL
+
+    _ Learn new tech / stack :
+        * Being someone who's fascinated with tech and learning, this will allow
+          me to force myself to be exposed to new languages / libraries / and software developing
+
+        * allow me to perform an agile like process with this application to get a feel / simulate
+           the real world
+
+    - Personal and Community :
+        * create an interactive application that allows (me and) users
+            to be able to gain more knowledge on geography through an
+            engaging and interactive application.
+
+        * I get overwhelmed by the fact that i
+
+
+    - Portfolio :
+        To show case (new) skills to potential employers and show I have an affinity for learning
+        and applying myself.
+
+AUDIENCE
+
+    - anyone who wants to become better at identifying and learning about
+        geographical locations
+
+
+WHAT DO I WANT TO GET OUT OF THIS PROJECT?
+
+    Maybe I don't suck at programming?
+    Lessen my imposter syndrome?
+
+
+
+
+
+MVP FEATURES
+
+    * 3D Earth ( scrollable, clickable, zoom-able )
+
+    * Have a rough sketch of layout
+
+    * Find API's that consists of information of all countries
+
+    * Be able to show
+
+    * show hints pertaining to appropriate geographical location
+
+    * allow users to show new hints (based on the amount in the database for that location)
+
+
+
+
+
+    FUTURE FEATURES
+
+        * difficulty
+
+        * do more beside countries, ie., regions, landmarks?
+
+        * ability to see images as hints
