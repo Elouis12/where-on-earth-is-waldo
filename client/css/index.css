@@ -367,10 +367,8 @@ body{
         justify-content: center;
         align-items: center;
         color: white;
-        margin: 0 5px 20px 5px;
-        /*background: transparent;*/
+        margin: 0 5px 0px 5px;
         /*background: orange;*/
-
 
     }
 
@@ -399,19 +397,12 @@ body{
     #hints-div{
 
         all: unset;
-        /*position: absolute;*/
-        top: 100%;
-        /*bottom: 0px;*/
         height: 100px;
         display: flex;
         flex-direction: column;
         width: 80%;
         overflow-y: scroll;
-        /*height: 100%;*/
         text-align: center;
-        /*transform: translateY(-50%);*/
-        /*background: blue;*/
-        /*transform: translateY(70%);*/
 
     }
 
