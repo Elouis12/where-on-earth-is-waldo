@@ -16,149 +16,389 @@ import {
     MeshBasicMaterial,
     Vector2,
     DirectionalLight,
-    AmbientLight,
-    PointLight,
     Clock,
     RingGeometry,
     Vector3,
     PlaneGeometry,
     CameraHelper,
     Group,
-    MeshPhongMaterial
-
+    Raycaster,
+    AmbientLight,
+    PointLight
 } from "https://cdn.skypack.dev/three@0.137";
-// import { RGBELoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/RGBELoader";
+import { RGBELoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/RGBELoader";
 import { OrbitControls } from "https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls";
 import { GLTFLoader } from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
 import anime from 'https://cdn.skypack.dev/animejs@3.2.1';
 
 
+/* CLASSES IMPORTS */
+import {countries} from "../data/CountryData.js"
+import {Game} from "./Game.js";
 
-const scene = new Scene();
+
+/*
+    INITIALIZE AND START GAME USING THE GAME CLASS
+*/
+let game = new Game(); // start game
+function startGame(){
+
+
+    document.getElementById("start-button").addEventListener("click", ()=>{
+
+        game.start(); // start the game
+
+    })
+
+
+    document.getElementById("get-hint-button").addEventListener("click", ()=>{
+
+        game.getHint(); // getHint
+
+    })
+
+    document.getElementById("next-button").addEventListener("click", ()=>{
+
+        game.next(); // get next country
+
+    });
+
+}
+
+/*
+    GLOBAL VARIABLES
+*/
+
+let scene,
+    earth,
+    camera,
+    renderer,
+    sunLight,
+    moonLight;
+
+let earthRadius = 10;
+
 
 let sunBackground = document.querySelector(".sun-background");
 let moonBackground = document.querySelector(".moon-background");
 
-const ringsScene = new Scene();
-
-const camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-camera.position.set(0, 15, 50);
-
-const ringsCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-ringsCamera.position.set(0, 0, 50);
-
-// CREATE RENDERER TO THE DOM
-const renderer = new WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(innerWidth, innerHeight);
-renderer.toneMapping = ACESFilmicToneMapping;
-renderer.outputEncoding = sRGBEncoding;
-renderer.physicallyCorrectLights = true;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = PCFSoftShadowMap;
-document.body.appendChild(renderer.domElement);
-
-let earth,
-    controls,
-    sunLight,
-    ambientLight,
-    pointLight,
-    moonLight,
-    ring1,
-    ring2,
-    ring3,
-    cloudMesh
+let countryObjects = []; // to use when raycasting
 
 let mousePos = new Vector2(0,0);
 
-// TEXTURES
-let pmrem = new PMREMGenerator(renderer);
-/*let envmapTexture = await new RGBELoader()
-    .setDataType(FloatType)
-    .loadAsync("assets/old_room_2k.hdr");*/  // thanks to https://polyhaven.com/hdris !
-// let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
-let textures = {
-    // thanks to https://free3d.com/user/ali_alkendi !
-    bump: await new TextureLoader().loadAsync("assets/textures/earthbump.jpg"),
-    map: await new TextureLoader().loadAsync("assets/textures/earthmap.jpg"),
-    spec: await new TextureLoader().loadAsync("assets/textures/earthspec.jpg"),
-    planeTrailMask: await new TextureLoader().loadAsync("assets/textures/trail.png"),
-};
+/*
+    GET X Y Z POSITION FROM THE COUNTRIES LAT AND LONG POSITIONS
+*/
+function calcPosFromLatLonRad(lat,lon,radius){
 
-// Important to know!
-// textures.map.encoding = sRGBEncoding;
-function setObjectsToScene(){
+    let phi   = (90-lat)*(Math.PI/180);
+    let theta = (lon+180)*(Math.PI/180);
+
+    let x = -((radius) * Math.sin(phi)*Math.cos(theta));
+    let z = ((radius) * Math.sin(phi)*Math.sin(theta));
+    let y = ((radius) * Math.cos(phi));
 
 
-    // ADD SUN LIGHT
+    return [x,y,z];
+}
+
+/*
+    ADD THE POINTS TO THE GLOBE
+*/
+async function addPoints(radius){
+
+
+    /* POINT OF INTEREST */
+    let geometry = new SphereGeometry(0.1, 20, 20);
+
+    let material = new MeshBasicMaterial(/*{color: new Color('pink')}*/)
+
+    material.color = new Color( /*`rgb(
+                ${Math.floor( Math.random() * 256 )},
+                ${Math.floor( Math.random() * 256 )},
+                ${Math.floor( Math.random() * 256 )})`*/
+        "white"
+    );
+    let pointOfInterestMesh = new Mesh(geometry, material);
+    pointOfInterestMesh.scale.set(1, 1, 1);
+    material.wireframe = true;
+    // material.side = DoubleSide;
+
+    for( let x = 0; x < countries.length; x+=1 ){
+
+        if( /*coordinates[x].Country === "United States" ||
+            coordinates[x].Country === "France" ||
+            coordinates[x].Country === "Australia"*/ true ){
+
+            let calCoords = calcPosFromLatLonRad( countries[x].latitude, countries[x].longitude, radius );
+
+            let meshClone = pointOfInterestMesh.clone();
+            meshClone.userData.country = countries[x].Country;
+            meshClone.position.set(calCoords[0], calCoords[1], calCoords[2]);
+
+            countryObjects.push(meshClone);
+            earth.add(meshClone);
+
+        }
+
+    }
+}
+
+/*
+    SET RAY CASTERS TO GET OBJECTS / COUNTRIES
+*/
+function setRayCasters(){
+
+
+    // WHEN THE USER CLICKS (THE RIGHT) POINT(S)
+    document.addEventListener("pointerdown", onPointerDown);
+    function onPointerDown(event) {
+
+        event.preventDefault();
+
+        const mouse3D =  new Vector2(
+            event.clientX / window.innerWidth * 2 - 1,
+            -event.clientY / window.innerHeight * 2 + 1
+        );
+
+        const raycaster = new Raycaster();
+
+        raycaster.setFromCamera(mouse3D, camera);
+
+        const intersects = raycaster.intersectObjects(countryObjects);
+
+
+        if (intersects.length > 0 && intersects[0].object.userData.country ) {
+
+            document.body.style.cursor = "pointer"; // make pointer
+            // alert(intersects[0].object.userData.country);
+            let answerPicked = intersects[0].object.userData.country;
+            game.answer( answerPicked );
+
+
+        }else{
+
+            document.body.style.cursor = "default"; // chnage back to default
+
+        }
+    }
+
+    // WHEN THE USER HOVERS OVER A POINT
+    document.addEventListener("pointermove", onPointerMove);
+    function onPointerMove(event) {
+
+        event.preventDefault();
+
+        const mouse3D =  new Vector2(
+            event.clientX / window.innerWidth * 2 - 1,
+            -event.clientY / window.innerHeight * 2 + 1
+        );
+
+        const raycaster = new Raycaster();
+
+        raycaster.setFromCamera(mouse3D, camera);
+
+        const intersects = raycaster.intersectObjects(countryObjects);
+
+
+        if (intersects.length > 0 && intersects[0].object.userData.country ) { // object raycasted was a point
+
+            document.body.style.cursor = "pointer"; // make pointer
+            // intersects[0].object.material.color.setHex("#0066FF");
+
+        }else /*if( intersects.length > 0 ){*/
+
+            document.body.style.cursor = "default"; // change back to default
+            // intersects[0].object.material.color.setHex("#FFFFFF");
+            /*for( let x in countryObjects ){
+
+                x.object.material.color.setHex("#FFFFFF");
+            }
+
+            alert("default")
+
+        }
+            */
+
+    }
+}
+
+function setDay(){
+
+    let daytime = true;
+    let animating = false;
+    document.getElementById("toggle").addEventListener("click", (e) => {
+        if(animating) return;
+
+        let anim = [0, 1];
+
+        if(!daytime) {
+            anim = [1, 0];
+            document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
+
+        } else if(daytime) {
+            anim = [0, 1];
+            document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
+
+        } else {
+            return;
+        }
+
+        animating = true;
+
+        let obj = { t: 0 };
+        anime({
+            targets: obj,
+            t: anim,
+            complete: () => {
+                animating = false;
+                daytime = !daytime;
+            },
+            update: () => {
+                sunLight.intensity = 3.5 * (1-obj.t);
+                moonLight.intensity = 3.5 * obj.t;
+
+                sunLight.position.setY(20 * (1-obj.t));
+                moonLight.position.setY(20 * obj.t);
+
+                earth.material.sheen = (1-obj.t);
+                scene.children.forEach((child) => {
+                    child.traverse((object) => {
+                        if(object instanceof Mesh && object.material.envMap) {
+                            object.material.envMapIntensity = object.sunEnvIntensity * (1-obj.t) + object.moonEnvIntensity * obj.t;
+                        }
+                    });
+                });
+
+                /*ringsScene.children.forEach((child, i) => {
+                    child.traverse((object) => {
+                        object.material.opacity = object.sunOpacity * (1-obj.t) + object.moonOpacity * obj.t;
+                    });
+                });*/
+
+                // sunBackground.style.opacity = 1-obj.t;
+                // moonBackground.style.opacity = obj.t;
+            },
+            easing: 'easeInOutSine',
+            duration: 500,
+        });
+    });
+}
+
+
+
+(async function () {
+
+    startGame();
+    setRayCasters();
+
+    /* SCENE */
+    scene = new Scene();
+
+    /* CAMERA */
+    camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
+    camera.position.set(0, 15, 50);
+
+
+    /* RENDERER */
+    renderer = new WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.toneMapping = ACESFilmicToneMapping;
+    renderer.outputEncoding = sRGBEncoding;
+    renderer.physicallyCorrectLights = true;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
+
+    /* SUN */
     sunLight = new DirectionalLight(
         new Color("#FFFFFF").convertSRGBToLinear(),
-        0.5/*0.2*/,
+        3.5,
     );
-
-    sunLight.position.set(-100, -100, -100/*10, 20, 10*/);
+    sunLight.position.set(10, 20, 10);
     sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 0/*512*/;
-    sunLight.shadow.mapSize.height = 0/*512*/;
-    sunLight.shadow.camera.near =   1/*0.5*/;
-    sunLight.shadow.camera.far = 1/*100*/;
-    sunLight.shadow.camera.left = 1/*-10*/;
-    sunLight.shadow.camera.bottom = 1/*-10*/;
-    sunLight.shadow.camera.top = 1/*10*/;
-    sunLight.shadow.camera.right = 1/*10*/;
-    sunLight.position.set(-100, -100, -100);
-    sunLight.castShadow = true;
-    // scene.add(sunLight);
+    sunLight.shadow.mapSize.width = 512;
+    sunLight.shadow.mapSize.height = 512;
+    sunLight.shadow.camera.near = 0.5;
+    sunLight.shadow.camera.far = 100;
+    sunLight.shadow.camera.left = -10;
+    sunLight.shadow.camera.bottom = -10;
+    sunLight.shadow.camera.top = 10;
+    sunLight.shadow.camera.right = 10;
+    scene.add(sunLight);
 
-
-    // ADD AMBIENT LIGHT
-    ambientLight = new AmbientLight( "#77ccff", 1 ); // shows all the objects
-    scene.add( ambientLight );
-
-    // ADD POINT LIGHT
-    pointLight = new PointLight( "#77ccff", 1 ); // light pointing to the object
-    pointLight.position.set( 5, 3, 5 );
-    // scene.add( pointLight );
-
-
-    // ADD MOONLIGHT
+    /* MOON */
     moonLight = new DirectionalLight(
         new Color("#77ccff").convertSRGBToLinear(),
         0,
     );
-    moonLight.position.set(100, 100, 100);
+    moonLight.position.set(-10, 20, 10);
     moonLight.castShadow = true;
-    moonLight.shadow.mapSize.width = 0/*512*/;
-    moonLight.shadow.mapSize.height = 0/*512*/;
-    moonLight.shadowCameraNear = 1;
-    moonLight.shadowCameraFar = 1;
-    moonLight.shadowCameraLeft = 1;
-    moonLight.shadowCamerBottom = 1;
-    moonLight.shadowCameraTop = 1;
-    moonLight.shadowCameraRight = 1;
+    moonLight.shadow.mapSize.width = 512;
+    moonLight.shadow.mapSize.height = 512;
+    moonLight.shadow.camera.near = 0.5;
+    moonLight.shadow.camera.far = 100;
+    moonLight.shadow.camera.left = -10;
+    moonLight.shadow.camera.bottom = -10;
+    moonLight.shadow.camera.top = 10;
+    moonLight.shadow.camera.right = 10;
     scene.add(moonLight);
 
-    // // Create a helper for the shadow camera (optional)
-    // const helper = new CameraHelper( light.shadow.camera );
-    // scene.add( helper );
+    /*
+        AMBIENT LIGHT
+    */
+    const ambientLight = new AmbientLight( "#77ccff", 1 ); // shows all the objects
+    scene.add( ambientLight );
 
-    // ORBIT CONTROLS
-    controls = new OrbitControls(camera, renderer.domElement);
+    /*
+        POINT LIGHT
+    */
+    const pointLight = new PointLight( "#77ccff", 1 ); // light pointing to the object
+    pointLight.position.set( 5, 3, 5 );
+    // scene.add( pointLight );
+
+
+// // Create a helper for the shadow camera (optional)
+// const helper = new CameraHelper( light.shadow.camera );
+// scene.add( helper );
+
+
+    /* ORBIT CONTROLS */
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
     controls.dampingFactor = 0.05;
     controls.enableDamping = true;
 
+    /* TEXTURES AND LOADERS */
 
+    let hdrFile = "dry_cracked_lake_4k.hdr";
+    let pmrem = new PMREMGenerator(renderer);
+    let envmapTexture = await new RGBELoader()
+        .setDataType(FloatType)
+        .loadAsync(`assets/textures/${hdrFile}`);  // thanks to https://polyhaven.com/hdris !
+    let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
 
-    // ADD EARTH
+    let textures = {
+        // thanks to https://free3d.com/user/ali_alkendi !
+        bump: await new TextureLoader().loadAsync("assets/textures/earthbump.jpg"),
+        map: await new TextureLoader().loadAsync("assets/textures/earthmap.jpg"),
+        spec: await new TextureLoader().loadAsync("assets/textures/earthspec.jpg"),
+        planeTrailMask: await new TextureLoader().loadAsync("assets/textures/trail.png"),
+    };
+
+    // Important to know!
+    // textures.map.encoding = sRGBEncoding;
+
+    /* EARTH */
     earth = new Mesh(
-        new SphereGeometry(10, 70, 70),
+        new SphereGeometry(earthRadius, 70, 70),
         new MeshPhysicalMaterial({
             map: textures.map,
             roughnessMap: textures.spec,
             bumpMap: textures.bump,
-            bumpScale: 0.2 /*0.05*/,
-            // envMap,
+            bumpScale: 0.05,
+            envMap,
             envMapIntensity: 0.4,
             sheen: 1,
             sheenRoughness: 0.75,
@@ -170,31 +410,25 @@ function setObjectsToScene(){
     earth.moonEnvIntensity = 0.1;
     earth.rotation.y += Math.PI * 1.25;
     earth.receiveShadow = true;
+    earth.userData.earth = "earth";
+    countryObjects.push(earth);
     scene.add(earth);
 
+    await addPoints(earthRadius);
+    setDay();
 
-    /* ADD CLOUDS */
-    const cloudGeometry = new SphereGeometry(10.2, 70, 140);
-    const cloudMaterial = new MeshPhongMaterial({
+    /* RINGS */
+    const ringsScene = new Scene();
 
-        map : new TextureLoader().load("./assets/textures/earthCloud.png"),
-        transparent : true
-    });
+    const ringsCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
+    ringsCamera.position.set(0, 0, 50);
 
-    cloudMesh = new Mesh( cloudGeometry, cloudMaterial );
-    cloudMesh.sunEnvIntensity = 0.4;
-    cloudMesh.moonEnvIntensity = 0.1;
-    cloudMesh.rotation.y -= Math.PI;
-    cloudMesh.receiveShadow = true;
-    earth.add( cloudMesh );
-
-    // ADD RINGS
-    ring1 = new Mesh(
+    const ring1 = new Mesh(
         new RingGeometry(15, 13.5, 80, 1, 0),
         new MeshPhysicalMaterial({
             color: new Color("#FFCB8E").convertSRGBToLinear().multiplyScalar(200),
             roughness: 0.25,
-            // envMap,
+            envMap,
             envMapIntensity: 1.8,
             side: DoubleSide,
             transparent: true,
@@ -206,7 +440,7 @@ function setObjectsToScene(){
     ring1.moonOpacity = 0.03;
     // ringsScene.add(ring1);
 
-    ring2 = new Mesh(
+    const ring2 = new Mesh(
         new RingGeometry(16.5, 15.75, 80, 1, 0),
         new MeshBasicMaterial({
             color: new Color("#FFCB8E").convertSRGBToLinear(),
@@ -220,7 +454,7 @@ function setObjectsToScene(){
     ring2.moonOpacity = 0.1;
     // ringsScene.add(ring2);
 
-    ring3 = new Mesh(
+    const ring3 = new Mesh(
         new RingGeometry(18, 17.75, 80),
         new MeshBasicMaterial({
             color: new Color("#FFCB8E").convertSRGBToLinear().multiplyScalar(50),
@@ -234,155 +468,18 @@ function setObjectsToScene(){
     ring3.moonOpacity = 0.03;
     // ringsScene.add(ring3);
 
-    /*let earthGroup = new Group();
-
-    earthGroup.add(sphere);
-    earthGroup.add(ring1);
-    earthGroup.add(ring2);
-    earthGroup.add(ring3);
-
-    scene.add( earthGroup );*/
-
-
-}
-
-function calcPosFromLatLongRad(){
-
-    let phi
-}
-
-
-function addCountryCoord(/*earth, countriesArray, */ longitude, latitude){
-
-    let pointOInterest = new SphereGeometry( .1, 32, 32 );
-
-    let lat = ( latitude ) * (Math.PI/180);
-    let lon = ( longitude ) * (Math.PI/180);
-
-    const radius = 10;
-    const phi = (90-lat) * (Math.PI/180);
-    const theta = (lon+180) * (Math.PI/180);
-
-    let material = new MeshBasicMaterial({
-
-        color : "pink",
-    });
-
-    /*
-        long + 71
-        lat + 71
-    */
-    let mesh =  new Mesh( pointOInterest, material );
-
-    mesh.position.set(
-
-        /*Math.cos(lat) * Math.cos(lon) * radius,
-        Math.sin(lat) * radius,
-        Math.cos(lat) * Math.sin(lon) * radius*/
-
-
-       /* Math.sin(lat) * radius,
-        Math.cos(lat) * Math.cos(lon) * radius,
-        Math.cos(lat) * Math.sin(lon) * radius*/
-
-        -(radius) * ( Math.cos(phi) ) * Math.cos( theta ),
-        (radius) * ( Math.sin(phi) ),
-        (radius) * ( Math.cos(phi) ) * Math.sin(theta)
-    );
-
-    mesh.rotation.set( 0.0, -lon, lat-Math.PI * 0.5 ); // allows it to rotate of that long / lat
-
-
-    mesh.userData.country = "America"; // so when we raycast we can determine if correct
-
-
-    earth.add(mesh)
-
-}
-(async function () {
-
-    await setObjectsToScene(); // sets all the objects we need
-
-    // addCountryCoord(27.6648, 152.5158);
-    // addCountryCoord(107.7783, 190.4179);
-
-    // MAKE PLANES
     // https://sketchfab.com/3d-models/cartoon-plane-f312ec9f87794bdd83630a3bc694d8ea#download
     // "Cartoon Plane" (https://skfb.ly/UOLT) by antonmoek is licensed under Creative Commons Attribution
     // (http://creativecommons.org/licenses/by/4.0/).
     let plane = (await new GLTFLoader().loadAsync("assets/plane/scene.glb")).scene.children[0];
     let planesData = [
-        makePlane(plane, textures.planeTrailMask,/* envMap,*/ scene),
-        makePlane(plane, textures.planeTrailMask,/* envMap,*/ scene),
-        makePlane(plane, textures.planeTrailMask,/* envMap,*/ scene),
-        makePlane(plane, textures.planeTrailMask,/* envMap,*/ scene),
-        makePlane(plane, textures.planeTrailMask,/* envMap,*/ scene),
+        makePlane(plane, textures.planeTrailMask, envMap, scene),
+        makePlane(plane, textures.planeTrailMask, envMap, scene),
+        makePlane(plane, textures.planeTrailMask, envMap, scene),
+        makePlane(plane, textures.planeTrailMask, envMap, scene),
+        makePlane(plane, textures.planeTrailMask, envMap, scene),
     ];
 
-    // ADD METEORITE
-    let meteorite = (await new GLTFLoader().loadAsync("assets/meteorite/scene.gltf")).scene;
-    meteorite.scale.set(0.001, 0.001, 0.001);
-    meteorite.position.set(0,0,0);
-    meteorite.rotation.set(0,0,0);
-    meteorite.updateMatrixWorld();
-    cloudMesh.add(meteorite);
-    /*
-
-        let daytime = true;
-        let animating = false;
-        window.addEventListener("mousemove", (e) => {
-            if(animating) return;
-
-            let anim = [0, 1];
-
-            if(e.clientX > (innerWidth - 200) && !daytime) {
-                anim = [1, 0];
-            } else if(e.clientX < 200 && daytime) {
-                anim = [0, 1];
-            } else {
-                return;
-            }
-
-            animating = true;
-
-            let obj = { t: 0 };
-            anime({
-                targets: obj,
-                t: anim,
-                complete: () => {
-                    animating = false;
-                    daytime = !daytime;
-                },
-                update: () => {
-                    sunLight.intensity = 3.5 * (1-obj.t);
-                    moonLight.intensity = 3.5 * obj.t;
-
-                    sunLight.position.setY(20 * (1-obj.t));
-                    moonLight.position.setY(20 * obj.t);
-
-                    earth.material.sheen = (1-obj.t);
-                    scene.children.forEach((child) => {
-                        child.traverse((object) => {
-                            if(object instanceof Mesh && object.material.envMap) {
-                                object.material.envMapIntensity = object.sunEnvIntensity * (1-obj.t) + object.moonEnvIntensity * obj.t;
-                            }
-                        });
-                    });
-
-                    ringsScene.children.forEach((child, i) => {
-                        child.traverse((object) => {
-                            object.material.opacity = object.sunOpacity * (1-obj.t) + object.moonOpacity * obj.t;
-                        });
-                    });
-
-                    sunBackground.style.opacity = 1-obj.t;
-                    moonBackground.style.opacity = obj.t;
-                },
-                easing: 'easeInOutSine',
-                duration: 500,
-            });
-        });
-    */
 
 
     let clock = new Clock();
@@ -432,21 +529,9 @@ function addCountryCoord(/*earth, countriesArray, */ longitude, latitude){
             plane.rotateOnAxis(new Vector3(1,0,0), +Math.PI * 0.5);
         });
 
-
-        // meteorite.rotation.y += 0.0025;
-        // meteorite.rotateOnAxis(new Vector3(nr(), nr(), nr()).normalize(), Math.random() * Math.PI * 2); // random axis
-        // meteorite.rotateOnAxis(new Vector3(0, 1, 0), Math.PI * 2);    // y-axis rotation
-        // meteorite.rotateOnAxis(new Vector3(0, 0, 1), Math.random() * Math.PI * 0.45 + Math.PI * 0.05);    // this decides the radius
-        // meteorite.translateY(10.5 + Math.random() * 1.0);
-        // meteorite.rotateOnAxis(new Vector3(1,0,0), +Math.PI * 0.5);
-
-
         renderer.autoClear = false;
         renderer.render(ringsScene, ringsCamera);
         renderer.autoClear = true;
-
-        earth.rotation.y += /*Math.PI **/ 0.00125;
-        cloudMesh.rotation.y += /*Math.PI **/ 0.0010;
     });
 })();
 
@@ -454,7 +539,7 @@ function nr() {
     return Math.random() * 2 - 1;
 }
 
-function makePlane(planeMesh, trailTexture, /*envMap,*/ scene) {
+function makePlane(planeMesh, trailTexture, envMap, scene) {
     let plane = planeMesh.clone();
     plane.scale.set(0.001, 0.001, 0.001);
     plane.position.set(0,0,0);
@@ -463,7 +548,7 @@ function makePlane(planeMesh, trailTexture, /*envMap,*/ scene) {
 
     plane.traverse((object) => {
         if(object instanceof Mesh) {
-            // object.material.envMap = envMap;
+            object.material.envMap = envMap;
             object.sunEnvIntensity = 1;
             object.moonEnvIntensity = 0.3;
             object.castShadow = true;
@@ -474,7 +559,7 @@ function makePlane(planeMesh, trailTexture, /*envMap,*/ scene) {
     let trail = new Mesh(
         new PlaneGeometry(1, 2),
         new MeshPhysicalMaterial({
-            // envMap,
+            envMap,
             envMapIntensity: 3,
 
             roughness: 0.4,
@@ -516,14 +601,12 @@ window.addEventListener("mousemove", (e) => {
 });
 
 
-
 function onWindowResize(){ // everytime we call this, it will fit it according to the newly changed size
 
     camera.aspect = window.innerWidth / window.innerHeight; // resets camera
     camera.updateProjectionMatrix(); // update the camera to that
     renderer.setPixelRatio( window.devicePixelRatio ); // take the pixel ratio of the device
     renderer.setSize( window.innerWidth, window.innerHeight ); // resets renderer
-
 
 }
 window.addEventListener( 'resize', onWindowResize )
