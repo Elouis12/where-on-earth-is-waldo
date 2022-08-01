@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Where on Earth is Waldo?</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/toggle.css">
+    <link rel="stylesheet" type="text/css" href="css/settings.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- JS -->
+    <script type="module" src="./js/play.js"></script>
+    <script type="text/javascript" src="./js/settings.js"></script>
+
+</head>
+<body>
+
+
+
+<!--  NAV BAR  -->
+<nav id="navbar">
+
+    <div id="menu-container">
+        <input id="toggle-button"  class="day" type="button" >
+    </div>
+
+    <div id="navbar-container">
+        <ul id="nav-menu">
+            <li class="nav-items" onclick="window.location ='/'">Home</li>
+            <li class="nav-items" onclick="window.location ='/'">About</li>
+            <li class="nav-items" onclick="window.location ='/'">Contact</li>
+        </ul>
+    </div>
+
+</nav>
+
+
+<!-- SETTINGS -->
+<section id="settings-box" class="settings-box">
+
+<!--    <div class="settings-modes-div" >
+
+        &lt;!&ndash;            <label for="touch">&ndash;&gt;
+        <span class="settings-box-title">
+                <span class="settings-mode">Difficulty</span>
+                <span id="settings-difficulty">
+                    <span>Easy | 3 Hints</span>
+                    <span>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </span>
+                </span>
+            </span>
+        &lt;!&ndash;            </label>&ndash;&gt;
+        <input type="checkbox" >&lt;!&ndash;id="touch"&ndash;&gt;
+
+        <ul id="difficulty-ul" class="slide">
+            <li value="0" onclick="changeText(this)">
+                <span>Easy | 3 Hints</span>
+                <div>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                </div>
+            </li>
+            <li value="1" onclick="changeText(this)">
+                <span>Medium | 2 Hints</span>
+                <div>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                </div>
+            </li>
+            <li value="2" onclick="changeText(this)">
+                <span>Hard | 1 Hint</span>
+                <div>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+            </li>
+        </ul>
+    </div>-->
+
+    <div class="settings-modes-div">
+
+        <!--            <label for="touch">-->
+        <span class="settings-box-title">
+                <span class="settings-mode">Game Mode</span>
+                <span id="settings-game-mode">
+                     <span>Hints</span>
+                    <i title="guess the country with limited hints" class="fa-solid fa-magnifying-glass"></i>
+                </span>
+            </span>
+        <!--            </label>-->
+        <input type="checkbox" ><!--id="touch"-->
+
+        <ul id="game-modes-ul" class="slide">
+            <li onclick="changeText(this)">
+                <span>Hints</span>
+                <i title="guess the country with limited hints" class="fa-solid fa-magnifying-glass"></i>
+            </li>
+            <li onclick="changeText(this)">
+                <span>Flags</span>
+                <i class="fa-solid fa-flag"></i>
+            </li>
+            <li onclick="changeText(this)">
+                <span>Countries</span>
+                <i class="fa-solid fa-earth-americas"></i>
+            </li>
+            <li onclick="changeText(this)">
+                <span>Capitals</span>
+                <i class="fa-solid fa-building-columns"></i>
+            </li>
+        </ul>
+    </div>
+
+    <div class="settings-modes-div">
+
+        <!--            <label for="touch">-->
+        <span class="settings-box-title">
+                <span class="settings-mode">Extra Game Mode</span>
+                <span id="settings-extra-game-mode">
+                    <span>Regular</span>
+                    <i class="fa-solid fa-earth-europe"></i>
+                </span>
+            </span>
+        <!--            </label>-->
+        <input type="checkbox" ><!--id="touch"-->
+
+        <ul id="extra-game-modes-ul" class="slide">
+            <li onclick="changeText(this)">
+                <span>Regular</span>
+                <i class="fa-solid fa-earth-europe"></i>
+            </li>
+            <li onclick="changeText(this)">
+                <span>Elimination</span>
+                <i class="fa-solid fa-circle-xmark"></i>
+            </li>
+        </ul>
+    </div>
+<!--    <div class="settings-modes-div">
+
+            <span class="settings-box-title">
+                <span class="settings-mode">Country Count</span>
+                <input size="1" maxlength="3" id="country-count" type="text" value="0" >
+                <span id="country-count-message"></span>
+            </span>
+
+    </div>-->
+
+
+</section>
+
+
+
+<!-- HINTS -->
+<div id="hints-container" class="hints-container hide no-pointer-event" >
+
+  <div id="hints-header" class="no-pointer-event">
+
+    <div id="title-buttons-div" class="no-pointer-event">
+
+
+      <h2 id="location-title-h2">
+        Waldo's Last Known Location
+      </h2>
+
+      <div id="previous-next-button">
+          <input id="previous-button" class="btn previous-button visibilityHidden" type="button" value="Previous"  />
+          <input id="next-button" class="btn next-button" type="button" value="Next"  />
+          <input id="end-button" class="btn end-button" type="button" value="End"  onclick="window.location ='/play'" />
+      </div>
+
+    </div>
+
+
+    <div id="show-hints" class="no-pointer-event">
+
+      <input id="get-hint-button" class="btn" type="button" value="Get Hint">
+      <input id="next-round-button" class="btn hide" type="button" value="Get">
+
+      <div id="remaining-div">
+        <div class="" id="remaining-hints-div"> Remaining Hints : <span id="remaining-hints-count"></span></div>
+        <div id="remaining-countries-div"> Remaining Countries : <span id="remaining-countries-count"></span> </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div id="hints-div"> </div>
+
+</div>
+
+<input id="start-button" class="btn" type="button" value="Find Waldo">
+
+</body>
+</html>

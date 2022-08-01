@@ -1,0 +1,501 @@
+import {GeoAPI} from './GeoAPI.js'
+
+export class Game{
+
+    #countriesQueue = [];
+    #countriesTemp = []; // so we can restart
+    #waldoText = "Waldo Has Escaped! Find Him Again!";
+    #geoAPI  = new GeoAPI();
+    #difficulty; // -3 is how many hints to show
+    #gameMode;
+    #extraGameMode;
+    #countryCount = 4; // max country user can use
+
+
+
+    constructor(){
+
+        this.#initGame();
+
+        // this.#startGame();
+    }
+
+/*
+    INITIALIZE OUR FIELDS
+*/
+    async #initGame(){
+
+        await this.#geoAPI.getAllCountries().then(
+
+            ( countries ) => {
+
+                this.#setCountries( countries ); // get all countries and hints
+            }
+        );
+
+
+    }
+
+/*
+    BRING USER TO START SCREEN
+*/
+     start(){
+
+        let hintsContainer = document.getElementById("hints-container");
+        let navBarContainer = document.getElementById("navbar-container");
+        let settingsSection = document.getElementById("settings-box");
+        let startButton = document.getElementById("start-button");
+
+
+
+        // grab the options
+        //  this.#setDifficulty();
+        //  this.#setCountryCount();
+         this.#setGameMode();
+         this.#setExtraGameMode();
+
+        // find which game mode chosen
+         const gameMode = this.#getGameMode();
+         const extraGameMode = this.getExtraGameMode();
+         // const difficulty = this.#getDifficulty();
+         // const countryCount = this.getCountryCount();
+
+
+/*         if( isNaN(countryCount) || countryCount < 1 || countryCount > this.getCountries().length ){
+
+             let messageParagraph = document.getElementById("country-count-message");
+
+             messageParagraph.innerText = `Count cannot be less than 1 or greater than ${ this.getCountries().length }`;
+             return;
+         }*/
+
+         if( gameMode !== "hints" ){
+
+             const getHintsButton = document.getElementById("get-hint-button");
+             const remainingHintsDiv = document.getElementById("remaining-hints-div");
+
+             getHintsButton.classList.add("hide");
+             remainingHintsDiv.classList.add("hide");
+         }
+
+         // based on the game mode display the according text
+         this.#displayText( gameMode );
+
+         this.#countriesRemaining();
+
+         // display / hide the elements
+         settingsSection.style.visibility = "hidden";
+         startButton.style.visibility = "hidden";
+         hintsContainer.style.display = "flex";
+         navBarContainer.style.visibility = "hidden";
+
+    }
+
+/*  DISPLAYS APPROPRIATE TEXT ACCORDING TO GAME MODE  */
+    #displayText(gameMode){
+
+        let hintsDiv = document.getElementById("hints-div");
+
+        if( this.#countriesQueue.length > 0 ){
+
+            switch ( gameMode ){
+
+                case "countries" :
+                case "elimination" :
+                    hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">Waldo was last seen in ${this.#countriesQueue[0].country }</p>`);
+                    break;
+
+                case "capitals" :
+                    hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">Sources tells us its capital is ${this.#countriesQueue[0].capital }</p>`);
+                    break;
+
+                case "flags" :
+                    // hintsDiv.insertAdjacentHTML("beforeend", `<image class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag }" />`);
+                    hintsDiv.insertAdjacentHTML("beforeend", `<p>Waldo was found carrying this flag <br/><image style="height: 100%; width:100%" class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag}" /></p>`);
+                    break;
+
+                case "hints":
+                    this.#getHint();
+                    break;
+            }
+
+        }
+
+    }
+
+/*
+    PLAYER GAME OPTIONS
+*/
+    #getDifficulty(){ return this.#difficulty; }
+
+    #getGameMode(){ return this.#gameMode; }
+
+    getExtraGameMode(){ return this.#extraGameMode; }
+
+    getCountryCount(){ return this.#countryCount; }
+
+    #setDifficulty(){
+
+         const difficultySpan = document.getElementById("settings-difficulty");
+
+         this.#difficulty = Number(  difficultySpan.innerText.split(" ")[2] ) - 3; // gets 1, 2, 3(easy, medium, hard)
+
+    }
+
+    #setGameMode(){
+
+         const gameModeSpan = document.getElementById("settings-game-mode");
+
+        this.#gameMode =  gameModeSpan.innerText.toLowerCase().split(" ")[0];
+
+    }
+
+    #setExtraGameMode(){
+
+         const extraGameModeSpan = document.getElementById("settings-extra-game-mode");
+
+        this.#extraGameMode =  extraGameModeSpan.innerText.toLowerCase().split(" ")[0];
+
+    }
+
+    #setCountryCount(){
+
+         const countryCountTextBox = document.getElementById("country-count");
+
+        this.#countryCount =  Number( countryCountTextBox.value );
+
+    }
+
+
+/*
+    VALIDATES INPUT
+*/
+    answer(input){
+
+        let hintsDiv = document.getElementById("hints-div");
+
+        let remainingHintsCount = document.getElementById("remaining-hints-count");
+
+        if(  this.#countriesQueue.length > 0 && // countries has more countries to populate
+             input.toLowerCase().trim() === this.#countriesQueue[0].country.toLowerCase() // if there are hints available
+
+            ){
+
+            // empty the div
+            hintsDiv.innerHTML = "";
+
+            // reset hints count
+            remainingHintsCount.innerText = 0;
+
+            // pop from countriesQueue because they got it right
+            this.#countriesQueue.shift();
+
+            // set next round
+            this.#setNextRound();
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+
+/*
+     PREPARES THE ROUND AFTER USER GETS IT CORRECTLY
+*/
+    #setNextRound(){
+
+
+        let nextRoundButton = document.getElementById("next-round-button");
+        let remainingHintsDiv = document.getElementById("remaining-div");
+        let titleAndButtons = document.getElementById("title-buttons-div");
+
+
+
+        nextRoundButton.classList.remove("hide");
+
+        // USER GOT ALL COUNTRIES
+        if( this.getCountries().length === 0 ){
+
+            nextRoundButton.setAttribute("value", "You've Found Waldo in All Countries!");
+
+        // USER GOT A COUNTRY
+        }else{
+
+            nextRoundButton.setAttribute("value", this.#waldoText);
+
+        }
+
+        // HIDE THE ELEMENTS EXCEPT GET HINT BUTTON
+        remainingHintsDiv.classList.add("hide"); // hide hint counter when user gets it right
+        titleAndButtons.classList.add("visibilityHidden"); // hide location title when user gets it right
+
+
+        // REMOVE NEXT BUTTON IF 1 MORE COUNTRY REMAINS
+        if( this.#countriesQueue.length === 1 ){
+
+            document.getElementById("next-button").classList.add("visibilityHidden");
+            document.getElementById("previous-button").classList.add("visibilityHidden");
+
+        // RESTART THE GAME IF ALL COUNTRIES HAVE BEEN USED
+        }else if( this.#countriesQueue.length <= 0 ){
+
+            this.#restart();
+        }
+
+        if( this.#getGameMode() === 'hints' ){
+
+            const getHintButton = document.getElementById("get-hint-button");
+            getHintButton.classList.add("hide");
+        }
+
+
+    }
+
+
+/*
+     SETS THE COUNTRIES FROM DB TO BE USED
+*/
+
+    async #setCountries(countriesData){
+
+        this.#countriesQueue = countriesData.slice(); // now that its set
+        this.#countriesTemp = countriesData.slice(); // now that its set
+
+
+        for( let x = 0; x < this.#countriesQueue.length; x+=1 ){
+
+            await this.#geoAPI.getGeoFacts( this.#countriesQueue[x].country, 3 /*- this.#difficulty*/ ).then( (hints)=>{
+
+                this.#countriesQueue[x]["facts"] = hints; // add facts property to each object
+
+            } );
+
+            if( x+1 === this.#countriesQueue.length ){
+
+                this.#randomize( this.#countriesQueue ); // randomize entire array
+
+            }
+
+        }
+
+
+    }
+
+
+/*
+    PREVIOUS COUNTRY
+*/
+
+    previous(){
+
+        let hintsDiv = document.getElementById("hints-div");
+        hintsDiv.innerHTML = "";
+
+        let country = this.getCountries()[ this.getCountries().length - 1 ] ; // get the last country
+
+        this.getCountries().unshift( country ); // put it in the front
+        this.getCountries().pop(); // remove it
+
+
+        this.#displayText( this.#getGameMode() );
+
+
+        // this.getHint(); // get a new set of hints
+
+    }
+/*
+    NEXT COUNTRY
+*/
+
+    next(){
+
+        const previousButton = document.getElementById("previous-button");
+
+        if( this.#countriesQueue.length > 1 ){
+
+            previousButton.classList.remove("visibilityHidden"); // show previous button
+
+            let hintsDiv = document.getElementById("hints-div");
+            hintsDiv.innerHTML = "";
+
+            let country = this.getCountries().shift(); // get the first country
+
+            this.getCountries().push( country ); // push it to the back
+
+            this.#displayText( this.#getGameMode() );
+
+        }
+
+    }
+
+/*
+    RESTARTS THE GAME
+*/
+    #restart(){
+
+        console.log("queue ", this.getCountries() );
+        console.log("temp ", this.#countriesTemp );
+
+        let hintsDiv = document.getElementById("hints-div");
+        hintsDiv.innerHTML = "";
+
+        this.#countriesQueue = this.#countriesTemp.slice();
+
+        this.#randomize( this.#countriesQueue );
+
+        document.getElementById("next-button").classList.remove("visibilityHidden");
+
+    }
+
+/*
+     ADDS HINT TO LIST OF HINTS
+*/
+    #getHint(){
+
+        let hintsDiv = document.getElementById("hints-div");
+        let remainingHintsCount = document.getElementById("remaining-hints-count");
+
+        // SET HINTS LEFT COUNT
+        remainingHintsCount.innerHTML =
+            hintsDiv.children.length === this.#countriesQueue[0].facts.length ? // hints div is filled up with the facts
+                0 // put 0
+                :
+                ( this.#countriesQueue[0].facts.length - hintsDiv.children.length ) - 1 ; // -1 because we put 1 hint into the div already
+
+
+        remainingHintsCount.style.color ='white';
+
+
+        // set new hint
+        if( this.#countriesQueue.length > 0  &&
+            hintsDiv.children.length < this.#countriesQueue[0].facts.length ){
+
+            hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">${this.#countriesQueue[0].facts[ hintsDiv.children.length ].fact }</p>`);// place a hint inside the hints div
+
+        }
+
+    }
+
+
+    #getNextRound(){
+
+        let nextRoundButton = document.getElementById("next-round-button");
+        let remainingHintsDiv = document.getElementById("remaining-div");
+        let titleAndButtons = document.getElementById("title-buttons-div");
+        let previousButton = document.getElementById("previous-button");
+
+        remainingHintsDiv.classList.remove("hide"); // hide hint counter when user gets it right
+        titleAndButtons.classList.remove("visibilityHidden"); // hide location title when user gets it right
+        nextRoundButton.classList.add("hide");
+        previousButton.classList.add("visibilityHidden");
+
+        // add hints button if game mode is hints
+        if( this.#getGameMode() === 'hints' ){
+
+            const getHintButton = document.getElementById("get-hint-button");
+            getHintButton.classList.remove("hide");
+        }
+
+        // SET COUNTRIES LEFT COUNT
+        this.#countriesRemaining();
+
+        // display the next thing to the div
+        this.#displayText( this.#getGameMode() );
+
+
+    }
+
+    startNextRound(){
+
+        this.#getNextRound();
+    }
+
+/*  COUNTRIES REMAINING */
+    #countriesRemaining(){
+
+        let remainingCountriesCount = document.getElementById("remaining-countries-count");
+
+        remainingCountriesCount.style.color ='white';
+
+        // SET COUNTRIES LEFT COUNT
+        remainingCountriesCount.innerHTML =
+            this.getCountries().length <= 0 ? // hints div is filled up with the facts
+                0 // put 0
+                :
+                this.getCountries().length - 1 ; // -1 because we're always at one country
+
+    }
+
+    getCountries(){
+
+        return this.#countriesQueue;
+    }
+
+
+/*
+    RANDOMIZE ARRAY SO EACH TIME USER GETS DIFFERENT COUNTRY WHEN ACCESSING SITE
+*/
+    #randomize(arr) {
+        var i, j, tmp;
+        for (i = arr.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+        return arr;
+    }
+
+/*
+    ADD FUNCTIONS TO BUTTONS
+*/
+/*
+    #startGame(){
+
+
+        if(
+            document.getElementById("get-hint-button") &&
+            document.getElementById("next-round-button") &&
+            document.getElementById("previous-button") &&
+            document.getElementById("next-button")
+        ){
+
+            document.getElementById("get-hint-button").addEventListener("click", ()=>{
+
+                this.#getHint(); // getHint
+
+            })
+
+            document.getElementById("next-round-button").addEventListener("click", ()=>{
+
+                this.#startNextRound(); // start the next round
+
+            })
+
+            document.getElementById("previous-button").addEventListener("click", ()=>{
+
+                this.#previous(); // get previous country
+
+            });
+
+            document.getElementById("next-button").addEventListener("click", ()=>{
+
+                this.#next(); // get next country
+
+            });
+
+        }
+
+    }*/
+
+}
+
+
+
+
+
+
+
