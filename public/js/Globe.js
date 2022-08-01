@@ -69,6 +69,7 @@ export class Globe {
 
     constructor() {
 
+
         this.#game = new Game();
 
     }
@@ -172,6 +173,8 @@ export class Globe {
 
 
         }
+
+        this.#setRayCasters();
     }
 
 
@@ -200,13 +203,20 @@ export class Globe {
 
                 let answerPicked = intersects[0].object.userData.country;
 
+
+                // console.log(intersects[0].object);
+
                 // REMOVE IT FROM THE SCENE IF GAME MODE IS ELIMINATION
                 if (
                     this.#game.answer(answerPicked) &&
                     this.#game.getExtraGameMode() === "elimination"
                 ) {
 
-                    this.#earth.remove(intersects[0].object);
+
+                    this.#earth.remove( intersects[0].object );
+
+                    this.#earth.remove(this.#earth.children[7]);
+                    console.log(this.#earth.children, " ______")
 
                 // LEAVE IT
                 } else {
@@ -233,13 +243,14 @@ export class Globe {
 
             if (intersects.length > 0 && intersects[0].object.userData.country) {
 
-                intersects[0].object.material.color.setHex(26367);
+                // intersects[0].object.material.color.setHex(26367);
+                intersects[0].object.material.color.setHex(96367);
 
                 document.body.style.cursor = "pointer"; // make pointer
 
             } else {
 
-                document.body.style.cursor = "default"; // chnage back to default
+                document.body.style.cursor = "default"; // change back to default
 
                 this.#countryObjects.forEach((country) => {
 
@@ -265,7 +276,7 @@ export class Globe {
 
         // let daytime = true;
         // let animating = false;
-        document.getElementById("toggle-button").addEventListener("click", (e) => {
+        // document.getElementById("toggle-button").addEventListener("click", (e) => {
 
             let themeButton = document.getElementById("toggle-button");
 
@@ -277,14 +288,18 @@ export class Globe {
             if (!this.#daytime) {
                 anim = [1, 0];
                 document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
-                themeButton.setAttribute("class", "day");
-                themeButton.setAttribute("title", "NIGHT");
+                // themeButton.setAttribute("class", "day");
+                // themeButton.setAttribute("title", "NIGHT");
+
+                window.localStorage.setItem("color", "linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220))");
 
             } else if (this.#daytime) {
                 anim = [0, 1];
                 document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
-                themeButton.setAttribute("class", "night");
-                themeButton.setAttribute("title", "DAY");
+                // themeButton.setAttribute("class", "night");
+                // themeButton.setAttribute("title", "DAY");
+
+                window.localStorage.setItem("color", "linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%)");
 
             } else {
                 return;
@@ -331,7 +346,7 @@ export class Globe {
 
             window.localStorage.setItem("dayTime", this.#daytime);
             window.localStorage.setItem("animating", this.#animating);
-        });
+        // });
 
     }
 
@@ -340,7 +355,10 @@ export class Globe {
 
         this.#daytime = JSON.parse(window.localStorage.getItem("dayTime"));
         this.#animating = !JSON.parse(window.localStorage.getItem("animating"));
+        // this.#animating = !JSON.parse(window.localStorage.getItem("animating"));
 
+        // alert(window.localStorage.getItem("color"))
+        // document.body.style.backgroundColor = window.localStorage.getItem("color");
         document.getElementById("toggle-button").click();
 
     }
@@ -476,11 +494,11 @@ export class Globe {
 
         this.#setDay();
 
-        if (JSON.parse(window.localStorage.getItem("dayTime"))) {
+/*        if (JSON.parse(window.localStorage.getItem("dayTime"))) {
 
 
             this.#loadDay();
-        }
+        }*/
 
 
         /* CLOUDS */

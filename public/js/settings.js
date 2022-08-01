@@ -9,8 +9,10 @@ function changeText(e){
     const difficulty = document.getElementById("difficulty-ul");
     const gameMode = document.getElementById("settings-game-mode").children[0].innerText;
 
+    // UNCOMMENT FOR WHEN PUTTING BACK EXTRA GAME MODE
+
     // put strikethrough on difficulty if user clicked game mode other than hints
-    if(
+  /*  if(
         (
             e.parentElement.getAttribute("id") === "game-modes-ul" &&
             value !== "Hints"
@@ -40,5 +42,5 @@ function changeText(e){
 
         }
     }
-
+*/
 }

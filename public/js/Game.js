@@ -52,7 +52,7 @@ export class Game{
         //  this.#setDifficulty();
         //  this.#setCountryCount();
          this.#setGameMode();
-         this.#setExtraGameMode();
+         // this.#setExtraGameMode();
 
         // find which game mode chosen
          const gameMode = this.#getGameMode();
