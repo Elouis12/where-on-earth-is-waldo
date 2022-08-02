@@ -121,8 +121,8 @@ export class Game{
                     break;
 
                 case "flags" :
-                    // hintsDiv.insertAdjacentHTML("beforeend", `<image class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag }" />`);
-                    hintsDiv.insertAdjacentHTML("beforeend", `<p>Waldo was found carrying this flag <br/><image style="height: 100%; width:100%" class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag}" /></p>`);
+                    hintsDiv.insertAdjacentHTML("beforeend", `<p >Waldo was spotted carrying this flag <br/><image height="100" style="width: 100%;" class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag}" /></p>`);
+                    document.getElementById("hints-div").style.height = "170px";
                     break;
 
                 case "hints":
