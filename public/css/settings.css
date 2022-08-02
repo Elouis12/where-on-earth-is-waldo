@@ -156,11 +156,12 @@ li:hover{
 
     clear:both;
     height:0px;
-    overflow: scroll;
+    overflow-y: scroll;
     text-align: center;
     transition: height .4s ease;
     margin: 0;
     padding: 0;
+    /*position: relative;*/
 }
 
 .slide li {
@@ -168,6 +169,7 @@ li:hover{
     padding : 20px;
     list-style: none;
     cursor: pointer;
+    /*position: relative;*/
 
 }
 
@@ -214,5 +216,19 @@ input[id="country-count"]{
     top: 90%;
     left: 50%;
     transform: translateX(-50%);
+
+}
+
+/*ul*/.slide > li:hover  .settings-info{
+
+    display: block;
+    position: absolute;
+    /*top: 32%;*/
+    top: 32%;
+    right: 0%;
+    width: 100px;
+    transform: translate(100%/*, 50%*/);
+    background: #3a6291;
+    font-size: 10pt;
 
 }

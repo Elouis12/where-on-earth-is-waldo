@@ -102,7 +102,23 @@ export class Globe {
 
             document.getElementById("next-round-button").addEventListener("click", () => {
 
-                this.#game.startNextRound(); // start the next round
+
+                // restart will be called
+                if( this.#game.getCountries().length <= 0 ){ // game is over
+
+                    // will populate country again with random country
+                    this.#game.startNextRound(); // start the next round
+
+                    // add coords according to the populated countries
+                    this.addPoints(this.#game.getCountries(), this.#game.getCountryCount());
+
+                }else{
+
+                    this.#game.startNextRound(); // start the next round
+
+                }
+
+
 
             })
         }
@@ -150,6 +166,21 @@ export class Globe {
     */
     addPoints(countryArray, countryCount) {
 
+        // remove the ones already on the globe
+        if( this.#countryObjects.length > 0 ){
+
+            this.#earth.children = [];
+            /*for( let x = 0; x < this.#earth.children.length; x+=1 ){
+
+                if( this.#earth.children[x].userData.country ){
+
+                    alert("yoo " + this.#earth.children[x].userData.country);
+                    this.#earth.remove( this.#earth.children[x] )
+                }
+            }*/
+
+            this.#countryObjects = []; // reset the country objects array
+        }
 
         /* POINT OF INTEREST */
         let geometry = new SphereGeometry(0.1, 20, 20);
@@ -174,7 +205,7 @@ export class Globe {
 
         }
 
-        this.#setRayCasters();
+        console.log(this.#earth.children)
     }
 
 
@@ -243,8 +274,8 @@ export class Globe {
 
             if (intersects.length > 0 && intersects[0].object.userData.country) {
 
-                // intersects[0].object.material.color.setHex(26367);
-                intersects[0].object.material.color.setHex(96367);
+                intersects[0].object.material.color.setHex(26367);
+                // intersects[0].object.material.color.setHex(96367);
 
                 document.body.style.cursor = "pointer"; // make pointer
 

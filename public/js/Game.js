@@ -33,7 +33,6 @@ export class Game{
             }
         );
 
-
     }
 
 /*
@@ -50,38 +49,50 @@ export class Game{
 
         // grab the options
         //  this.#setDifficulty();
-        //  this.#setCountryCount();
+         this.#setCountryCount();
          this.#setGameMode();
-         // this.#setExtraGameMode();
+         this.#setExtraGameMode();
 
         // find which game mode chosen
          const gameMode = this.#getGameMode();
          const extraGameMode = this.getExtraGameMode();
          // const difficulty = this.#getDifficulty();
-         // const countryCount = this.getCountryCount();
+         const countryCount = this.getCountryCount();
 
 
-/*         if( isNaN(countryCount) || countryCount < 1 || countryCount > this.getCountries().length ){
+         if( isNaN(countryCount) || countryCount < 1 || countryCount > this.getCountries().length ){
 
              let messageParagraph = document.getElementById("country-count-message");
 
              messageParagraph.innerText = `Count cannot be less than 1 or greater than ${ this.getCountries().length }`;
              return;
-         }*/
+         }
 
+
+         // hide get hints and remaining hint count if game mode is not hints
          if( gameMode !== "hints" ){
 
              const getHintsButton = document.getElementById("get-hint-button");
-             const remainingHintsDiv = document.getElementById("remaining-hints-div");
+             const remainingDiv = document.getElementById("remaining-hints-div");
 
              getHintsButton.classList.add("hide");
-             remainingHintsDiv.classList.add("hide");
+             remainingDiv.classList.add("hide");
          }
 
          // based on the game mode display the according text
-         this.#displayText( gameMode );
+         this.#displayTextAccordingToGameMode( gameMode );
 
-         this.#countriesRemaining();
+
+         this.#countriesQueue = this.#countriesQueue.slice( 0, this.getCountryCount() ); // slice the array depending on how many user wanted
+         this.#countriesRemaining(); // sets the remaining countries after slicing it
+
+
+         // remove next button if user only selected 1 country
+         if( this.#countriesQueue.length === 1 ){
+
+             document.getElementById("next-button").classList.add("visibilityHidden");
+         }
+
 
          // display / hide the elements
          settingsSection.style.visibility = "hidden";
@@ -92,7 +103,7 @@ export class Game{
     }
 
 /*  DISPLAYS APPROPRIATE TEXT ACCORDING TO GAME MODE  */
-    #displayText(gameMode){
+    #displayTextAccordingToGameMode(gameMode){
 
         let hintsDiv = document.getElementById("hints-div");
 
@@ -115,7 +126,7 @@ export class Game{
                     break;
 
                 case "hints":
-                    this.#getHint();
+                    this.getHint();
                     break;
             }
 
@@ -209,7 +220,7 @@ export class Game{
 
 
         let nextRoundButton = document.getElementById("next-round-button");
-        let remainingHintsDiv = document.getElementById("remaining-div");
+        let remainingDiv = document.getElementById("remaining-div");
         let titleAndButtons = document.getElementById("title-buttons-div");
 
 
@@ -229,20 +240,16 @@ export class Game{
         }
 
         // HIDE THE ELEMENTS EXCEPT GET HINT BUTTON
-        remainingHintsDiv.classList.add("hide"); // hide hint counter when user gets it right
+        remainingDiv.classList.add("hide"); // hide hint counter when user gets it right
         titleAndButtons.classList.add("visibilityHidden"); // hide location title when user gets it right
 
 
         // REMOVE NEXT BUTTON IF 1 MORE COUNTRY REMAINS
-        if( this.#countriesQueue.length === 1 ){
+        if( this.#countriesQueue.length === 1 ) {
 
             document.getElementById("next-button").classList.add("visibilityHidden");
             document.getElementById("previous-button").classList.add("visibilityHidden");
 
-        // RESTART THE GAME IF ALL COUNTRIES HAVE BEEN USED
-        }else if( this.#countriesQueue.length <= 0 ){
-
-            this.#restart();
         }
 
         if( this.#getGameMode() === 'hints' ){
@@ -300,10 +307,8 @@ export class Game{
         this.getCountries().pop(); // remove it
 
 
-        this.#displayText( this.#getGameMode() );
+        this.#displayTextAccordingToGameMode( this.#getGameMode() );
 
-
-        // this.getHint(); // get a new set of hints
 
     }
 /*
@@ -325,7 +330,7 @@ export class Game{
 
             this.getCountries().push( country ); // push it to the back
 
-            this.#displayText( this.#getGameMode() );
+            this.#displayTextAccordingToGameMode( this.#getGameMode() );
 
         }
 
@@ -336,8 +341,6 @@ export class Game{
 */
     #restart(){
 
-        console.log("queue ", this.getCountries() );
-        console.log("temp ", this.#countriesTemp );
 
         let hintsDiv = document.getElementById("hints-div");
         hintsDiv.innerHTML = "";
@@ -346,14 +349,24 @@ export class Game{
 
         this.#randomize( this.#countriesQueue );
 
+
+        this.#countriesQueue = this.#countriesQueue.slice(0, this.getCountryCount());
+
+
+        // it will be hidden because when 1 remains next button is hidden
         document.getElementById("next-button").classList.remove("visibilityHidden");
 
+        // remove next button if user only selected 1 country
+        if( this.#countriesQueue.length === 1 ){
+
+            document.getElementById("next-button").classList.add("visibilityHidden");
+        }
     }
 
 /*
      ADDS HINT TO LIST OF HINTS
 */
-    #getHint(){
+    getHint(){
 
         let hintsDiv = document.getElementById("hints-div");
         let remainingHintsCount = document.getElementById("remaining-hints-count");
@@ -382,12 +395,18 @@ export class Game{
 
     #getNextRound(){
 
+        // RESTART THE GAME IF ALL COUNTRIES HAVE BEEN USED
+        if( this.#countriesQueue.length <= 0 ){
+
+            this.#restart();
+        }
+
         let nextRoundButton = document.getElementById("next-round-button");
-        let remainingHintsDiv = document.getElementById("remaining-div");
+        let remainingDiv = document.getElementById("remaining-div");
         let titleAndButtons = document.getElementById("title-buttons-div");
         let previousButton = document.getElementById("previous-button");
 
-        remainingHintsDiv.classList.remove("hide"); // hide hint counter when user gets it right
+        remainingDiv.classList.remove("hide"); // hide hint counter when user gets it right
         titleAndButtons.classList.remove("visibilityHidden"); // hide location title when user gets it right
         nextRoundButton.classList.add("hide");
         previousButton.classList.add("visibilityHidden");
@@ -403,7 +422,7 @@ export class Game{
         this.#countriesRemaining();
 
         // display the next thing to the div
-        this.#displayText( this.#getGameMode() );
+        this.#displayTextAccordingToGameMode( this.#getGameMode() );
 
 
     }
@@ -448,48 +467,6 @@ export class Game{
         }
         return arr;
     }
-
-/*
-    ADD FUNCTIONS TO BUTTONS
-*/
-/*
-    #startGame(){
-
-
-        if(
-            document.getElementById("get-hint-button") &&
-            document.getElementById("next-round-button") &&
-            document.getElementById("previous-button") &&
-            document.getElementById("next-button")
-        ){
-
-            document.getElementById("get-hint-button").addEventListener("click", ()=>{
-
-                this.#getHint(); // getHint
-
-            })
-
-            document.getElementById("next-round-button").addEventListener("click", ()=>{
-
-                this.#startNextRound(); // start the next round
-
-            })
-
-            document.getElementById("previous-button").addEventListener("click", ()=>{
-
-                this.#previous(); // get previous country
-
-            });
-
-            document.getElementById("next-button").addEventListener("click", ()=>{
-
-                this.#next(); // get next country
-
-            });
-
-        }
-
-    }*/
 
 }
 
