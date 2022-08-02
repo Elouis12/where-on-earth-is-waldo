@@ -17,6 +17,12 @@ app.get('/', (req, resp)=>{
 */
 
 
+app.get('/about', (req, resp)=>{
+
+    resp.sendFile( path.resolve( __dirname, './public/about.html') );
+})
+
+
 app.get('/play', (req, resp)=>{
 
     resp.sendFile( path.resolve( __dirname, './public/play.html') );

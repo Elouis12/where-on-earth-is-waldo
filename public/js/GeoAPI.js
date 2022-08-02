@@ -57,7 +57,7 @@ export class GeoAPI{
 
         ).then(
 
-            (data) => { countries = data; console/*.log(data)*/ }
+            (data) => { countries = data; /*console.log(data)*/ }
 
         ).catch(
 

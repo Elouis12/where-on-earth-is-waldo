@@ -205,7 +205,6 @@ export class Globe {
 
         }
 
-        console.log(this.#earth.children)
     }
 
 
@@ -235,8 +234,6 @@ export class Globe {
                 let answerPicked = intersects[0].object.userData.country;
 
 
-                // console.log(intersects[0].object);
-
                 // REMOVE IT FROM THE SCENE IF GAME MODE IS ELIMINATION
                 if (
                     this.#game.answer(answerPicked) &&
@@ -247,7 +244,6 @@ export class Globe {
                     this.#earth.remove( intersects[0].object );
 
                     this.#earth.remove(this.#earth.children[7]);
-                    console.log(this.#earth.children, " ______")
 
                 // LEAVE IT
                 } else {
