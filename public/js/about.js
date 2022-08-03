@@ -198,9 +198,9 @@ function setDay(){
 
     // let daytime = true;
     // let animating = false;
-    document.getElementById("toggle-button").addEventListener("click", (e) => {
+    // document.getElementById("toggle-button").addEventListener("click", (e) => {
 
-        let themeButton = document.getElementById("toggle-button");
+        // let themeButton = document.getElementById("toggle-button");
 
 
 
@@ -210,15 +210,15 @@ function setDay(){
 
         if(!daytime) {
             anim = [1, 0];
-            document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
-            themeButton.setAttribute("class", "day");
-            themeButton.setAttribute("title", "NIGHT");
+            // document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
+            // themeButton.setAttribute("class", "day");
+            // themeButton.setAttribute("title", "NIGHT");
 
         } else if(daytime) {
             anim = [0, 1];
-            document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
-            themeButton.setAttribute("class", "night");
-            themeButton.setAttribute("title", "DAY");
+            // document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
+            // themeButton.setAttribute("class", "night");
+            // themeButton.setAttribute("title", "DAY");
 
         } else {
             return;
@@ -265,7 +265,7 @@ function setDay(){
 
         window.localStorage.setItem("dayTime", daytime);
         window.localStorage.setItem("animating", animating);
-    });
+    // });
 
 }
 
@@ -418,9 +418,9 @@ function loadDay(){
     scene.add(earth);
 
     // await addPoints(earthRadius, game.getCountries(), game.getCountryCount());
+    setDay();
 
-
-/*    setDay();
+/*
 
     if( JSON.parse( window.localStorage.getItem("dayTime") ) ){
 

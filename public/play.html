@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/toggle.css">
     <link rel="stylesheet" type="text/css" href="css/settings.css">
+    <link rel="stylesheet" type="text/css" href="css/loader.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -36,7 +37,7 @@
 
 
 <!-- SETTINGS -->
-<section id="settings-box" class="settings-box">
+<section id="settings-box" class="settings-box hide">
 
     <!--    <div class="settings-modes-div" >
 
@@ -162,7 +163,7 @@
 
 
 <!-- HINTS -->
-<div id="hints-container" class="hints-container hide no-pointer-event" >
+<div id="hints-container" class="hints-container hide no-pointer-event hide" >
 
     <div id="hints-header" class="no-pointer-event">
 
@@ -176,7 +177,7 @@
             <div id="previous-next-button">
                 <input id="previous-button" class="btn previous-button visibilityHidden" type="button" value="Previous"  />
                 <input id="next-button" class="btn next-button" type="button" value="Next"  />
-                <input id="end-button" class="btn end-button" type="button" value="End"  onclick="window.location ='/play'" />
+                <input id="end-button" class="end-button" type="button" value="End"  onclick="window.location ='/play'" />
             </div>
 
         </div>
@@ -201,7 +202,11 @@
 
 </div>
 
-<input id="start-button" class="btn" type="button" value="Find Waldo">
+<!-- LOADING SCREEN -->
+
+<div id="loader" class="loader"></div>
+
+<input id="start-button" class="btn hide" type="button" value="Find Waldo">
 
 </body>
 </html>

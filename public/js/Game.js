@@ -112,12 +112,11 @@ export class Game{
             switch ( gameMode ){
 
                 case "countries" :
-                case "elimination" :
-                    hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">Waldo was last seen in ${this.#countriesQueue[0].country }</p>`);
+                    hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">Waldo was last seen in <span class="capital-text">${this.#countriesQueue[0].country }</span></p>`);
                     break;
 
                 case "capitals" :
-                    hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">Sources tells us its capital is ${this.#countriesQueue[0].capital }</p>`);
+                    hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">Sources tells us its capital is <span class="capital-text">${this.#countriesQueue[0].capital } </span></p>`);
                     break;
 
                 case "flags" :

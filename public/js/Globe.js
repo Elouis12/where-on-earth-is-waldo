@@ -45,16 +45,17 @@ import {Game} from "./Game.js";
 
 export class Globe {
 
-    #game;
+    game;
+    // game;
 
     #scene;
-    #earth;
+    earth;
     #camera;
     #renderer;
     #sunLight;
     #moonLight;
 
-    #earthRadius = 10;
+    earthRadius = 10;
 
 
     #sunBackground = document.querySelector(".sun-background");
@@ -70,7 +71,8 @@ export class Globe {
     constructor() {
 
 
-        this.#game = new Game();
+        this.game = new Game();
+
 
     }
 
@@ -81,10 +83,10 @@ export class Globe {
 
             document.getElementById("start-button").addEventListener("click", () => {
 
-                this.#game.start(); // start the game
+                this.game.start(); // start the game
 
                 // add dots
-                this.addPoints(this.#game.getCountries(), this.#game.getCountryCount());
+                this.addPoints(this.game.getCountries(), this.game.getCountryCount());
 
             });
         }
@@ -93,7 +95,7 @@ export class Globe {
 
             document.getElementById("get-hint-button").addEventListener("click", () => {
 
-                this.#game.getHint(); // getHint
+                this.game.getHint(); // getHint
 
             })
         }
@@ -104,17 +106,17 @@ export class Globe {
 
 
                 // restart will be called
-                if( this.#game.getCountries().length <= 0 ){ // game is over
+                if( this.game.getCountries().length <= 0 ){ // game is over
 
                     // will populate country again with random country
-                    this.#game.startNextRound(); // start the next round
+                    this.game.startNextRound(); // start the next round
 
                     // add coords according to the populated countries
-                    this.addPoints(this.#game.getCountries(), this.#game.getCountryCount());
+                    this.addPoints(this.game.getCountries(), this.game.getCountryCount());
 
                 }else{
 
-                    this.#game.startNextRound(); // start the next round
+                    this.game.startNextRound(); // start the next round
 
                 }
 
@@ -127,7 +129,7 @@ export class Globe {
 
             document.getElementById("previous-button").addEventListener("click", () => {
 
-                this.#game.previous(); // get previous country
+                this.game.previous(); // get previous country
 
             });
         }
@@ -136,7 +138,7 @@ export class Globe {
 
             document.getElementById("next-button").addEventListener("click", () => {
 
-                this.#game.next(); // get next country
+                this.game.next(); // get next country
 
             });
         }
@@ -166,18 +168,18 @@ export class Globe {
     */
     addPoints(countryArray, countryCount) {
 
+
+        // user added a count greater than what the array holds
+        if( countryCount > countryArray.length ){
+
+            // entering the loop ill give error, index out of bounds
+            return;
+        }
+
         // remove the ones already on the globe
         if( this.#countryObjects.length > 0 ){
 
-            this.#earth.children = [];
-            /*for( let x = 0; x < this.#earth.children.length; x+=1 ){
-
-                if( this.#earth.children[x].userData.country ){
-
-                    alert("yoo " + this.#earth.children[x].userData.country);
-                    this.#earth.remove( this.#earth.children[x] )
-                }
-            }*/
+            this.earth.children = [];
 
             this.#countryObjects = []; // reset the country objects array
         }
@@ -187,7 +189,7 @@ export class Globe {
 
         for (let x = 0; x < countryCount; x += 1) {
 
-            let calCoords = this.#calcPosFromLatLonRad(Number(countryArray[x].lat), Number(countryArray[x].lon), this.#earthRadius);
+            let calCoords = this.#calcPosFromLatLonRad(Number(countryArray[x].lat), Number(countryArray[x].lon), this.earthRadius);
 
             let material = new MeshBasicMaterial(/*{color: new Color('pink')}*/)
 
@@ -200,7 +202,7 @@ export class Globe {
             pointOfInterestMesh.position.set(calCoords[0], calCoords[1], calCoords[2]);
 
             this.#countryObjects.push(pointOfInterestMesh);
-            this.#earth.add(pointOfInterestMesh);
+            this.earth.add(pointOfInterestMesh);
 
 
         }
@@ -236,19 +238,19 @@ export class Globe {
 
                 // REMOVE IT FROM THE SCENE IF GAME MODE IS ELIMINATION
                 if (
-                    this.#game.answer(answerPicked) &&
-                    this.#game.getExtraGameMode() === "elimination"
+                    this.game.answer(answerPicked) &&
+                    this.game.getExtraGameMode() === "elimination"
                 ) {
 
 
-                    this.#earth.remove( intersects[0].object );
+                    this.earth.remove( intersects[0].object );
 
-                    this.#earth.remove(this.#earth.children[7]);
+                    this.earth.remove(this.earth.children[7]);
 
                 // LEAVE IT
                 } else {
 
-                    this.#game.answer(answerPicked)
+                    this.game.answer(answerPicked)
                 }
             }
         });
@@ -314,7 +316,7 @@ export class Globe {
 
             if (!this.#daytime) {
                 anim = [1, 0];
-                document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
+                // document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
                 // themeButton.setAttribute("class", "day");
                 // themeButton.setAttribute("title", "NIGHT");
 
@@ -322,7 +324,7 @@ export class Globe {
 
             } else if (this.#daytime) {
                 anim = [0, 1];
-                document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
+                // document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
                 // themeButton.setAttribute("class", "night");
                 // themeButton.setAttribute("title", "DAY");
 
@@ -349,7 +351,7 @@ export class Globe {
                     this.#sunLight.position.setY(20 * (1 - obj.t));
                     this.#moonLight.position.setY(20 * obj.t);
 
-                    this.#earth.material.sheen = (1 - obj.t);
+                    this.earth.material.sheen = (1 - obj.t);
                     this.#scene.children.forEach((child) => {
                         child.traverse((object) => {
                             if (object instanceof Mesh && object.material.envMap) {
@@ -413,7 +415,10 @@ export class Globe {
         this.#renderer.physicallyCorrectLights = true;
         this.#renderer.shadowMap.enabled = true;
         this.#renderer.shadowMap.type = PCFSoftShadowMap;
+        // this.#renderer.domElement.style.display = "none"; // hides the canvas
         document.body.appendChild(this.#renderer.domElement);
+        document.getElementsByTagName("CANVAS")[0].style.display = "none";
+
 
 
         /* SUN */
@@ -493,8 +498,8 @@ export class Globe {
 
 
         /* EARTH */
-        this.#earth = new Mesh(
-            new SphereGeometry(this.#earthRadius, 70, 70),
+        this.earth = new Mesh(
+            new SphereGeometry(this.earthRadius, 70, 70),
             new MeshPhysicalMaterial({
                 map: textures.map,
                 roughnessMap: textures.spec,
@@ -508,15 +513,15 @@ export class Globe {
                 clearcoat: 0.5,
             }),
         );
-        this.#earth.sunEnvIntensity = 0.4;
-        this.#earth.moonEnvIntensity = 0.1;
-        this.#earth.rotation.y += Math.PI * 1.25;
-        this.#earth.receiveShadow = true;
-        this.#earth.userData.earth = "earth";
-        this.#countryObjects.push(this.#earth);
-        this.#scene.add(this.#earth);
+        this.earth.sunEnvIntensity = 0.4;
+        this.earth.moonEnvIntensity = 0.1;
+        this.earth.rotation.y += Math.PI * 1.25;
+        this.earth.receiveShadow = true;
+        this.earth.userData.earth = "earth";
+        this.#countryObjects.push(this.earth);
+        this.#scene.add(this.earth);
 
-        await this.addPoints(this.#game.getCountries(), this.#game.getCountryCount());
+        await this.addPoints(this.game.getCountries(), this.game.getCountryCount());
 
 
         this.#setDay();
@@ -543,6 +548,18 @@ export class Globe {
         cloudMesh.rotation.y += Math.PI * 1.25;
         cloudMesh.receiveShadow = true;
         this.#scene.add(cloudMesh);
+
+
+        /* add stars */
+        const starGeometry = new SphereGeometry(80, 140, 140);
+        const starMaterial = new MeshBasicMaterial({ // this material does not interact with light, or light won't affect it
+
+            map : new TextureLoader().load("./assets/textures/galaxy.png"),
+            side: THREE.BackSide
+        });
+
+        const starMesh = new Mesh( starGeometry, starMaterial );
+        this.#scene.add( starMesh );
 
         /* RINGS */
         const ringsScene = new Scene();
@@ -595,9 +612,7 @@ export class Globe {
         ring3.moonOpacity = 0.03;
         // ringsScene.add(ring3);
 
-        // https://sketchfab.com/3d-models/cartoon-plane-f312ec9f87794bdd83630a3bc694d8ea#download
-        // "Cartoon Plane" (https://skfb.ly/UOLT) by antonmoek is licensed under Creative Commons Attribution
-        // (http://creativecommons.org/licenses/by/4.0/).
+
         let plane = (await new GLTFLoader().loadAsync("assets/plane/scene.glb")).scene.children[0];
         let planesData = [
             this.#makePlane(plane, textures.planeTrailMask, envMap, this.#scene),
@@ -613,8 +628,9 @@ export class Globe {
         this.#renderer.setAnimationLoop(() => {
 
             let delta = clock.getDelta();
-            this.#earth.rotation.y += delta * 0.025/*0.05*/;
+            this.earth.rotation.y += delta * 0.025/*0.05*/;
             cloudMesh.rotation.y += delta * 0.05;
+            starMesh.rotation.y -= 0.0002;
 
             controls.update();
             this.#renderer.render(this.#scene, this.#camera);

@@ -133,8 +133,28 @@ li:hover{
     left: 50%;
     width : 50%;
     transform: translate(-50%, -50%);
-    background: #d9d9d9;
+    /*background: #d9d9d9;*/
+    background: #e3e7f3;
+    border-radius: 5px;
+
 }
+
+.settings-modes-div:first-child >.settings-box-title,
+.settings-modes-div:first-child
+{
+
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.settings-modes-div:last-child >.settings-box-title,
+.settings-modes-div:last-child
+{
+
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
 
 .settings-box-title {
     padding : 30px;
@@ -144,6 +164,7 @@ li:hover{
     font-variant : small-caps;
     cursor : pointer;
     display: block;
+
 }
 
 .settings-box-title:not(:last-child)::after {
@@ -176,7 +197,11 @@ li:hover{
 .settings-modes-div{
 
     position: relative;
+    background: #e3e7f3;
+    color: #8395ca;
+
 }
+
 .settings-mode{
 
     position: absolute;
@@ -228,7 +253,11 @@ input[id="country-count"]{
     right: 0%;
     width: 100px;
     transform: translate(100%/*, 50%*/);
-    background: #3a6291;
+    background: #e3e7f3;
+    color: #8395ca;
+    padding: 5px;
     font-size: 10pt;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 
 }

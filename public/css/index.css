@@ -16,9 +16,12 @@ body{
     overflow: hidden;
     font-family: 'poppins', sans-serif;
     /*background: linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));*/
-    background: linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);
+    /*background: linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);*/
 
+    /*background: url("../client/public/assets/textures/galaxy.png");*/
+    background: url("./galaxy.png");
 }
+
 
 
 .btn{
@@ -29,8 +32,10 @@ body{
     border-radius: 3rem;
     font-weight: 500;
     cursor: pointer;
-    background: rgb(0, 114, 255);
-    color: white;
+    /*background: rgb(0, 114, 255);*/
+    /*color: white;*/
+    background: #e3e7f3 /*#e5ecf8*//*#e3e7f3*/;
+    color: #326cc7;
 }
 
 .visibilityHidden{
@@ -47,19 +52,19 @@ body{
     border-radius: 3rem;
     font-weight: 500;
     cursor: pointer;
-    background: #fff;
-    color: rgb(0, 114, 255);
+    background: #f4f7fc;
+    /*color: rgb(0, 114, 255);*/
 }
 
 
-.btn:active{
+/*.btn:active{
 
     color: white;
     background: rgb(0, 114, 255);
     transition-delay: 1000ms;
     transition: all ease-in-out;
 
-}
+}*/
 
 /* NAVBAR */
 
@@ -495,4 +500,42 @@ body{
 
         display: none;
     }
+}
+
+
+.capital-text{
+
+    background: #e3e7f3;
+    padding: 5px;
+    color: #8395ca;
+    border-radius: 5px;
+}
+
+.end-button{
+
+    padding: 0.5rem 1rem;
+    /*margin-top: 2rem;*/
+    border: none;
+    border-radius: 3rem;
+    font-weight: 500;
+    cursor: pointer;
+    /*background: #ff1919;*/
+    /*color: white;*/
+    /*background: #ffefeb;*/
+    /*color: #ff4c4c;*/
+    background: #ff4c4c;
+    color:#ffefeb ;
+}
+.end-button:hover{
+
+    padding: 0.5rem 1rem;
+    /*margin-top: 2rem;*/
+    border: none;
+    border-radius: 3rem;
+    font-weight: 500;
+    cursor: pointer;
+    /*background: #fff;*/
+    /*background: #f4f7fc;*/
+    background: #ff7f7f;
+    /*color: #ff1919;*/
 }
