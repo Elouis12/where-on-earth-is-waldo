@@ -322,7 +322,9 @@ export class Game{
             // SET HINTS
             await this.#geoAPI.getGeoFacts( this.#countriesQueue[x].country, 3 /*- this.#difficulty*/ ).then( (hints)=>{
 
-                this.#countriesQueue[x]["facts"] = hints; // add facts property to each object
+                let randomizedFacts = this.#randomize( hints ); // randomize the facts
+
+                this.#countriesQueue[x]["facts"] = randomizedFacts; // add facts property to each object
 
             } );
 

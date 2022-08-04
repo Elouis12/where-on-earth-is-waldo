@@ -38,6 +38,17 @@ body{
     color: #326cc7;
 }
 
+#get-hint-button{
+
+    background: #326cc7/*#e5ecf8*//*#e3e7f3*/;
+    color: #e3e7f3 ;
+}
+#get-hint-button:hover{
+
+    background: #84A6DD /*#e5ecf8*//*#e3e7f3*/;
+    color: #e3e7f3 ;
+}
+
 .visibilityHidden{
 
     visibility: hidden;
