@@ -17,7 +17,6 @@ export class Game{
 
         this.#initGame();
 
-        // this.#startGame();
     }
 
 /*
@@ -45,7 +44,7 @@ export class Game{
         let settingsSection = document.getElementById("settings-box");
         let startButton = document.getElementById("start-button");
 
-
+         let listOfCountries = document.getElementsByClassName("select-country");
 
         // grab the options
         //  this.#setDifficulty();
@@ -53,14 +52,15 @@ export class Game{
          this.#setGameMode();
          this.#setExtraGameMode();
 
-        // find which game mode chosen
          const gameMode = this.#getGameMode();
-         const extraGameMode = this.getExtraGameMode();
          // const difficulty = this.#getDifficulty();
          const countryCount = this.getCountryCount();
 
 
-         if( isNaN(countryCount) || countryCount < 1 || countryCount > this.getCountries().length ){
+         if(
+             listOfCountries.length <= 0 &&
+             ( isNaN(countryCount) || countryCount < 1 || countryCount > this.getCountries().length )
+         ){
 
              let messageParagraph = document.getElementById("country-count-message");
 
@@ -79,11 +79,22 @@ export class Game{
              remainingDiv.classList.add("hide");
          }
 
+
+         // USE USER SELECTED COUNTRIES
+         if( listOfCountries.length > 0 ){
+
+             this.#customCountryOptions();
+         // USE SELECTED COUNT OF COUNTRIES
+         }else{
+
+             this.#countriesQueue = this.#countriesQueue.slice( 0, this.getCountryCount() ); // slice the array depending on how many countries the user wanted
+
+         }
+
          // based on the game mode display the according text
          this.#displayTextAccordingToGameMode( gameMode );
 
 
-         this.#countriesQueue = this.#countriesQueue.slice( 0, this.getCountryCount() ); // slice the array depending on how many user wanted
          this.#countriesRemaining(); // sets the remaining countries after slicing it
 
 
@@ -173,6 +184,32 @@ export class Game{
          const countryCountTextBox = document.getElementById("country-count");
 
         this.#countryCount =  Number( countryCountTextBox.value );
+
+    }
+
+    #customCountryOptions(){
+
+        let listOfCountries = document.getElementsByClassName("select-country");
+
+        const set = new Set();
+
+        for( let x = 0; x < listOfCountries.length; x+=1 ){
+
+            set.add( listOfCountries[x].children[0].innerText );
+        }
+
+        for( let x = 0; x < this.getCountries().length; x+=1 ){
+
+            if( !set.has( this.getCountries()[x].country ) ){
+
+                this.getCountries()[x] = null;
+            }
+        }
+
+        this.#countriesQueue = this.getCountries().filter( countries =>  countries !== null );
+
+        // save it into temp
+        this.#countriesTemp = this.getCountries().slice();
 
     }
 
@@ -270,9 +307,19 @@ export class Game{
         this.#countriesQueue = countriesData.slice(); // now that its set
         this.#countriesTemp = countriesData.slice(); // now that its set
 
+        const setListToCountries = document.getElementById("country-options-ul");
 
         for( let x = 0; x < this.#countriesQueue.length; x+=1 ){
 
+            // SET COUNTRIES TO LIST IN HTML
+            setListToCountries.insertAdjacentHTML(
+                "beforeend",
+                `<li onclick="selectCountry(this)">
+                        <span >${this.#countriesQueue[x].country}</span>
+                        <i class="fa-solid fa-earth-europe"></i>
+                     </li>`
+            )
+            // SET HINTS
             await this.#geoAPI.getGeoFacts( this.#countriesQueue[x].country, 3 /*- this.#difficulty*/ ).then( (hints)=>{
 
                 this.#countriesQueue[x]["facts"] = hints; // add facts property to each object
@@ -348,9 +395,14 @@ export class Game{
 
         this.#randomize( this.#countriesQueue );
 
+        let listOfCountries = document.getElementsByClassName("select-country");
 
-        this.#countriesQueue = this.#countriesQueue.slice(0, this.getCountryCount());
+        // IN THE EVENT THE USER DID NOT SELECT CUSTOM COUNTRIES AND GAVE A COUNT LIMIT
+        if( listOfCountries.length < 0 ){
 
+            this.#countriesQueue = this.#countriesQueue.slice(0, this.getCountryCount());
+
+        }
 
         // it will be hidden because when 1 remains next button is hidden
         document.getElementById("next-button").classList.remove("visibilityHidden");

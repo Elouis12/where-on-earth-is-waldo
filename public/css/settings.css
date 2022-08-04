@@ -261,3 +261,11 @@ input[id="country-count"]{
     border-bottom-right-radius: 5px;
 
 }
+
+
+.select-country{
+
+  background: #8395ca;
+  color: #e3e7f3 ;
+
+}

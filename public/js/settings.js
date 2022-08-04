@@ -44,3 +44,41 @@ function changeText(e){
     }
 */
 }
+
+
+function selectCountry(e){
+
+    // if it's already select remove it
+    if( e.getAttribute("class") === "select-country" ){
+
+        e.classList.remove("select-country");
+        // e.children[0].classList.remove("country-selected"); // remove country-selected class to it so we make sure we grab all the ones the user wanted
+
+    }else{
+
+        e.classList.add("select-country");
+        // e.children[0].classList.add("country-selected"); // add country-selected class to the span so we can grab all the ones clicked on
+
+    }
+
+    // if any country is selected
+    // disabled country count box
+
+    const listOfCountries = document.getElementsByClassName("select-country");
+    const countryInputBox = document.getElementById("country-count");
+
+    if( listOfCountries.length > 0 ){
+
+        countryInputBox.disabled = true;
+        countryInputBox.style.cursor = "not-allowed"
+        countryInputBox.style.opacity = "0.2";
+
+    }else{
+
+        countryInputBox.disabled = false;
+        countryInputBox.style.cursor = "text"
+        countryInputBox.style.opacity = "1";
+
+    }
+
+}

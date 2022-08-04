@@ -184,10 +184,14 @@ export class Globe {
             this.#countryObjects = []; // reset the country objects array
         }
 
+        const listOfCountries = document.getElementsByClassName("select-country");
+        const count = listOfCountries.length > 0 ? this.game.getCountries().length : countryCount;
+
+
         /* POINT OF INTEREST */
         let geometry = new SphereGeometry(0.1, 20, 20);
 
-        for (let x = 0; x < countryCount; x += 1) {
+        for (let x = 0; x < count; x += 1) {
 
             let calCoords = this.#calcPosFromLatLonRad(Number(countryArray[x].lat), Number(countryArray[x].lon), this.earthRadius);
 
@@ -272,7 +276,8 @@ export class Globe {
 
             if (intersects.length > 0 && intersects[0].object.userData.country) {
 
-                intersects[0].object.material.color.setHex(26367);
+                // intersects[0].object.material.color.setHex(26367);
+                intersects[0].object.material.color.setHex(6650814);
                 // intersects[0].object.material.color.setHex(96367);
 
                 document.body.style.cursor = "pointer"; // make pointer
@@ -285,7 +290,7 @@ export class Globe {
 
                     if (country.userData.country) { // if it is a country because we also added earth
 
-                        if (country.material.color.getHex() === 26367) { // so we don't apply it to all countries, only the one with blue
+                        if (country.material.color.getHex() === /*26367*/6650814) { // so we don't apply it to all countries, only the one with blue
 
                             // give them the color white
                             country.material.color.setHex(16777215);
