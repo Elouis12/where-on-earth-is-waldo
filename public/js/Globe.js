@@ -129,22 +129,12 @@ export class Globe {
 
         });
 
-        document.getElementById("previous-button").addEventListener("click", () => {
-
-            this.#removeCorrectDot();
-        });
-
 
         document.getElementById("next-button").addEventListener("click", () => {
 
             this.game.next(); // get next country
 
         });
-        document.getElementById("next-button").addEventListener("click", () => {
-
-            this.#removeCorrectDot();
-        });
-
 
     }
 
@@ -218,21 +208,6 @@ export class Globe {
 
     }
 
-
-    #removeCorrectDot() {
-
-
-        for (let x = 0; x < this.#countryObjects.length; x += 1) {
-
-            if (this.#countryObjects[x].material.color.getHex() === this.#redHexValue) {
-
-                this.#countryObjects[x].material.color.setHex(this.#whiteHexValue);
-                break;
-            }
-        }
-
-    }
-
     /*
         SET RAY CASTERS TO GET OBJECTS / COUNTRIES
     */
@@ -291,9 +266,12 @@ export class Globe {
 
                         for (let x = 0; x < this.#countryObjects.length; x += 1) {
 
+                            // found the dot that matches the current country
                             if (this.#countryObjects[x].userData.country === this.game.getCountries()[0].country) {
 
                                 this.#countryObjects[x].material.color.setHex(this.#redHexValue);
+
+                                // this.#countryObjects[x].material.color.setHex(this.#redHexValue);
 
                                 let blinkDot = setInterval(() => {
 
@@ -314,6 +292,17 @@ export class Globe {
 
                                         // set to black
                                         this.#countryObjects[x].material.color.setHex(this.#blackHexValue);
+
+                                        clearInterval(blinkDot);
+                                    }
+
+                                    // when user clicks next or previous then that object will no longer match the first country in our game class
+                                    if(
+                                        this.#countryObjects[x].userData.country !== this.game.getCountries()[0].country
+                                    ){
+
+                                        // set to white
+                                        this.#countryObjects[x].material.color.setHex(this.#whiteHexValue);
 
                                         clearInterval(blinkDot);
                                     }
