@@ -27,26 +27,26 @@ body{
 .btn{
 
     padding: 0.5rem 1rem;
-    /*margin-top: 2rem;*/
     border: none;
     border-radius: 3rem;
     font-weight: 500;
     cursor: pointer;
-    /*background: rgb(0, 114, 255);*/
-    /*color: white;*/
-    background: #e3e7f3 /*#e5ecf8*//*#e3e7f3*/;
-    color: #326cc7;
+    background: #fff;
+    color: #101010;
+    /*transition: background, color ease-in-out 1000ms 5000ms;*/
 }
 
 #get-hint-button{
 
-    background: #326cc7/*#e5ecf8*//*#e3e7f3*/;
-    color: #e3e7f3 ;
+    background: #1877F2/*#e3e7f3*/ /*#e5ecf8*//*#e3e7f3*/;
+    color: /*#326cc7*/#fff;
 }
 #get-hint-button:hover{
 
-    background: #84A6DD /*#e5ecf8*//*#e3e7f3*/;
-    color: #e3e7f3 ;
+/*    background: #84A6DD !*#e5ecf8*!!*#e3e7f3*!;
+    color: #e3e7f3 ;*/
+    background:#fff;
+    color:  #1877F2;
 }
 
 .visibilityHidden{
@@ -57,25 +57,17 @@ body{
 
 .btn:hover{
 
-    padding: 0.5rem 1rem;
-    /*margin-top: 2rem;*/
-    border: none;
-    border-radius: 3rem;
-    font-weight: 500;
-    cursor: pointer;
-    background: #f4f7fc;
-    /*color: rgb(0, 114, 255);*/
+    background: #101010;
+    color: #fff;
 }
 
 
-/*.btn:active{
+.btn:active{
 
-    color: white;
-    background: rgb(0, 114, 255);
+    background: #fff;
+    color: #101010;
     transition-delay: 1000ms;
-    transition: all ease-in-out;
-
-}*/
+}
 
 /* NAVBAR */
 
@@ -526,28 +518,15 @@ body{
 .end-button{
 
     padding: 0.5rem 1rem;
-    /*margin-top: 2rem;*/
     border: none;
     border-radius: 3rem;
     font-weight: 500;
     cursor: pointer;
-    /*background: #ff1919;*/
-    /*color: white;*/
-    /*background: #ffefeb;*/
-    /*color: #ff4c4c;*/
     background: #ff4c4c;
-    color:#ffefeb ;
+    color:#fff ;
 }
 .end-button:hover{
 
-    padding: 0.5rem 1rem;
-    /*margin-top: 2rem;*/
-    border: none;
-    border-radius: 3rem;
-    font-weight: 500;
-    cursor: pointer;
-    /*background: #fff;*/
-    /*background: #f4f7fc;*/
-    background: #ff7f7f;
-    /*color: #ff1919;*/
+    background: #fff;
+    color: #ff4c4c ;
 }

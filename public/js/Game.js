@@ -12,6 +12,7 @@ export class Game{
     #countryCount = 4; // max country user can use
 
 
+    timesWrong = 0; // find how many times the user clicked on the wrong country
 
     constructor(){
 

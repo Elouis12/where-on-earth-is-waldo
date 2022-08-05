@@ -158,7 +158,7 @@ li:hover{
 
 .settings-box-title {
     padding : 30px;
-    background : #2d2f31;
+    background : #101010/*#020024*//*#333333*//*#2d2f31*/;
     color : white;
     font-size : 1.2em;
     font-variant : small-caps;
@@ -197,8 +197,10 @@ li:hover{
 .settings-modes-div{
 
     position: relative;
-    background: #e3e7f3;
-    color: #8395ca;
+    /*background: #e3e7f3;*/
+    /*color: #8395ca;*/
+    background: #fff;
+    color: #020024;
 
 }
 
@@ -215,7 +217,8 @@ input[id="country-count"]{
 
     height: 100%;
     font-size : 1.2em;
-    background : #2d2f31;
+    /*background : #2d2f31;*/
+    background: transparent;
     /*position: relative;*/
     border-radius: 5px;
     text-align: center;
@@ -253,8 +256,10 @@ input[id="country-count"]{
     right: 0%;
     width: 100px;
     transform: translate(100%/*, 50%*/);
-    background: #e3e7f3;
-    color: #8395ca;
+/*    background: #e3e7f3;
+    color: #8395ca;*/
+    background: #fff;
+    color: #020024;
     padding: 5px;
     font-size: 10pt;
     border-top-right-radius: 5px;
@@ -265,7 +270,20 @@ input[id="country-count"]{
 
 .select-country{
 
-  background: #8395ca;
-  color: #e3e7f3 ;
+  /*background: #8395ca;
+  color: #e3e7f3 ;*/
+  background: #101010;
+  color: #fff ;
+    border-bottom: white 1px solid;
 
+}
+
+
+
+#select-all-country-li{
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    cursor: default;
 }

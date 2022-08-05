@@ -61,6 +61,13 @@ function selectCountry(e){
 
     }
 
+
+    disableCountryCountBox();
+
+}
+
+function disableCountryCountBox(){
+
     // if any country is selected
     // disabled country count box
 
@@ -80,5 +87,42 @@ function selectCountry(e){
         countryInputBox.style.opacity = "1";
 
     }
+}
+function selectAllCountries(){
 
+    const listOfCountries = document.getElementById("country-options-ul").children;
+
+    const checkbox = document.getElementById("pill3");
+
+    const countryInputBox = document.getElementById("country-count");
+
+
+    // highlight / de-select all
+    // first element will be the option to select / de-select all
+    for (let x = 1; x < listOfCountries.length; x+=1 ){
+
+        // user wants to select all countries
+        if( checkbox.checked ){
+
+            // no need to select it if it's already selected
+            if( listOfCountries[x].getAttribute("class") !== "select-country" ){
+
+
+                listOfCountries[x].classList.add("select-country");
+
+            }
+
+        }else{
+
+            // no need to de-select it if it's already not selected
+            if( listOfCountries[x].getAttribute("class") === "select-country" ){
+
+                listOfCountries[x].classList.remove("select-country");
+
+            }
+        }
+
+    }
+
+    disableCountryCountBox();
 }

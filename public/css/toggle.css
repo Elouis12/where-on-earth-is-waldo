@@ -1,327 +1,39 @@
-:root {
-    /** sunny side **/
-    --blue-background: #C2E9F6;
-    --blue-border: #72cce3;
-    --blue-color: #96dcee;
-    --yellow-background: #fffaa8;
-    --yellow-border: #f5eb71;
-    /** dark side **/
-    --indigo-background: #808fc7;
-    --indigo-border: #5d6baa;
-    --indigo-color: #6b7abb;
-    --gray-border: #e8e8ea;
-    --gray-dots: #e8e8ea;
-    /** general **/
-    --white: #fff;
-}
-
-/** {
-    margin: 0;
-    padding: 0;
-}*/
-
-/*body {
-    display: grid;
-    place-items: center;
-    min-height: 100vh;
-    position: relative;
-}*/
-#menu-container{
-
-
-}
-
-#toggle-button{
-
-    border-radius: 82px;
-    width: 60px;
-    height: 30px;
-
-}
-
-.day{
-
-    border: 5px solid var(--yellow-border);
-    background: var(--yellow-background);
-
-
-}
-.night{
-
-    border: 5px solid var(--indigo-border);
-    background: var(--indigo-background);
-}
-#toggle-button:hover{
-
-    cursor: pointer;
-
-}
-/*
-
-.toggle--label:hover{
-    cursor: pointer;
-}
-
-!*.background {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: var(--blue-background);
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    transition: all 250ms ease-in;
-}*!
-
-.toggle--checkbox {
+.toggle-pill-color input[type="checkbox"] {
     display: none;
 }
-.toggle--checkbox:checked {
-    !** This will all flip from sun to moon **!
-    !** Change the label color **!
-}
-.toggle--checkbox:checked ~ .background {
-    background: var(--indigo-background);
-}
-.toggle--checkbox:checked + .toggle--label {
-    background: var(--indigo-color);
-    border-color: var(--indigo-border);
-    !** Change the cloud to stars **!
-    !** Change the sun into the moon **!
-    !** Show the dimples on the moon **!
-}
-.toggle--checkbox:checked + .toggle--label .toggle--label-background {
-    left: 60px;
-    width: 5px;
-}
-.toggle--checkbox:checked + .toggle--label .toggle--label-background:before {
-    width: 5px;
-    height: 5px;
-    top: -25px;
-}
-.toggle--checkbox:checked + .toggle--label .toggle--label-background:after {
-    width: 5px;
-    height: 5px;
-    left: -30px;
-    top: 20px;
-}
-.toggle--checkbox:checked + .toggle--label:before {
-    background: var(--white);
-    border-color: var(--gray-border);
-    animation-name: switch;
-    animation-duration: 350ms;
-    animation-fill-mode: forwards;
-}
-.toggle--checkbox:checked + .toggle--label:after {
-    transition-delay: 350ms;
-    opacity: 1;
-}
-.toggle--label {
-    !** Placeholder element, starting at blue **!
-    !*width: 200px;*!
-    !*height: 100px;*!
-    width: 40px;
-    height: 20px;
-    background: var(--blue-color);
-    border-radius: 100px;
-    border: 5px solid var(--blue-border);
-    display: flex;
+.toggle-pill-color input[type="checkbox"] + label {
+    display: block;
     position: relative;
-    transition: all 350ms ease-in;
-    !** The sun cloud and moon stars **!
-    !** Sun/Moon element **!
-    !** Gray dots on the moon **!
-}
-.toggle--label-background {
-    width: 10px;
-    height: 5px;
-    border-radius: 5px;
-    position: relative;
-    !*background: var(--white);*!
-    left: 135px;
-    top: 45px;
-    transition: all 150ms ease-in;
-}
-.toggle--label-background:before {
-    content: "";
-    position: absolute;
-    top: -5px;
-    !*width: 40px;*!
-    width: 8px;
-    !*height: 5px;*!
-    height: 1px;
-    border-radius: 5px;
-    !*background: var(--white);*!
-    left: -20px;
-    transition: all 150ms ease-in;
-}
-.toggle--label-background:after {
-    content: "";
-    position: absolute;
-    top: 5px;
-    !*width: 40px;*!
-    width: 8px;
-    !*height: 5px;*!
-    height: 1px;
-    border-radius: 5px;
-    !*background: var(--white);*!
-    left: -10px;
-    transition: all 150ms ease-in;
-}
-.toggle--label:before {
-    animation-name: reverse;
-    animation-duration: 350ms;
-    animation-fill-mode: forwards;
-    transition: all 350ms ease-in;
-    content: "";
-    !*width: 82px;*!
-    !*width: 16px;*!
-    !*height: 82px;*!
-    !*height: 16px;*!
-    border: 5px solid var(--yellow-border);
-    top: 4px;
-    left: 4px;
-    position: absolute;
-    border-radius: 82px;
-    background: var(--yellow-background);
-}
-.toggle--label:after {
-    transition-delay: 0ms;
-    transition: all 250ms ease-in;
-    position: absolute;
-    content: "";
-    !*box-shadow: var(--gray-dots) -13px 0 0 2px, var(--gray-dots) -24px 14px 0 -2px;*!
-    left: 143px;
-    top: 23px;
-    width: 10px;
-    height: 10px;
-    background: transparent;
-    border-radius: 50%;
-    opacity: 0;
-}
-
-@keyframes switch {
-!*    0% {
-        left: 4px;
-    }
-    60% {
-        left: 4px;
-        width: 112px;
-    }
-    100% {
-        left: 104px;
-        width: 82px;
-    }*!
-}
-@keyframes reverse {
-!*    0% {
-        left: 104px;
-        width: 82px;
-    }
-    60% {
-        left: 72px;
-        width: 112px;
-    }
-    100% {
-        left: 4px;
-    }*!
-}
-
-!*
-
- .knobs, .layer
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
-.button
-{
-    position: relative;
-    width: 74px;
-    height: 36px;
-    overflow: hidden;
-}
-
-.button.r, .button.r .layer
-{
-    border-radius: 100px;
-}
-
-.button.b2
-{
-    border-radius: 2px;
-}
-
-.checkbox
-{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    opacity: 0;
+    width: 3em;
+    height: 1.6em;
+    border-radius: 1em;
+    background: #fff/*#8395ca*/;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    z-index: 3;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-transition: background 0.1s ease-in-out;
+    transition: background 0.1s ease-in-out;
 }
-
-.knobs
-{
-    z-index: 2;
-}
-
-.layer
-{
-    width: 100%;
-    background-color: #fcebeb;
-    transition: 0.3s ease all;
-    z-index: 1;
-}
-
-
-#button-1 .knobs:before
-{
-    content: 'OFF';
+.toggle-pill-color input[type="checkbox"] + label:before {
+    content: "";
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 1em;
+    background: #fff;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 20px;
-    height: 10px;
-    color: #fff;
-    font-size: 10px;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1;
-    padding: 9px 4px;
-    background-color: #f44336;
-    border-radius: 50%;
-    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    left: 0.2em;
+    top: 0.2em;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
-
-#button-1 .checkbox:checked + .knobs:before
-{
-    content: 'ON';
-    left: 42px;
-    background-color: #03A9F4;
+.toggle-pill-color input[type="checkbox"]:checked + label {
+    background: #101010/*#47cf73*/;
 }
-
-#button-1 .checkbox:checked ~ .layer
-{
-    background-color: #ebf7fc;
+.toggle-pill-color input[type="checkbox"]:checked + label:before {
+    box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+    left: 1.6em;
 }
-
-#button-1 .knobs, #button-1 .knobs:before, #button-1 .layer
-{
-    transition: 0.3s ease all;
-}
-
-
- *!
-
-
-
-*/
-

@@ -203,6 +203,9 @@ export class Globe {
             pointOfInterestMesh.scale.set(1, 1, 1);
             material.wireframe = true;
             pointOfInterestMesh.userData.country = countryArray[x].country;
+            pointOfInterestMesh.userData.selected = false; // when user gets it correct
+            pointOfInterestMesh.userData.lat = countryArray[x].lat; // when user gets it correct
+            pointOfInterestMesh.userData.lon = countryArray[x].lon; // when user gets it correct
             pointOfInterestMesh.position.set(calCoords[0], calCoords[1], calCoords[2]);
 
             this.#countryObjects.push(pointOfInterestMesh);
@@ -240,22 +243,38 @@ export class Globe {
                 let answerPicked = intersects[0].object.userData.country;
 
 
-                // REMOVE IT FROM THE SCENE IF GAME MODE IS ELIMINATION
-                if (
-                    this.game.answer(answerPicked) &&
-                    this.game.getExtraGameMode() === "elimination"
-                ) {
+                // USER GETS IT CORRECT
+                if( this.game.answer(answerPicked) ){
 
+                    // REMOVE IT FROM THE SCENE IF GAME MODE IS ELIMINATION
+                    if( this.game.getExtraGameMode() === "elimination" ){
 
-                    this.earth.remove( intersects[0].object );
+                        this.earth.remove( intersects[0].object );
 
-                    this.earth.remove(this.earth.children[7]);
+                    }
+                    intersects[0].object.userData.selected = true;
+                    intersects[0].object.material.color.setHex(1052688);
 
-                // LEAVE IT
-                } else {
+                }else{
 
-                    this.game.answer(answerPicked)
+                    this.game.timesWrong++;
+
+                    if( this.game.timesWrong === 3 ){  // that way when it increases the count to 4 it won't re-loop the array and set the color again
+
+                        for( let x = 0; x < this.#countryObjects.length; x+=1 ){
+
+                            if( this.#countryObjects[x].userData.country === this.game.getCountries()[0].country ){
+
+                                this.#countryObjects[x].material.color.setHex( 16731212 );
+                                break;
+                            }
+                        }
+                        this.#showCorrectCountry( this.game.getCountries()[0] );
+                    }
                 }
+
+
+
             }
         });
 
@@ -274,11 +293,14 @@ export class Globe {
             const intersects = raycaster.intersectObjects(this.#countryObjects);
 
 
-            if (intersects.length > 0 && intersects[0].object.userData.country) {
+            if( intersects[0].object.material.color.getHex() !== 16731212 ){
 
-                // intersects[0].object.material.color.setHex(26367);
-                intersects[0].object.material.color.setHex(6650814);
-                // intersects[0].object.material.color.setHex(96367);
+            }
+
+            if (intersects.length > 0 && !intersects[0].object.userData.selected ) {
+
+
+                intersects[0].object.material.color.setHex(1052688);
 
                 document.body.style.cursor = "pointer"; // make pointer
 
@@ -288,9 +310,9 @@ export class Globe {
 
                 this.#countryObjects.forEach((country) => {
 
-                    if (country.userData.country) { // if it is a country because we also added earth
+                    if (!country.userData.selected) {  // set to back to white if the user did not get it correct already
 
-                        if (country.material.color.getHex() === /*26367*/6650814) { // so we don't apply it to all countries, only the one with blue
+                        if (country.material.color.getHex() === /*26367*/1052688) { // so we don't apply it to all countries, only the one with blue
 
                             // give them the color white
                             country.material.color.setHex(16777215);
@@ -305,6 +327,15 @@ export class Globe {
 
     }
 
+
+    #showCorrectCountry( country ){
+
+        let position = this.#calcPosFromLatLonRad( country.lat, country.lon, this.earthRadius );
+        // this.earth.rotation.set( 0 /*0*/, position[1]/*0*/, position[2] /*0*/ );
+        // this.earth.rotation.y = position[1];
+        // this.earth.rotation.x = position[0];
+        // this.#camera.lookAt( this.earth.position );
+    }
 
     #setDay() {
 
