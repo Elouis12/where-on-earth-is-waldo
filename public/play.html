@@ -201,7 +201,7 @@
 
 
             <h2 id="location-title-h2">
-                Waldo's Last Known Location
+                Find Waldo
             </h2>
 
             <div id="previous-next-button">
@@ -213,17 +213,27 @@
         </div>
 
 
-        <div id="show-hints" class="no-pointer-event">
+        <div id="show-hints-answer-container">
 
-            <input id="get-hint-button" class="btn" type="button" value="Get Hint">
-            <input id="next-round-button" class="btn hide" type="button" value="">
+            <div id="show-hints" class="no-pointer-event">
 
-            <div id="remaining-div">
-                <div class="" id="remaining-hints-div"> Remaining Hints : <span id="remaining-hints-count"></span></div>
-                <div id="remaining-countries-div"> Remaining Countries : <span id="remaining-countries-count"></span> </div>
+                <input id="get-hint-button" class="btn" type="button" value="Get Hint">
+                <input id="next-round-button" class="btn hide" type="button" value="">
+
+                <div id="remaining-div">
+                    <div class="" id="remaining-hints-div"> Remaining Hints : <span id="remaining-hints-count"></span></div>
+                    <div id="remaining-countries-div"> Remaining Countries : <span id="remaining-countries-count"></span> </div>
+                </div>
+
+            </div>
+
+            <div id="attempt-div">
+                <div id="show-answer" class="hide blink-text"> Rotate the globe to find the country </div>
+                <div id="show-attempt" > Attempt : <span id="attempt-count"></span> </div>
             </div>
 
         </div>
+
 
     </div>
 

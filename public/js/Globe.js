@@ -58,6 +58,12 @@ export class Globe {
     earthRadius = 10;
 
 
+    #blackHexValue = 1052688;
+    #redHexValue = 16731212;
+    #whiteHexValue = 16777215;
+    #lessWhiteHexValue = 16579836;
+
+
     #sunBackground = document.querySelector(".sun-background");
     #moonBackground = document.querySelector(".moon-background");
 
@@ -79,69 +85,65 @@ export class Globe {
     addButtons() {
 
 
-        if (document.getElementById("start-button")) {
+        document.getElementById("start-button").addEventListener("click", () => {
 
-            document.getElementById("start-button").addEventListener("click", () => {
+            this.game.start(); // start the game
 
-                this.game.start(); // start the game
+            // add dots
+            this.addPoints(this.game.getCountries(), this.game.getCountryCount());
 
-                // add dots
+        });
+
+
+        document.getElementById("get-hint-button").addEventListener("click", () => {
+
+            this.game.getHint(); // getHint
+
+        })
+
+        document.getElementById("next-round-button").addEventListener("click", () => {
+
+
+            // restart will be called
+            if (this.game.getCountries().length <= 0) { // game is over
+
+                // will populate country again with random country
+                this.game.startNextRound(); // start the next round
+
+                // add coords according to the populated countries
                 this.addPoints(this.game.getCountries(), this.game.getCountryCount());
 
-            });
-        }
+            } else {
 
-        if (document.getElementById("get-hint-button")) {
+                this.game.startNextRound(); // start the next round
 
-            document.getElementById("get-hint-button").addEventListener("click", () => {
-
-                this.game.getHint(); // getHint
-
-            })
-        }
-
-        if (document.getElementById("next-round-button")) {
-
-            document.getElementById("next-round-button").addEventListener("click", () => {
+            }
 
 
-                // restart will be called
-                if( this.game.getCountries().length <= 0 ){ // game is over
-
-                    // will populate country again with random country
-                    this.game.startNextRound(); // start the next round
-
-                    // add coords according to the populated countries
-                    this.addPoints(this.game.getCountries(), this.game.getCountryCount());
-
-                }else{
-
-                    this.game.startNextRound(); // start the next round
-
-                }
+        })
 
 
+        document.getElementById("previous-button").addEventListener("click", () => {
 
-            })
-        }
+            this.game.previous(); // get previous country
 
-        if (document.getElementById("previous-button")) {
+        });
 
-            document.getElementById("previous-button").addEventListener("click", () => {
+        document.getElementById("previous-button").addEventListener("click", () => {
 
-                this.game.previous(); // get previous country
+            this.#removeCorrectDot();
+        });
 
-            });
-        }
 
-        if (document.getElementById("next-button")) {
+        document.getElementById("next-button").addEventListener("click", () => {
 
-            document.getElementById("next-button").addEventListener("click", () => {
+            this.game.next(); // get next country
 
-                this.game.next(); // get next country
+        });
+        document.getElementById("next-button").addEventListener("click", () => {
 
-            });
-        }
+            this.#removeCorrectDot();
+        });
 
 
     }
@@ -170,14 +172,14 @@ export class Globe {
 
 
         // user added a count greater than what the array holds
-        if( countryCount > countryArray.length ){
+        if (countryCount > countryArray.length) {
 
             // entering the loop ill give error, index out of bounds
             return;
         }
 
         // remove the ones already on the globe
-        if( this.#countryObjects.length > 0 ){
+        if (this.#countryObjects.length > 0) {
 
             this.earth.children = [];
 
@@ -217,6 +219,20 @@ export class Globe {
     }
 
 
+    #removeCorrectDot() {
+
+
+        for (let x = 0; x < this.#countryObjects.length; x += 1) {
+
+            if (this.#countryObjects[x].material.color.getHex() === this.#redHexValue) {
+
+                this.#countryObjects[x].material.color.setHex(this.#whiteHexValue);
+                break;
+            }
+        }
+
+    }
+
     /*
         SET RAY CASTERS TO GET OBJECTS / COUNTRIES
     */
@@ -238,42 +254,78 @@ export class Globe {
             const intersects = raycaster.intersectObjects(this.#countryObjects);
 
 
+            // if black already
+            if (intersects.length > 0 && intersects[0].object.userData.selected) {
+
+                return;
+
+            }
+
             if (intersects.length > 0 && intersects[0].object.userData.country) {
 
                 let answerPicked = intersects[0].object.userData.country;
 
 
                 // USER GETS IT CORRECT
-                if( this.game.answer(answerPicked) ){
+                if (this.game.answer(answerPicked)) {
 
                     // REMOVE IT FROM THE SCENE IF GAME MODE IS ELIMINATION
-                    if( this.game.getExtraGameMode() === "elimination" ){
+                    if (this.game.getExtraGameMode() === "elimination") {
 
-                        this.earth.remove( intersects[0].object );
+                        this.earth.remove(intersects[0].object);
 
                     }
                     intersects[0].object.userData.selected = true;
-                    intersects[0].object.material.color.setHex(1052688);
+                    intersects[0].object.material.color.setHex(this.#blackHexValue);
 
-                }else{
+                } else {
 
                     this.game.timesWrong++;
 
-                    if( this.game.timesWrong === 3 ){  // that way when it increases the count to 4 it won't re-loop the array and set the color again
+                    this.game.attemptsRemaining();
 
-                        for( let x = 0; x < this.#countryObjects.length; x+=1 ){
+                    if (this.game.timesWrong === 3) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
 
-                            if( this.#countryObjects[x].userData.country === this.game.getCountries()[0].country ){
+                        document.getElementById("show-answer").classList.remove("hide");
+                        document.getElementById("show-attempt").classList.add("hide");
 
-                                this.#countryObjects[x].material.color.setHex( 16731212 );
+                        for (let x = 0; x < this.#countryObjects.length; x += 1) {
+
+                            if (this.#countryObjects[x].userData.country === this.game.getCountries()[0].country) {
+
+                                this.#countryObjects[x].material.color.setHex(this.#redHexValue);
+
+                                let blinkDot = setInterval(() => {
+
+                                    // when color is red change to white
+                                    if (this.#countryObjects[x].material.color.getHex() === this.#redHexValue) {
+
+                                        // used a less white value because on hover it will make it black as it's blinking
+                                        this.#countryObjects[x].material.color.setHex(this.#lessWhiteHexValue);
+
+                                    // make it white again
+                                    } else {
+
+                                        this.#countryObjects[x].material.color.setHex(this.#redHexValue);
+                                    }
+
+                                    // user selected the blinking dot
+                                    if (this.#countryObjects[x].userData.selected) {
+
+                                        // set to black
+                                        this.#countryObjects[x].material.color.setHex(this.#blackHexValue);
+
+                                        clearInterval(blinkDot);
+                                    }
+
+                                }, 500)
                                 break;
                             }
                         }
-                        this.#showCorrectCountry( this.game.getCountries()[0] );
+
                     }
+
                 }
-
-
 
             }
         });
@@ -293,17 +345,28 @@ export class Globe {
             const intersects = raycaster.intersectObjects(this.#countryObjects);
 
 
-            if( intersects[0].object.material.color.getHex() !== 16731212 ){
+            // if dot is red or less-white color
+            if (intersects.length > 0 &&
+                (
+                    intersects[0].object.material.color.getHex() === this.#redHexValue ||
+                    intersects[0].object.material.color.getHex() === this.#lessWhiteHexValue
+                )
+            ) {
+
+                document.body.style.cursor = "pointer"; // make pointer
+                return;
 
             }
 
-            if (intersects.length > 0 && !intersects[0].object.userData.selected ) {
+            // highlight black when white
+            if (intersects.length > 0 && !intersects[0].object.userData.selected) {
 
 
-                intersects[0].object.material.color.setHex(1052688);
+                intersects[0].object.material.color.setHex(this.#blackHexValue);
 
                 document.body.style.cursor = "pointer"; // make pointer
 
+                // put back to white
             } else {
 
                 document.body.style.cursor = "default"; // change back to default
@@ -312,7 +375,7 @@ export class Globe {
 
                     if (!country.userData.selected) {  // set to back to white if the user did not get it correct already
 
-                        if (country.material.color.getHex() === /*26367*/1052688) { // so we don't apply it to all countries, only the one with blue
+                        if (country.material.color.getHex() === /*26367*/this.#blackHexValue) { // so we don't apply it to all countries, only the one with blue
 
                             // give them the color white
                             country.material.color.setHex(16777215);
@@ -328,9 +391,9 @@ export class Globe {
     }
 
 
-    #showCorrectCountry( country ){
+    #showCorrectCountry(country) {
 
-        let position = this.#calcPosFromLatLonRad( country.lat, country.lon, this.earthRadius );
+        let position = this.#calcPosFromLatLonRad(country.lat, country.lon, this.earthRadius);
         // this.earth.rotation.set( 0 /*0*/, position[1]/*0*/, position[2] /*0*/ );
         // this.earth.rotation.y = position[1];
         // this.earth.rotation.x = position[0];
@@ -343,74 +406,74 @@ export class Globe {
         // let animating = false;
         // document.getElementById("toggle-button").addEventListener("click", (e) => {
 
-            let themeButton = document.getElementById("toggle-button");
+        let themeButton = document.getElementById("toggle-button");
 
 
-            if (this.#animating) return;
+        if (this.#animating) return;
 
-            let anim = [0, 1];
+        let anim = [0, 1];
 
-            if (!this.#daytime) {
-                anim = [1, 0];
-                // document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
-                // themeButton.setAttribute("class", "day");
-                // themeButton.setAttribute("title", "NIGHT");
+        if (!this.#daytime) {
+            anim = [1, 0];
+            // document.body.setAttribute("style", "background : linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));");
+            // themeButton.setAttribute("class", "day");
+            // themeButton.setAttribute("title", "NIGHT");
 
-                window.localStorage.setItem("color", "linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220))");
+            window.localStorage.setItem("color", "linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220))");
 
-            } else if (this.#daytime) {
-                anim = [0, 1];
-                // document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
-                // themeButton.setAttribute("class", "night");
-                // themeButton.setAttribute("title", "DAY");
+        } else if (this.#daytime) {
+            anim = [0, 1];
+            // document.body.setAttribute("style", "background : linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);");
+            // themeButton.setAttribute("class", "night");
+            // themeButton.setAttribute("title", "DAY");
 
-                window.localStorage.setItem("color", "linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%)");
+            window.localStorage.setItem("color", "linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%)");
 
-            } else {
-                return;
-            }
+        } else {
+            return;
+        }
 
-            this.#animating = true;
+        this.#animating = true;
 
-            let obj = {t: 0};
-            anime({
-                targets: obj,
-                t: anim,
-                complete: () => {
-                    this.#animating = false;
-                    this.#daytime = !this.#daytime;
-                },
-                update: () => {
-                    this.#sunLight.intensity = 0.1 * (1 - obj.t);
-                    this.#moonLight.intensity = 3.5 * obj.t;
+        let obj = {t: 0};
+        anime({
+            targets: obj,
+            t: anim,
+            complete: () => {
+                this.#animating = false;
+                this.#daytime = !this.#daytime;
+            },
+            update: () => {
+                this.#sunLight.intensity = 0.1 * (1 - obj.t);
+                this.#moonLight.intensity = 3.5 * obj.t;
 
-                    this.#sunLight.position.setY(20 * (1 - obj.t));
-                    this.#moonLight.position.setY(20 * obj.t);
+                this.#sunLight.position.setY(20 * (1 - obj.t));
+                this.#moonLight.position.setY(20 * obj.t);
 
-                    this.earth.material.sheen = (1 - obj.t);
-                    this.#scene.children.forEach((child) => {
-                        child.traverse((object) => {
-                            if (object instanceof Mesh && object.material.envMap) {
-                                object.material.envMapIntensity = object.sunEnvIntensity * (1 - obj.t) + object.moonEnvIntensity * obj.t;
-                            }
-                        });
+                this.earth.material.sheen = (1 - obj.t);
+                this.#scene.children.forEach((child) => {
+                    child.traverse((object) => {
+                        if (object instanceof Mesh && object.material.envMap) {
+                            object.material.envMapIntensity = object.sunEnvIntensity * (1 - obj.t) + object.moonEnvIntensity * obj.t;
+                        }
                     });
+                });
 
-                    /*ringsScene.children.forEach((child, i) => {
-                        child.traverse((object) => {
-                            object.material.opacity = object.sunOpacity * (1-obj.t) + object.moonOpacity * obj.t;
-                        });
-                    });*/
+                /*ringsScene.children.forEach((child, i) => {
+                    child.traverse((object) => {
+                        object.material.opacity = object.sunOpacity * (1-obj.t) + object.moonOpacity * obj.t;
+                    });
+                });*/
 
-                    // sunBackground.style.opacity = 1-obj.t;
-                    // moonBackground.style.opacity = obj.t;
-                },
-                easing: 'easeInOutSine',
-                duration: 500,
-            });
+                // sunBackground.style.opacity = 1-obj.t;
+                // moonBackground.style.opacity = obj.t;
+            },
+            easing: 'easeInOutSine',
+            duration: 500,
+        });
 
-            window.localStorage.setItem("dayTime", this.#daytime);
-            window.localStorage.setItem("animating", this.#animating);
+        window.localStorage.setItem("dayTime", this.#daytime);
+        window.localStorage.setItem("animating", this.#animating);
         // });
 
     }
@@ -454,7 +517,6 @@ export class Globe {
         // this.#renderer.domElement.style.display = "none"; // hides the canvas
         document.body.appendChild(this.#renderer.domElement);
         document.getElementsByTagName("CANVAS")[0].style.display = "none";
-
 
 
         /* SUN */
@@ -562,11 +624,11 @@ export class Globe {
 
         this.#setDay();
 
-/*        if (JSON.parse(window.localStorage.getItem("dayTime"))) {
+        /*        if (JSON.parse(window.localStorage.getItem("dayTime"))) {
 
 
-            this.#loadDay();
-        }*/
+                    this.#loadDay();
+                }*/
 
 
         /* CLOUDS */
@@ -590,12 +652,12 @@ export class Globe {
         const starGeometry = new SphereGeometry(80, 140, 140);
         const starMaterial = new MeshBasicMaterial({ // this material does not interact with light, or light won't affect it
 
-            map : new TextureLoader().load("./assets/textures/galaxy.png"),
+            map: new TextureLoader().load("./assets/textures/galaxy.png"),
             side: THREE.BackSide
         });
 
-        const starMesh = new Mesh( starGeometry, starMaterial );
-        this.#scene.add( starMesh );
+        const starMesh = new Mesh(starGeometry, starMaterial);
+        this.#scene.add(starMesh);
 
         /* RINGS */
         const ringsScene = new Scene();
