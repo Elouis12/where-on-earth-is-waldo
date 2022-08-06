@@ -5,7 +5,7 @@ export class GeoAPI{
 */
 
 // let getGeoHintsByCountry = `https://geofactsapi.herokuapp.com/countries/${country}/`
-    getCountries = `https://geofactsapi.herokuapp.com/countries/coords`
+    getCountries = `https://geofactsapi.herokuapp.com/countries/countriesandflags`
 
 
 /*

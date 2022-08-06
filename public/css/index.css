@@ -296,7 +296,7 @@ body{
     width: 100%;
 }
 
-.hints-container  input, .hints-container > #hints-div { /* allow clicking button or scrolling */
+.hints-container  input, .hints-container > .hints-div { /* allow clicking button or scrolling */
 
     pointer-events: auto;
 }
@@ -322,7 +322,7 @@ body{
     width: 100%;
 }
 
-#hints-div {
+.hints-div {
 
     width: 100%;
     text-align: center;
@@ -333,6 +333,20 @@ body{
 
 }
 
+.structure-flag-emoji{
+
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.structure-flag-emoji > span:nth-child(2){
+
+    font-size: 100px;
+}
 
 .hints-p:not(:first-child){ /* keeps the first <p> tag at top and give the rest margins */
 
@@ -376,6 +390,7 @@ body{
     #hints-header{
 
         width: 40%;
+        overflow: scroll;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -386,7 +401,7 @@ body{
     }
 
 
-    #hints-div{
+    .hints-div{
 
         /*all: unset;*/
         display: flex;
@@ -398,6 +413,23 @@ body{
 
         /*background: red;*/
 
+    }
+
+    .structure-flag-emoji {
+
+        all: unset;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60%;
+        height: 100%;
+        margin-right: 20px;
+        
+    }
+
+    .structure-flag-emoji > span {
+
+        width: 100%;
     }
 
     .hide{
@@ -450,7 +482,7 @@ body{
     }
 
 
-    #hints-div{
+    .hints-div {
 
         all: unset;
         height: 100px;
@@ -466,6 +498,20 @@ body{
         width: 100%;
 
     }
+
+    .structure-flag-emoji{
+
+        all: unset;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        position: relative;
+        top: 430px;
+
+        width: 100%;
+
+    }
+
 
     .hide{
 
@@ -489,9 +535,6 @@ body{
         display: none;
     }
 
-    .hints-container{
-
-    }
 
     .hide{
 
@@ -547,3 +590,11 @@ body{
         opacity: 0;
     }
 }
+
+
+
+#flag-emoji{
+
+
+}
+

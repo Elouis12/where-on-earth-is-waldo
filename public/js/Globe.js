@@ -294,10 +294,9 @@ export class Globe {
                                         this.#countryObjects[x].material.color.setHex(this.#blackHexValue);
 
                                         clearInterval(blinkDot);
-                                    }
 
                                     // when user clicks next or previous then that object will no longer match the first country in our game class
-                                    if(
+                                    }else if(
                                         this.#countryObjects[x].userData.country !== this.game.getCountries()[0].country
                                     ){
 

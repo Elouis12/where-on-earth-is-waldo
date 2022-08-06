@@ -135,8 +135,22 @@ export class Game{
                     break;
 
                 case "flags" :
-                    hintsDiv.insertAdjacentHTML("beforeend", `<p >Waldo was spotted carrying this flag <br/><image height="100" style="width: 100%;" class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag}" /></p>`);
-                    document.getElementById("hints-div").style.height = "170px";
+                    // hintsDiv.insertAdjacentHTML("beforeend", `<p >Waldo was spotted carrying this flag <br/><image height="100" style="width: 100%;" class="hints-p" alt="${this.#countriesQueue[0].country}" src="${this.#countriesQueue[0].flag_image}" /></p>`);
+
+
+                    document.getElementById("hints-div").classList.remove("hints-div");
+                    document.getElementById("hints-div").classList.add("structure-flag-emoji");
+
+                    hintsDiv.insertAdjacentHTML("beforeend",
+                        `
+                                <span >Waldo was spotted carrying this flag</span> 
+                                <span id="flag-emoji">${ this.#countriesQueue[0].flag_emoji }</span>
+                            `
+
+                    );
+                    document.getElementById("hints-div").style.width = "unset";
+                    // document.getElementById("hints-div").style.height = "170px";
+
                     break;
 
                 case "hints":
