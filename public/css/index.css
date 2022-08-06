@@ -424,7 +424,7 @@ body{
         width: 60%;
         height: 100%;
         margin-right: 20px;
-        
+
     }
 
     .structure-flag-emoji > span {
@@ -572,7 +572,13 @@ body{
 
     margin-top: 5px;
     padding: 0px 5px;
+    width: 100%;
 
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
 }
 
 .blink-text {
@@ -593,8 +599,17 @@ body{
 
 
 
-#flag-emoji{
+.show-found-attempt-div{
 
+    display: flex;
 
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
 }
 
+
+.show{
+
+    display: block;
+}

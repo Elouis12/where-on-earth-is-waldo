@@ -262,7 +262,8 @@ export class Globe {
                     if (this.game.timesWrong === 3) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
 
                         document.getElementById("show-answer").classList.remove("hide");
-                        document.getElementById("show-attempt").classList.add("hide");
+                        document.getElementById("show-found-attempt-div").classList.add("hide");
+                        document.getElementById("show-found-attempt-div").classList.remove("show-found-attempt-div");
 
                         for (let x = 0; x < this.#countryObjects.length; x += 1) {
 

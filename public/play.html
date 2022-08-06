@@ -221,15 +221,18 @@
                 <input id="next-round-button" class="btn hide" type="button" value="">
 
                 <div id="remaining-div">
-                    <div class="" id="remaining-hints-div"> Remaining Hints : <span id="remaining-hints-count"></span></div>
-                    <div id="remaining-countries-div"> Remaining Countries : <span id="remaining-countries-count"></span> </div>
+                    <div class="" id="remaining-hints-div">Hints Remaining : <span id="remaining-hints-count"></span></div>
+                    <div id="remaining-countries-div">Countries Remaining : <span id="remaining-countries-count"></span> </div>
                 </div>
 
             </div>
 
             <div id="attempt-div">
                 <div id="show-answer" class="hide blink-text"> Rotate the globe to find the country </div>
-                <div id="show-attempt" > Attempt : <span id="attempt-count"></span> </div>
+                <div id="show-found-attempt-div" class="show-found-attempt-div">
+                    <span id="found-span" > <i class="fa-solid fa-user-secret"></i> : <span id="found-count"></span> </span>
+                    <span>Attempt : <span id="attempt-count"></span> </span>
+                </div>
             </div>
 
         </div>
