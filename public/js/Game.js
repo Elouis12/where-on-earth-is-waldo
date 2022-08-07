@@ -9,7 +9,7 @@ export class Game{
     #difficulty; // -3 is how many hints to show
     #gameMode;
     #extraGameMode;
-    #countryCount = 4; // max country user can use
+    #countryCount = 0; // max country user can use
 
 
     timesWrong = 0; // find how many times the user clicked on the wrong country
@@ -48,13 +48,15 @@ export class Game{
 
          let listOfCountries = document.getElementsByClassName("select-country");
 
-         this.#updateFoundCount();
 
         // grab the options
         //  this.#setDifficulty();
          this.#setCountryCount();
          this.#setGameMode();
          this.#setExtraGameMode();
+
+         this.#updateFoundCountDiv();
+
 
          const gameMode = this.#getGameMode();
          // const difficulty = this.#getDifficulty();
@@ -101,7 +103,7 @@ export class Game{
 
          this.#countriesRemaining(); // sets the remaining countries after slicing it
 
-         this.attemptsRemaining();
+         this.getAttemptsRemaining();
 
          // remove next button if user only selected 1 country
          if( this.#countriesQueue.length === 1 ){
@@ -109,6 +111,14 @@ export class Game{
              document.getElementById("next-button").classList.add("visibilityHidden");
          }
 
+        // remove attempts if only 1 country is left or user selected 1 country
+         let attemptSpan = document.getElementById("attempt-span");
+         if( this.getCountries().length === 1 ){
+
+             // show attempts
+             attemptSpan.classList.add("hide");
+
+         }
 
          // display / hide the elements
          settingsSection.style.visibility = "hidden";
@@ -235,7 +245,7 @@ export class Game{
     }
 
 
-    #resetTimesWrong(){
+    #resetAttempts(){
 
         this.timesWrong = 0;
     }
@@ -256,8 +266,8 @@ export class Game{
 
             this.#found++;
 
-            this.#resetTimesWrong();
-            this.attemptsRemaining();
+            this.#resetAttempts();
+            this.getAttemptsRemaining();
 
 
             // empty the div
@@ -292,15 +302,28 @@ export class Game{
         let titleAndButtons = document.getElementById("title-buttons-div");
 
         let blinkText = document.getElementById("show-answer");
-        let showFoundAttemptDiv = document.getElementById("show-found-attempt-div");
+        let foundSpan = document.getElementById("found-span");
+        let attemptSpan = document.getElementById("attempt-span");
 
 
         nextRoundButton.classList.remove("hide");
+
+        // HIDE THE ELEMENTS EXCEPT GET HINT BUTTON
+        remainingDiv.classList.add("hide"); // hide hint counter when user gets it right
+        titleAndButtons.classList.add("visibilityHidden"); // hide location title when user gets it right
+
+        blinkText.classList.add("hide");
+
+        attemptSpan.classList.add("hide");
+        foundSpan.classList.add("hide");
+
+        this.#updateFoundCountDiv();
 
         // USER GOT ALL COUNTRIES
         if( this.getCountries().length === 0 ){
 
             nextRoundButton.setAttribute("value", "You've Found Waldo in All Countries!");
+            foundSpan.classList.remove("hide"); // keep the total user found
 
         // USER GOT A COUNTRY
         }else{
@@ -309,13 +332,7 @@ export class Game{
 
         }
 
-        // HIDE THE ELEMENTS EXCEPT GET HINT BUTTON
-        remainingDiv.classList.add("hide"); // hide hint counter when user gets it right
-        titleAndButtons.classList.add("visibilityHidden"); // hide location title when user gets it right
 
-        blinkText.classList.add("hide");
-        showFoundAttemptDiv.classList.add("hide");
-        showFoundAttemptDiv.classList.remove("show-found-attempt-div");
 
 
         // REMOVE NEXT BUTTON IF 1 MORE COUNTRY REMAINS
@@ -386,10 +403,16 @@ export class Game{
 
         this.#hideBlinkingText();
 
-        this.#resetTimesWrong();
+        this.#resetAttempts();
+        this.getAttemptsRemaining();
 
-        this.#showAttemptCount();
-        this.attemptsRemaining();
+
+        let foundSpan = document.getElementById("found-span");
+        let attemptSpan = document.getElementById("attempt-span");
+
+        foundSpan.classList.remove("hide");
+
+        attemptSpan.classList.remove("hide");
 
         let hintsDiv = document.getElementById("hints-div");
         hintsDiv.innerHTML = "";
@@ -415,16 +438,6 @@ export class Game{
         }
     }
 
-    #showAttemptCount(){
-
-        let showFoundAttemptDiv = document.getElementById("show-found-attempt-div");
-
-        if( showFoundAttemptDiv.getAttribute("class") === "hide" ){
-
-            showFoundAttemptDiv.classList.remove("hide");
-            showFoundAttemptDiv.classList.add("hide");
-        }
-    }
 /*
     NEXT COUNTRY
 */
@@ -433,10 +446,16 @@ export class Game{
 
         this.#hideBlinkingText();
 
-        this.#resetTimesWrong();
+        this.#resetAttempts();
+        this.getAttemptsRemaining();
 
-        this.#showAttemptCount();
-        this.attemptsRemaining();
+
+        let foundSpan = document.getElementById("found-span");
+        let attemptSpan = document.getElementById("attempt-span");
+
+        foundSpan.classList.remove("hide");
+
+        attemptSpan.classList.remove("hide");
 
 
         const previousButton = document.getElementById("previous-button");
@@ -466,7 +485,7 @@ export class Game{
 
         this.#found = 0;
 
-        this.#updateFoundCount();
+        this.#updateFoundCountDiv();
 
         let hintsDiv = document.getElementById("hints-div");
         hintsDiv.innerHTML = "";
@@ -538,18 +557,25 @@ export class Game{
         let titleAndButtons = document.getElementById("title-buttons-div");
         let previousButton = document.getElementById("previous-button");
 
-        let showFoundAttemptDiv = document.getElementById("show-found-attempt-div");
+        let foundSpan = document.getElementById("found-span");
+        let attemptSpan = document.getElementById("attempt-span");
 
 
-        this.#updateFoundCount();
+        if( this.getCountries().length === 1 ){
+
+            // show attempts
+            attemptSpan.classList.add("hide");
+
+        }
+
+        foundSpan.classList.remove("hide");
+
 
         remainingDiv.classList.remove("hide"); // hide hint counter when user gets it right
         titleAndButtons.classList.remove("visibilityHidden"); // hide location title when user gets it right
         nextRoundButton.classList.add("hide");
         previousButton.classList.add("visibilityHidden");
 
-        showFoundAttemptDiv.classList.remove("hide");
-        showFoundAttemptDiv.classList.add("show-found-attempt-div");
 
         // add hints button if game mode is hints
         if( this.#getGameMode() === 'hints' ){
@@ -588,18 +614,22 @@ export class Game{
 
     }
 
-    attemptsRemaining(){
+    getAttemptsRemaining(){
 
         let attemptSpan = document.getElementById("attempt-count");
 
         attemptSpan.innerText = 3 - this.timesWrong;
     }
 
-    #updateFoundCount(){
+    #updateFoundCountDiv(){
 
         let foundCountSpan = document.getElementById("found-count");
+        let listOfCountries = document.getElementsByClassName("select-country");
 
-        foundCountSpan.innerText = `${ this.#found } / ${ this.#countriesTemp.length }`
+
+        let countriesTotal = listOfCountries.length > 0 ? listOfCountries.length : this.getCountryCount();
+
+        foundCountSpan.innerText = `${ this.#found } / ${ countriesTotal }`
     }
 
     getCountries(){
