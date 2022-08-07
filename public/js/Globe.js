@@ -257,9 +257,10 @@ export class Globe {
 
                     this.game.timesWrong++;
 
-                    this.game.getAttemptsRemaining();
+                    this.game.updateAttemptsCountDiv();
 
-                    if (this.game.timesWrong === 3) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
+                    // show the blinking text
+                    if ( this.game.timesWrong === 3 ) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
 
                         document.getElementById("show-answer").classList.remove("hide");
                         document.getElementById("found-span").classList.add("hide");

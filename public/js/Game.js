@@ -101,9 +101,9 @@ export class Game{
          this.#displayTextAccordingToGameMode( gameMode );
 
 
-         this.#countriesRemaining(); // sets the remaining countries after slicing it
+         this.#updateCountriesRemaining(); // sets the remaining countries after slicing it
 
-         this.getAttemptsRemaining();
+         this.updateAttemptsCountDiv();
 
          // remove next button if user only selected 1 country
          if( this.#countriesQueue.length === 1 ){
@@ -264,10 +264,15 @@ export class Game{
 
             ){
 
-            this.#found++;
+            // user got it right before attempts reached 0
+            if( this.timesWrong < 3 ){
+
+                // update found count
+                this.#found++;
+            }
 
             this.#resetAttempts();
-            this.getAttemptsRemaining();
+            this.updateAttemptsCountDiv();
 
 
             // empty the div
@@ -404,7 +409,7 @@ export class Game{
         this.#hideBlinkingText();
 
         this.#resetAttempts();
-        this.getAttemptsRemaining();
+        this.updateAttemptsCountDiv();
 
 
         let foundSpan = document.getElementById("found-span");
@@ -447,7 +452,7 @@ export class Game{
         this.#hideBlinkingText();
 
         this.#resetAttempts();
-        this.getAttemptsRemaining();
+        this.updateAttemptsCountDiv();
 
 
         let foundSpan = document.getElementById("found-span");
@@ -585,7 +590,7 @@ export class Game{
         }
 
         // SET COUNTRIES LEFT COUNT
-        this.#countriesRemaining();
+        this.#updateCountriesRemaining();
 
         // display the next thing to the div
         this.#displayTextAccordingToGameMode( this.#getGameMode() );
@@ -599,7 +604,7 @@ export class Game{
     }
 
 /*  COUNTRIES REMAINING */
-    #countriesRemaining(){
+    #updateCountriesRemaining(){
 
         let remainingCountriesCount = document.getElementById("remaining-countries-count");
 
@@ -614,7 +619,7 @@ export class Game{
 
     }
 
-    getAttemptsRemaining(){
+    updateAttemptsCountDiv(){
 
         let attemptSpan = document.getElementById("attempt-count");
 
