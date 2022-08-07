@@ -478,7 +478,7 @@ export class Game{
         let listOfCountries = document.getElementsByClassName("select-country");
 
         // IN THE EVENT THE USER DID NOT SELECT CUSTOM COUNTRIES AND GAVE A COUNT LIMIT
-        if( listOfCountries.length < 0 ){
+        if( listOfCountries.length <= 0 ){
 
             this.#countriesQueue = this.#countriesQueue.slice(0, this.getCountryCount());
 
