@@ -574,6 +574,8 @@ export class Game{
         }
 
         foundSpan.classList.remove("hide");
+        attemptSpan.classList.remove("hide");
+
 
 
         remainingDiv.classList.remove("hide"); // hide hint counter when user gets it right
