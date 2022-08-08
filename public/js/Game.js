@@ -402,9 +402,6 @@ export class Game{
 
         }
 
-        console.log(this.getCountries());
-
-
     }
 
 
