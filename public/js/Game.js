@@ -320,7 +320,13 @@ export class Game{
         blinkText.classList.add("hide");
 
         attemptSpan.classList.add("hide");
-        foundSpan.classList.add("hide");
+
+        // in case the user was shown "rotate the globe..." and the attempt span and found spans were hidden
+        if( foundSpan.getAttribute("class") === "hide" ){
+            foundSpan.classList.remove("hide"); // keep the total user found
+
+        }
+        // foundSpan.classList.add("hide");
 
         this.#updateFoundCountDiv();
 
@@ -328,7 +334,7 @@ export class Game{
         if( this.getCountries().length === 0 ){
 
             nextRoundButton.setAttribute("value", "You've Found Waldo in All Countries!");
-            foundSpan.classList.remove("hide"); // keep the total user found
+            // foundSpan.classList.remove("hide"); // keep the total user found
 
         // USER GOT A COUNTRY
         }else{
@@ -380,9 +386,9 @@ export class Game{
                      </li>`
             )
             // SET HINTS
-            await this.#geoAPI.getGeoFacts( this.#countriesQueue[x].country, 3 /*- this.#difficulty*/ ).then( (hints)=>{
+            await this.#geoAPI.getGeoFacts( this.#countriesQueue[x].country, 3 /*- this.#difficulty*/ ).then( (facts)=>{
 
-                let randomizedFacts = this.#randomize( hints ); // randomize the facts
+                let randomizedFacts = this.#randomize( facts ); // randomize the facts
 
                 this.#countriesQueue[x]["facts"] = randomizedFacts; // add facts property to each object
 
@@ -395,6 +401,8 @@ export class Game{
             }
 
         }
+
+        console.log(this.getCountries());
 
 
     }
@@ -541,7 +549,7 @@ export class Game{
         if( this.#countriesQueue.length > 0  &&
             hintsDiv.children.length < this.#countriesQueue[0].facts.length ){
 
-            hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">${this.#countriesQueue[0].facts[ hintsDiv.children.length ].fact }</p>`);// place a hint inside the hints div
+            hintsDiv.insertAdjacentHTML("beforeend", `<p class="hints-p">${this.#countriesQueue[0].facts[ hintsDiv.children.length ]/*.fact*/ }</p>`);// place a hint inside the hints div
 
         }
 

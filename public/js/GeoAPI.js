@@ -4,8 +4,8 @@ export class GeoAPI{
     API CALLS
 */
 
-// let getGeoHintsByCountry = `https://geofactsapi.herokuapp.com/countries/${country}/`
-    getCountries = `https://geofactsapi.herokuapp.com/countries/countriesandflags`
+// let getGeoHintsByCountry = `https://geofactsapi.herokuapp.com/countries/facts${country}/`
+    getCountries = `https://geofactsapi.herokuapp.com/countries/`
 
 
 /*
@@ -16,7 +16,8 @@ export class GeoAPI{
         let facts = [];
         await fetch(
 
-            `https://geofactsapi.herokuapp.com/countries/${country}/${count}`,
+            // `https://geofactsapi.herokuapp.com/countries/facts/${country}/${count}`,
+            `http://localhost:3000/countries/facts/${country}/${count}`,
             {
                 headers: { // this made us not get an empty object
                     "Content-Type": "application/json"
@@ -26,7 +27,18 @@ export class GeoAPI{
         ).then(
             resp  => resp.json()
         ).then(
-            data => { facts = data; /*console.log(data)*/ }
+            data => {
+
+                console.log(data)
+                // grab only the facts
+                for( let x = 0; x < data.length; x+=1 ){
+
+                    facts.push( data[x].fact );
+                }
+
+                // console.log(facts);
+                // facts = data; /*console.log(data)*/
+            }
         ).catch(
             (e) => { console.log(e) }
         )
@@ -44,7 +56,8 @@ export class GeoAPI{
         let countries = [];
         await fetch(
 
-            this.getCountries,
+            // this.getCountries,
+            'http://localhost:3000/countries/',
             {
                 headers: { // this made us not get an empty object
                     "Content-Type": "application/json"
