@@ -571,20 +571,18 @@ export class Game{
         let attemptSpan = document.getElementById("attempt-span");
 
 
-        if( this.getCountries().length === 1 ){
+        // show attempts as long as countries > 1
+        if( this.getCountries().length > 1 ){
 
-            // show attempts
-            attemptSpan.classList.add("hide");
+            attemptSpan.classList.remove("hide");
 
         }
-
         foundSpan.classList.remove("hide");
-        attemptSpan.classList.remove("hide");
 
 
 
-        remainingDiv.classList.remove("hide"); // hide hint counter when user gets it right
-        titleAndButtons.classList.remove("visibilityHidden"); // hide location title when user gets it right
+        remainingDiv.classList.remove("hide");
+        titleAndButtons.classList.remove("visibilityHidden");
         nextRoundButton.classList.add("hide");
         previousButton.classList.add("visibilityHidden");
 
@@ -601,7 +599,6 @@ export class Game{
 
         // display the next thing to the div
         this.#displayTextAccordingToGameMode( this.#getGameMode() );
-
 
     }
 

@@ -33,7 +33,7 @@ export class GeoAPI{
 
                     facts.push( data[x].fact );
                 }
-                
+
             }
         ).catch(
             (e) => { console.log(e) }
