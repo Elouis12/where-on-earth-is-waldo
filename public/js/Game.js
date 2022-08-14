@@ -4,7 +4,7 @@ export class Game{
 
     #countriesQueue = [];
     #countriesTemp = []; // so we can restart
-    #waldoText = "Waldo Has Escaped! Find Him Again!";
+    // #waldoText = "Waldo Has Escaped! Find Him Again!";
     #geoAPI  = new GeoAPI();
     #difficulty; // -3 is how many hints to show
     #gameMode;
@@ -37,7 +37,7 @@ export class Game{
     }
 
 /*
-    BRING USER TO START SCREEN
+    BRING USER TO START OF GAME SCREEN
 */
      start(){
 
@@ -282,10 +282,10 @@ export class Game{
             remainingHintsCount.innerText = 0;
 
             // pop from countriesQueue because they got it right
-            this.#countriesQueue.shift();
+            let country = this.#countriesQueue.shift();
 
             // set next round
-            this.#setNextRound();
+            this.#setNextRound(country); // pass the country removed so we can tell the user
 
             return true;
 
@@ -299,7 +299,7 @@ export class Game{
 /*
      PREPARES THE ROUND AFTER USER GETS IT CORRECTLY
 */
-    #setNextRound(){
+    #setNextRound(country){
 
 
         let nextRoundButton = document.getElementById("next-round-button");
@@ -333,13 +333,13 @@ export class Game{
         // USER GOT ALL COUNTRIES
         if( this.getCountries().length === 0 ){
 
-            nextRoundButton.setAttribute("value", "You've Found Waldo in All Countries!");
+            nextRoundButton.setAttribute("value", `You've Found Waldo ( in ${ country.country } and ) in All Countries!`);
             // foundSpan.classList.remove("hide"); // keep the total user found
 
         // USER GOT A COUNTRY
         }else{
 
-            nextRoundButton.setAttribute("value", this.#waldoText);
+            nextRoundButton.setAttribute("value", `"Waldo Has Escaped ${ country.country }! Find Him Again!"`);
 
         }
 
