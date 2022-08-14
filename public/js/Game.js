@@ -333,7 +333,7 @@ export class Game{
         // USER GOT ALL COUNTRIES
         if( this.getCountries().length === 0 ){
 
-            nextRoundButton.setAttribute("value", `Waldo has finally been captured in ${ country.country }!`/*`You've Found Waldo ( in ${ country.country } and ) in All Countries!`*/);
+            nextRoundButton.setAttribute("value", `Waldo Has Finally Been Captured in ${ country.country }!`/*`You've Found Waldo ( in ${ country.country } and ) in All Countries!`*/);
             // foundSpan.classList.remove("hide"); // keep the total user found
 
         // USER GOT A COUNTRY
