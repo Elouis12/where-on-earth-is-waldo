@@ -381,7 +381,7 @@ export class Game{
             setListToCountries.insertAdjacentHTML(
                 "beforeend",
                 `<li onclick="selectCountry(this)">
-                        <span >${this.#countriesQueue[x].country}</span>
+                        <span class="country" >${this.#countriesQueue[x].country}</span>
                         <i class="fa-solid fa-earth-europe"></i>
                      </li>`
             )

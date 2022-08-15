@@ -1,3 +1,4 @@
+
 function changeText(e){
 
     let value = e.children[0].innerHTML;
@@ -98,8 +99,8 @@ function selectAllCountries(){
 
 
     // highlight / de-select all
-    // first element will be the option to select / de-select all
-    for (let x = 1; x < listOfCountries.length; x+=1 ){
+    // first 2 element will be the option to select / de-select all AND the search
+    for (let x = 2; x < listOfCountries.length; x+=1 ){
 
         // user wants to select all countries
         if( checkbox.checked ){
@@ -125,4 +126,40 @@ function selectAllCountries(){
     }
 
     disableCountryCountBox();
+}
+
+function search(element){
+
+    const value = element.value.toLowerCase();
+
+    let listOfCountriesSpan = document.getElementsByClassName("country");
+
+    let doesContain;
+
+    let didContain = false;
+
+    for( let x = 0; x < listOfCountriesSpan.length; x+=1 ){
+
+        doesContain = listOfCountriesSpan[x].innerHTML.toLowerCase().includes(value);
+
+        listOfCountriesSpan[x].parentElement.classList.toggle("hide", !doesContain ); // hide the ones that it does not contain
+
+        if( doesContain ){
+
+            didContain = true;
+        }
+    }
+
+
+    if( !didContain ){ // none contained it then show all of the words again
+
+
+        for( let x = 0; x < listOfCountriesSpan.length; x+=1 ){
+
+            listOfCountriesSpan[x].parentElement.classList.remove("hide"/*, !doesContain*/ ); // hide the ones that it does not contain
+
+        }
+
+    }
+
 }

@@ -272,8 +272,8 @@ input[id="country-count"]{
 
   /*background: #8395ca;
   color: #e3e7f3 ;*/
-  background: #101010;
-  color: #fff ;
+  background: /*#101010*/ #e8fbe8;
+  /*color: #fff ;*/
     border-bottom: white 1px solid;
 
 }
@@ -286,4 +286,21 @@ input[id="country-count"]{
     justify-content: space-around;
     align-items: center;
     cursor: default;
+}
+
+#search-box{
+
+    width: 80%;
+    border: none;
+    border-bottom: 1px black solid;
+    font-family: 'Poppins', serif ;
+    text-align: center;
+
+}
+
+#search-box:focus-within{
+
+    outline: none;
+    border: none;
+    border-bottom: 1px black solid;
 }
