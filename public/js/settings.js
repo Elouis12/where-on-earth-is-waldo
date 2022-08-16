@@ -44,26 +44,81 @@ function changeText(e){
         }
     }
 */
+
+    highlightSelection(e);
 }
 
 
+function highlightSelection(currentElement){
+
+    const gameModeUl = document.getElementById("game-modes-ul").children;
+    const extraGameModeUl = document.getElementById("extra-game-modes-ul").children;
+
+
+// FOR GAME MODES SELECTED
+
+    if( currentElement.parentElement.getAttribute("id") === "game-modes-ul" ){
+
+        currentElement.classList.add("selected-mode");
+
+        // remove all the others selected
+        for( let x = 0; x < gameModeUl.length; x+=1  ){
+
+            if( gameModeUl[x] !== currentElement && // is not th one we just selected
+                gameModeUl[x].getAttribute("class") === "selected-mode" // has a highlight on it
+            ){
+
+                gameModeUl[x].classList.remove("selected-mode");
+
+            }
+        }
+    }
+
+// FOR EXTRA MODES SELECTED
+
+
+    if( currentElement.parentElement.getAttribute("id") === "extra-game-modes-ul" ){
+
+        currentElement.classList.add("selected-mode");
+
+        // remove all the others selected
+        for( let x = 0; x < extraGameModeUl.length; x+=1  ){
+
+            if( extraGameModeUl[x] !== currentElement && // is not th one we just selected
+                extraGameModeUl[x].getAttribute("class") === "selected-mode" // has a highlight on it
+            ){
+
+                extraGameModeUl[x].classList.remove("selected-mode");
+
+            }
+        }
+    }
+
+}
+
 function selectCountry(e){
 
-    // if it's already select remove it
-    if( e.getAttribute("class") === "select-country" ){
+    // FOR THE COUNTRIES
+    if( e.parentElement.getAttribute("id") === "country-options-ul" ) {
 
-        e.classList.remove("select-country");
-        // e.children[0].classList.remove("country-selected"); // remove country-selected class to it so we make sure we grab all the ones the user wanted
+        // if it's already select remove it
+        if (e.getAttribute("class") === "select-country") {
 
-    }else{
+            e.classList.remove("select-country");
+            // e.children[0].classList.remove("country-selected"); // remove country-selected class to it so we make sure we grab all the ones the user wanted
 
-        e.classList.add("select-country");
-        // e.children[0].classList.add("country-selected"); // add country-selected class to the span so we can grab all the ones clicked on
+        } else {
+
+            e.classList.add("select-country");
+            // e.children[0].classList.add("country-selected"); // add country-selected class to the span so we can grab all the ones clicked on
+
+        }
+
+        disableCountryCountBox(); // check to see if we should disable the count box
 
     }
 
 
-    disableCountryCountBox();
 
 }
 

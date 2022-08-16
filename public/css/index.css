@@ -613,3 +613,11 @@ body{
 
     display: block;
 }
+
+
+.selected{
+
+    background: /*#101010*/ #e8fbe8;
+    /*color: #fff ;*/
+    border-bottom: white 1px solid;
+}

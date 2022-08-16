@@ -268,7 +268,7 @@ input[id="country-count"]{
 }
 
 
-.select-country{
+.select-country, .selected-mode{
 
   /*background: #8395ca;
   color: #e3e7f3 ;*/
