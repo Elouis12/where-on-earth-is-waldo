@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 
 
-app.use( express.static('./public') );
+app.use( express.static( './public') );
 
 /*
 app.get('/', (req, resp)=>{
@@ -27,6 +27,14 @@ app.get('/play', (req, resp)=>{
 
     resp.sendFile( path.resolve( __dirname, './public/play.html') );
 })
+
+
+app.all('/*', (req, resp)=>{
+
+    resp.sendFile( path.join( __dirname, '/public/404.html') );
+
+})
+
 
 
 
