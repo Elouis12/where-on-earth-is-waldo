@@ -35,6 +35,7 @@ import {
 import {RGBELoader} from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/RGBELoader";
 import {OrbitControls} from "https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls";
 import {GLTFLoader} from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
+import {VRButton} from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/webxr/VRButton.js";
 import anime from 'https://cdn.skypack.dev/animejs@3.2.1';
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
 
@@ -493,7 +494,16 @@ export class Globe {
 
         /* CAMERA */
         this.#camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-        this.#camera.position.set(0, 15, 50);
+        // this.#camera.position.set(0, 15, 50);
+
+
+        // adds to group as it allows vr to be set
+        //https://discourse.threejs.org/t/webxr-camera-is-not-at-position-of-perspective-camera/44934
+        let cameraGroup = new Group();
+        cameraGroup.add(this.#camera);
+        cameraGroup.position.set(0,15,50)
+        this.#scene.add(cameraGroup);
+
 
 
         /* RENDERER */
@@ -505,6 +515,21 @@ export class Globe {
         this.#renderer.shadowMap.enabled = true;
         this.#renderer.shadowMap.type = PCFSoftShadowMap;
         // this.#renderer.domElement.style.display = "none"; // hides the canvas
+
+        // adding VR capability
+
+        // renderer camera position
+
+
+/*        this.#renderer.xr.getCamera().position.copy( this.#camera.position);
+        // this.#renderer.xr.getCamera().position.set(100, 0, 50);
+        // this.#renderer.xr.getCamera().lookAt( this.#camera.target );
+        this.#renderer.xr.enabled = true;*/
+
+        document.body.appendChild( VRButton.createButton( this.#renderer ) );
+
+
+
         document.body.appendChild(this.#renderer.domElement);
         document.getElementsByTagName("CANVAS")[0].style.display = "none";
 
@@ -763,6 +788,12 @@ export class Globe {
             this.#renderer.autoClear = false;
             this.#renderer.render(ringsScene, ringsCamera);
             this.#renderer.autoClear = true;
+
+
+            this.#renderer.xr.getCamera().position.copy( this.#camera.position);
+            console.log(this.#camera.position)
+            // this.#renderer.xr.getCamera().lookAt( this.#camera.target );
+            this.#renderer.xr.enabled = true;
         });
     }
 

@@ -6,6 +6,6 @@
 ## To view the API and how to use visit [here](https://github.com/Elouis12/geofactsapi)
 
 
-![alt text](./public/assets/application-images/waldo-home.png)
-![alt text](./public/assets/application-images/waldo-start.png)
-![alt text](./public/assets/application-images/waldo-play.png)
+![alt text](public-copy1/assets/application-images/waldo-home.png)
+![alt text](public-copy1/assets/application-images/waldo-start.png)
+![alt text](public-copy1/assets/application-images/waldo-play.png)

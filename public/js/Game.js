@@ -29,7 +29,6 @@ export class Game{
         await this.#geoAPI.getAllCountries().then(
 
             ( countries ) => {
-
                 this.#setCountries( countries ); // get all countries and hints
             }
         );

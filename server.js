@@ -1,11 +1,14 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
+const cors = require("cors");
+
 
 dotenv.config();
 
 const app = express();
 
+app.use( cors() );
 
 app.use( express.static('./public') );
 
@@ -34,7 +37,6 @@ app.all('/*', (req, resp)=>{
     resp.sendFile( path.resolve( __dirname, './public/404.html') );
 
 })
-
 
 
 app.listen(process.env.PORT, ()=>{

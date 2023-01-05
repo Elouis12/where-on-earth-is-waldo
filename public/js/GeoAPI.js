@@ -16,7 +16,7 @@ export class GeoAPI{
         let facts = [];
         await fetch(
 
-            `https://geofactsapi.herokuapp.com/countries/facts/${country}/${count}`,
+            /*${this.getCountries}*/'http://localhost:3000/countries/facts' + `/${country}/${count}`,
             {
                 headers: { // this made us not get an empty object
                     "Content-Type": "application/json"
@@ -52,7 +52,7 @@ export class GeoAPI{
         let countries = [];
         await fetch(
 
-            this.getCountries,
+            /*this.getCountries*/ 'http://localhost:3000/countries',
             {
                 headers: { // this made us not get an empty object
                     "Content-Type": "application/json"

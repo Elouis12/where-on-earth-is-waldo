@@ -1,0 +1,16 @@
+
+
+
+
+
+
+
+
+
+
+
+              ( name )     ( email )                                                  ( _id_ )  ( last_logged_in )     ( countries % )
+                   \       /                             1                 1                  \       |      /
+    ( user_name ) - [ USER ]  ────────────────────────────        has      ═══════════════════ [ USER_STATS ] - ( streak [daily log in] )
+                   /        \                                                                  /      |      \
+               ( id )       ( password [hashed] )                            ( modes played )   ( _user_id_ )    ( games played )
