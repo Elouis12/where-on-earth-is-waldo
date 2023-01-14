@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Where on Earth is Waldo?</title>
+  <link type="text/css" rel="stylesheet" href="css/register.css" />
+  <link type="text/css" rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+<!--  &lt;!&ndash; JS &ndash;&gt;
+  <script type="module" >
+
+    import {UserAuthAPI} from './js/userAuthAPI.js'
+
+    let userAuthAPI = new UserAuthAPI();
+
+    // click works for now, better to use 'load'
+    document.body.addEventListener('click', userAuthAPI.verifyToken.bind() );
+
+    document.body.click();
+
+  </script>-->
+
+</head>
+<body>
+
+
+<div class="container">
+
+  <!--  NAV BAR  -->
+  <nav id="navbar">
+
+    <div id="menu-container">
+      <!--            <input id="toggle-button"  class="day" type="button" >-->
+    </div>
+
+    <div id="navbar-container">
+      <ul id="nav-menu">
+        <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+        <li id="login-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
+        <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+      </ul>
+    </div>
+
+  </nav>
+
+  <form class="register-container">
+
+    <div class="register-items">
+
+      <div class="register-items-header">
+        <h1 class="header-title">Welcome back</h1>
+      </div>
+
+      <div class="input-container">
+
+        <div class="input-container-items" >
+
+          <div class="icon-container">
+            <i class="fa-solid fa-user"></i>
+          </div>
+
+          <input id="usernameOrEmail"  class="account-input" type="email" placeholder="Username or Email" />
+
+          <div class="issue-container">
+            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+            <span class="issue-message hideVisibility"></span>
+          </div>
+
+        </div>
+
+
+        <div class="input-container-items" >
+
+          <div class="icon-container">
+            <i class="input-icon fa-solid fa-key"></i>
+          </div>
+          <input id="password" class="account-input" type="password" placeholder="Password" />
+
+
+          <div class="issue-container">
+            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+            <span class="issue-message hideVisibility"></span>
+          </div>
+
+        </div>
+
+        <input id="login-button" type="button" class="login-button" value="Login">
+
+        <p class="account-text">Don't have an account? <a class="account-link" href="/register">Sign up</a></p>
+
+
+      </div>
+
+
+    </div>
+
+    <!--<div class="gif">
+    </div>-->
+
+
+    <!--        <script type="text/javascript" src="./js/userAuthAPI.js" ></script>-->
+    <!--        <script type="text/javascript" src="./js/RegisterUser.js" ></script>-->
+    <script type="module" src="js/LoginUser.js" ></script>
+
+  </form>
+
+</div>
+
+
+
+</body>
+</html>

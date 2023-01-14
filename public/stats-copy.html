@@ -1,0 +1,371 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stats | Where on Earth is Waldo?</title>
+  <link type="text/css" rel="stylesheet" href="css/nav.css" />
+  <link type="text/css" rel="stylesheet" href="css/stats.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  &lt;!&ndash; MATERIAL ICONS &ndash;&gt;
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+
+  &lt;!&ndash;  <script type="module" >
+
+      import {UserAuthAPI} from './js/userAuthAPI.js'
+
+      let userAuthAPI = new UserAuthAPI();
+
+      document.body.addEventListener('click', userAuthAPI.verifyToken.bind() );
+
+      document.body.click();
+
+    </script>&ndash;&gt;
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
+  <script type="module" src="./js/Stats.js"></script>
+
+</head>
+<body>
+
+  &lt;!&ndash;  NAV BAR  &ndash;&gt;
+  <nav id="navbar">
+
+    <div id="menu-container">
+      &lt;!&ndash;            <input id="toggle-button"  class="day" type="button" >&ndash;&gt;
+    </div>
+
+    <div id="navbar-container">
+      <ul id="nav-menu">
+        <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+        <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
+        <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+      </ul>
+    </div>
+
+  </nav>
+
+  <div class="dashboard-container">
+
+    <div class="dashboard-title">
+        <h1 class="title">Statistics</h1>
+        <div class="date">mm/dd/yyyy</div>
+    </div>
+
+    <div class="dashboard-cards">
+
+      <div class="dashboard-items" >
+
+          <div class="dashboard-item-streaks">
+
+&lt;!&ndash;            <span class="material-icons">face</span>&ndash;&gt;
+            <span class="item-icon">🔥</span>
+
+            <div class="card-info">
+                <div class="card-info-text">
+                    <h5 class="card-info-title">Total Days</h5>
+                    <h1 class="card-info-days">1</h1>
+                </div>
+                <span class="card-info-icon">🔥</span>
+            </div>
+
+            <div class="last-updated">
+              <h6>last 24 hours</h6>
+            </div>
+
+          </div>
+
+        <div class="dashboard-item-streaks">
+
+          </div>
+
+      </div>
+      &lt;!&ndash; END OF ITEMS DASHBOARD &ndash;&gt;
+
+      <div class="dashboard-graphs" >
+
+        <div class="dashboard-graph-modes-count">
+
+        </div>
+
+        <div class="dashboard-graph-modes-percent">
+
+        </div>
+
+      </div>
+      &lt;!&ndash; END OF GRAPH CARDS &ndash;&gt;
+
+      <div class="dashboard-activity" >
+
+        <div class="dashboard-activity-recent">
+
+          <h1>Recent Activity</h1>
+
+          <table class="table">
+
+            <thead>
+
+              <tr>
+                <th>Game Mode</th>
+                <th>Countries Selected</th>
+                <th>Misc Game Mode</th>
+                <th>Correct</th>
+              </tr>
+
+            </thead>
+
+
+            <tr>
+              <td>Hints</td>
+              <td>9</td>
+              <td>Regular</td>
+              <td>9/10</td>
+            </tr>
+
+            <tr>
+              <td>Hints</td>
+              <td>9</td>
+              <td>Regular</td>
+              <td>9/10</td>
+            </tr>
+
+          </table>
+
+        </div>
+        <div class="dashboard-activity-work-on">
+
+        </div>
+
+      </div>
+      &lt;!&ndash; END OF ACTIVITY CARDS &ndash;&gt;
+
+    </div>
+    &lt;!&ndash; END OF CARDS &ndash;&gt;
+
+
+  </div>
+  &lt;!&ndash; END OF DASHBOARD&ndash;&gt;
+
+  <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+&lt;!&ndash;    <canvas id="doughnutChart" width="60" height="40"></canvas>&ndash;&gt;
+  &lt;!&ndash;  <canvas id="myChart2" width="60" height="40"></canvas>&ndash;&gt;
+  </div>
+
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stats | Where on Earth is Waldo?</title>
+    <link type="text/css" rel="stylesheet" href="css/nav.css" />
+    <link type="text/css" rel="stylesheet" href="css/stats.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- MATERIAL ICONS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+          rel="stylesheet">
+
+    <!--  <script type="module" >
+
+        import {UserAuthAPI} from './js/userAuthAPI.js'
+
+        let userAuthAPI = new UserAuthAPI();
+
+        document.body.addEventListener('click', userAuthAPI.verifyToken.bind() );
+
+        document.body.click();
+
+      </script>-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
+    <script type="module" src="./js/Stats.js"></script>
+
+</head>
+<body>
+
+<!--  NAV BAR  -->
+<nav id="navbar">
+
+    <div id="menu-container">
+        <!--            <input id="toggle-button"  class="day" type="button" >-->
+    </div>
+
+    <div id="navbar-container">
+        <ul id="nav-menu">
+            <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+            <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
+            <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+        </ul>
+    </div>
+
+</nav>
+
+
+<main>
+
+    <h1>Statistics</h1>
+
+    <div class="date">
+        <input type="date">
+    </div>
+
+    <div class="insights">
+
+        <div class="sales" >
+
+            <span class="material-icons-sharp">analytics</span>
+            <div class="middle" >
+                <div class="left">
+                    <h3>Total Days</h3>
+                    <h1>1 days</h1>
+                </div>
+                <div class="progress">
+                    <svg>
+                        <circle cx="38" cy="38" r="36"></circle>
+                    </svg>
+                    <div class="number">
+                        <p>81%</p>
+                    </div>
+                </div>
+            </div>
+
+            <small class="text-muted">Last 24 Hours</small>
+
+        </div>
+        <!-- END OF SALES -->
+
+        <div class="income" >
+
+            <span class="material-icons-sharp">bar_chart</span>
+            <div class="middle" >
+                <div class="left">
+                    <h3>Total Days</h3>
+                    <h1>1 days</h1>
+                </div>
+                <div class="progress">
+                    <svg>
+                        <circle cx="38" cy="38" r="36"></circle>
+                    </svg>
+                    <div class="number">
+                        <p>62%</p>
+                    </div>
+                </div>
+            </div>
+
+            <small class="text-muted">Last 24 Hours</small>
+
+        </div>
+        <!-- END OF SALES -->
+
+        <div class="expenses" >
+
+            <span class="material-icons-sharp">stacked_line_chart</span>
+            <div class="middle" >
+                <div class="left">
+                    <h3>Total Days</h3>
+                    <h1>1 days</h1>
+                </div>
+                <div class="progress">
+                    <svg>
+                        <circle cx="38" cy="38" r="36"></circle>
+                    </svg>
+                    <div class="number">
+                        <p>81%</p>
+                    </div>
+                </div>
+            </div>
+
+            <small class="text-muted">Last 24 Hours</small>
+
+        </div>
+        <!-- END OF SALES -->
+
+    </div>
+    <!--  END OF INSIGHTS  -->
+
+    <div class="recent-orders">
+        <h2>Recent Order</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Number</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Foldable Mini Drone</td>
+                    <td>85631</td>
+                    <td>Due</td>
+                    <td class="warning">Pending</td>
+                    <td class="primary">Details</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="#">Show All</a>
+    </div>
+    <!--  END OF MAIN   -->
+
+    <div class="sales-analytics">
+        <h2>Sales Analytics</h2>
+        <div class="item online">
+            <div class="icon">
+                <span class="material-icons-sharp">shopping_cart</span>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <h3>ONLINE ORDERS</h3>
+                    <small class="text_muted">Last 24 Hours</small>
+                </div>
+                <h5 class="success">-17%</h5>
+                <h3>3849</h3>
+            </div>
+        </div>
+
+        <div class="item customers">
+            <div class="icon">
+                <span class="material-icons-sharp">shopping_bag</span>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <h3>OFFLINE ORDERS</h3>
+                    <small class="text_muted">Last 24 Hours</small>
+                </div>
+                <h5 class="danger">-17%</h5>
+                <h3>1100</h3>
+            </div>
+        </div>
+
+        <div class="item online">
+            <div class="icon">
+                <span class="material-icons-sharp">person</span>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <h3>ONLINE ORDERS</h3>
+                    <small class="text_muted">Last 24 Hours</small>
+                </div>
+                <h5 class="success">+25%</h5>
+                <h3>849</h3>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

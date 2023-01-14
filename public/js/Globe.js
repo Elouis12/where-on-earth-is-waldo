@@ -35,7 +35,6 @@ import {
 import {RGBELoader} from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/RGBELoader";
 import {OrbitControls} from "https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls";
 import {GLTFLoader} from "https://cdn.skypack.dev/three-stdlib@2.8.5/loaders/GLTFLoader";
-import {VRButton} from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/webxr/VRButton.js";
 import anime from 'https://cdn.skypack.dev/animejs@3.2.1';
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
 
@@ -47,7 +46,7 @@ import {Game} from "./Game.js";
 export class Globe {
 
     game;
-    // game;
+
 
     #scene;
     earth;
@@ -75,10 +74,20 @@ export class Globe {
     #daytime = true;
     #animating = false;
 
+    //
+    controls;
+    textures;
+    cloudMesh;
+    starMesh;
+    planesData;
+
+    pauseGlobeRotation = false;
+
     constructor() {
 
 
         this.game = new Game();
+        this.clock = new Clock();
 
 
     }
@@ -165,7 +174,7 @@ export class Globe {
         // user added a count greater than what the array holds
         if (countryCount > countryArray.length) {
 
-            // entering the loop ill give error, index out of bounds
+            // entering the loop will give error, index out of bounds
             return;
         }
 
@@ -204,7 +213,6 @@ export class Globe {
             this.#countryObjects.push(pointOfInterestMesh);
             this.earth.add(pointOfInterestMesh);
 
-
         }
 
     }
@@ -231,7 +239,7 @@ export class Globe {
 
 
             // if black already
-            if (intersects.length > 0 && intersects[0].object.userData.selected) {
+            if (intersects.length > 0 && intersects[0].object.userData.selected ) {
 
                 return;
 
@@ -239,6 +247,7 @@ export class Globe {
 
             if (intersects.length > 0 && intersects[0].object.userData.country) {
 
+                // country name associated with a white dot
                 let answerPicked = intersects[0].object.userData.country;
 
 
@@ -284,7 +293,7 @@ export class Globe {
                                         // used a less white value because on hover it will make it black as it's blinking
                                         this.#countryObjects[x].material.color.setHex(this.#lessWhiteHexValue);
 
-                                    // make it white again
+                                        // make it white again
                                     } else {
 
                                         this.#countryObjects[x].material.color.setHex(this.#redHexValue);
@@ -298,7 +307,7 @@ export class Globe {
 
                                         clearInterval(blinkDot);
 
-                                    // when user clicks next or previous then that object will no longer match the first country in our game class
+                                        // when user clicks next or previous then that object will no longer match the first country in our game class
                                     }else if(
                                         this.#countryObjects[x].userData.country !== this.game.getCountries()[0].country
                                     ){
@@ -321,7 +330,7 @@ export class Globe {
             }
         });
 
-        // WHEN THE USER HOVERS OVER A POINT HIGHLIGHT
+        // WHEN THE USER HOVERS OVER A POINT, HIGHLIGHT
         document.addEventListener("pointermove", (event) => {
 
             const mouse3D = new Vector2(
@@ -336,17 +345,22 @@ export class Globe {
             const intersects = raycaster.intersectObjects(this.#countryObjects);
 
 
-            // if dot is red or less-white color
+            // if dot is red (blinking) or white color
             if (intersects.length > 0 &&
                 (
                     intersects[0].object.material.color.getHex() === this.#redHexValue ||
-                    intersects[0].object.material.color.getHex() === this.#lessWhiteHexValue
+                    // intersects[0].object.material.color.getHex() === this.#lessWhiteHexValue
+                    intersects[0].object.material.color.getHex() === this.#whiteHexValue
                 )
             ) {
 
+                this.pauseGlobeRotation = true; // to pause the globe's rotation when user hovers to try to make decision
                 document.body.style.cursor = "pointer"; // make pointer
                 return;
 
+            }else{
+
+                this.pauseGlobeRotation = false; // continue the globe rotation
             }
 
             // highlight black when white
@@ -482,11 +496,14 @@ export class Globe {
 
     }
 
+    /* change to initEnvironment */
     async initGlobe() {
 
 
+        /* BE ABLE TO RESIZE CANVAS AND OBJECTS WHEN SCREEN SIZE CHANGES */
         this.#onWindowResize(); // resizes the window
 
+        /* SELECT OBJECTS ON GLOBE */
         this.#setRayCasters();
 
         /* SCENE */
@@ -494,148 +511,31 @@ export class Globe {
 
         /* CAMERA */
         this.#camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-        // this.#camera.position.set(0, 15, 50);
-
-
-        // adds to group as it allows vr to be set
-        //https://discourse.threejs.org/t/webxr-camera-is-not-at-position-of-perspective-camera/44934
-        let cameraGroup = new Group();
-        cameraGroup.add(this.#camera);
-        cameraGroup.position.set(0,15,50)
-        this.#scene.add(cameraGroup);
-
-
+        this.#camera.position.set(0, 15, 50);
 
         /* RENDERER */
-        this.#renderer = new WebGLRenderer({antialias: true, alpha: true});
-        this.#renderer.setSize(innerWidth, innerHeight);
-        this.#renderer.toneMapping = ACESFilmicToneMapping;
-        this.#renderer.outputEncoding = sRGBEncoding;
-        this.#renderer.physicallyCorrectLights = true;
-        this.#renderer.shadowMap.enabled = true;
-        this.#renderer.shadowMap.type = PCFSoftShadowMap;
-        // this.#renderer.domElement.style.display = "none"; // hides the canvas
-
-        // adding VR capability
-
-        // renderer camera position
-
-
-/*        this.#renderer.xr.getCamera().position.copy( this.#camera.position);
-        // this.#renderer.xr.getCamera().position.set(100, 0, 50);
-        // this.#renderer.xr.getCamera().lookAt( this.#camera.target );
-        this.#renderer.xr.enabled = true;*/
-
-        document.body.appendChild( VRButton.createButton( this.#renderer ) );
-
-
-
-        document.body.appendChild(this.#renderer.domElement);
-        document.getElementsByTagName("CANVAS")[0].style.display = "none";
-
+        this.setRenderer();
 
         /* SUN */
-        this.#sunLight = new DirectionalLight(
-            new Color("#FFFFFF").convertSRGBToLinear(),
-            3.5,
-        );
-        this.#sunLight.position.set(10, 20, 10);
-        this.#sunLight.castShadow = true;
-        this.#sunLight.shadow.mapSize.width = 512;
-        this.#sunLight.shadow.mapSize.height = 512;
-        this.#sunLight.shadow.camera.near = 0.5;
-        this.#sunLight.shadow.camera.far = 100;
-        this.#sunLight.shadow.camera.left = -10;
-        this.#sunLight.shadow.camera.bottom = -10;
-        this.#sunLight.shadow.camera.top = 10;
-        this.#sunLight.shadow.camera.right = 10;
-        this.#sunLight.intensity = 0.1
-        this.#scene.add(this.#sunLight);
+        this.setSunLight();
 
         /* MOON */
-        this.#moonLight = new DirectionalLight(
-            new Color("#77ccff").convertSRGBToLinear(),
-            0,
-        );
-        this.#moonLight.position.set(-10, 20, 10);
-        this.#moonLight.castShadow = true;
-        this.#moonLight.shadow.mapSize.width = 512;
-        this.#moonLight.shadow.mapSize.height = 512;
-        this.#moonLight.shadow.camera.near = 0.5;
-        this.#moonLight.shadow.camera.far = 100;
-        this.#moonLight.shadow.camera.left = -10;
-        this.#moonLight.shadow.camera.bottom = -10;
-        this.#moonLight.shadow.camera.top = 10;
-        this.#moonLight.shadow.camera.right = 10;
-        this.#scene.add(this.#moonLight);
+        this.setMoonLight();
 
-        /*
-            AMBIENT LIGHT
-        */
-        const ambientLight = new AmbientLight("#77ccff", 1); // shows all the objects
-        this.#scene.add(ambientLight);
+        /* AMBIENT LIGHT */
+        this.setAmbientLight();
 
-        /*
-            POINT LIGHT
-        */
-        const pointLight = new PointLight("#77ccff", 1); // light pointing to the object
-        pointLight.position.set(5, 3, 5);
-        // scene.add( pointLight );
-
+        /* POINT LIGHT */
+        // this.setPointLight();
 
         /* ORBIT CONTROLS */
-        const controls = new OrbitControls(this.#camera, this.#renderer.domElement);
-        controls.target.set(0, 0, 0);
-        controls.dampingFactor = 0.05;
-        controls.enableDamping = true;
-        controls.minDistance = 15; // prevent the user from zooming too far in
-        controls.maxDistance = 100; // prevent the user from zooming too far out
+        this.setOrbitControls();
 
         /* TEXTURES AND LOADERS */
-
-        let hdrFile = "dry_cracked_lake_4k.hdr";
-        let pmrem = new PMREMGenerator(this.#renderer);
-        let envmapTexture = await new RGBELoader()
-            .setDataType(FloatType)
-            .loadAsync(`assets/textures/${hdrFile}`);  // thanks to https://polyhaven.com/hdris !
-        let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
-
-        let textures = {
-            // thanks to https://free3d.com/user/ali_alkendi !
-            bump: await new TextureLoader().loadAsync("assets/textures/earthbump.jpg"),
-            map: await new TextureLoader().loadAsync("assets/textures/earthmap.jpg"),
-            spec: await new TextureLoader().loadAsync("assets/textures/earthspec.jpg"),
-            planeTrailMask: await new TextureLoader().loadAsync("assets/textures/trail.png"),
-            cloud: await new TextureLoader().load("./assets/textures/earthCloud.png")
-        };
-
+        await this.setTexturesAndLoaders();
 
         /* EARTH */
-        this.earth = new Mesh(
-            new SphereGeometry(this.earthRadius, 70, 70),
-            new MeshPhysicalMaterial({
-                map: textures.map,
-                roughnessMap: textures.spec,
-                bumpMap: textures.bump,
-                bumpScale: 0.05,
-                envMap,
-                envMapIntensity: 0.4,
-                sheen: 1,
-                sheenRoughness: 0.75,
-                sheenColor: new Color("#ff8a00").convertSRGBToLinear(),
-                clearcoat: 0.5,
-            }),
-        );
-        this.earth.sunEnvIntensity = 0.4;
-        this.earth.moonEnvIntensity = 0.1;
-        this.earth.rotation.y += Math.PI * 1.25;
-        this.earth.receiveShadow = true;
-        this.earth.userData.earth = "earth";
-        this.#countryObjects.push(this.earth);
-        this.#scene.add(this.earth);
-
-        await this.addPoints(this.game.getCountries(), this.game.getCountryCount());
-
+        await this.setEarth();
 
         this.#setDay();
 
@@ -645,156 +545,21 @@ export class Globe {
                     this.#loadDay();
                 }*/
 
-
         /* CLOUDS */
-
-        const cloudGeometry = new SphereGeometry(10.2, 70, 140);
-        const cloudMaterial = new MeshPhongMaterial({
-
-            map: new TextureLoader().load("./assets/textures/earthCloud.png"),
-            transparent: true
-        });
-
-        const cloudMesh = new Mesh(cloudGeometry, cloudMaterial);
-        cloudMesh.sunEnvIntensity = 0.4;
-        cloudMesh.moonEnvIntensity = 0.1;
-        cloudMesh.rotation.y += Math.PI * 1.25;
-        cloudMesh.receiveShadow = true;
-        this.#scene.add(cloudMesh);
+        this.setClouds();
 
 
-        /* add stars */
-        const starGeometry = new SphereGeometry(80, 140, 140);
-        const starMaterial = new MeshBasicMaterial({ // this material does not interact with light, or light won't affect it
-
-            map: new TextureLoader().load("./assets/textures/galaxy.png"),
-            side: THREE.BackSide
-        });
-
-        const starMesh = new Mesh(starGeometry, starMaterial);
-        this.#scene.add(starMesh);
+        /* STARS */
+        this.setStars();
 
         /* RINGS */
-        const ringsScene = new Scene();
+        this.setRings();
 
-        const ringsCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-        ringsCamera.position.set(0, 0, 50);
+        /* PLANES */
+        await this.setPlanes();
 
-        const ring1 = new Mesh(
-            new RingGeometry(15, 13.5, 80, 1, 0),
-            new MeshPhysicalMaterial({
-                color: new Color("#FFCB8E").convertSRGBToLinear().multiplyScalar(200),
-                roughness: 0.25,
-                envMap,
-                envMapIntensity: 1.8,
-                side: DoubleSide,
-                transparent: true,
-                opacity: 0.35,
-            })
-        );
-        ring1.name = "ring";
-        ring1.sunOpacity = 0.35;
-        ring1.moonOpacity = 0.03;
-        // ringsScene.add(ring1);
-
-        const ring2 = new Mesh(
-            new RingGeometry(16.5, 15.75, 80, 1, 0),
-            new MeshBasicMaterial({
-                color: new Color("#FFCB8E").convertSRGBToLinear(),
-                transparent: true,
-                opacity: 0.5,
-                side: DoubleSide,
-            })
-        );
-        ring2.name = "ring";
-        ring2.sunOpacity = 0.35;
-        ring2.moonOpacity = 0.1;
-        // ringsScene.add(ring2);
-
-        const ring3 = new Mesh(
-            new RingGeometry(18, 17.75, 80),
-            new MeshBasicMaterial({
-                color: new Color("#FFCB8E").convertSRGBToLinear().multiplyScalar(50),
-                transparent: true,
-                opacity: 0.5,
-                side: DoubleSide,
-            })
-        );
-        ring3.name = "ring";
-        ring3.sunOpacity = 0.35;
-        ring3.moonOpacity = 0.03;
-        // ringsScene.add(ring3);
-
-
-        let plane = (await new GLTFLoader().loadAsync("assets/plane/scene.glb")).scene.children[0];
-        let planesData = [
-            this.#makePlane(plane, textures.planeTrailMask, envMap, this.#scene),
-            this.#makePlane(plane, textures.planeTrailMask, envMap, this.#scene),
-            this.#makePlane(plane, textures.planeTrailMask, envMap, this.#scene),
-            this.#makePlane(plane, textures.planeTrailMask, envMap, this.#scene),
-            this.#makePlane(plane, textures.planeTrailMask, envMap, this.#scene),
-        ];
-
-
-        let clock = new Clock();
-
-        this.#renderer.setAnimationLoop(() => {
-
-            let delta = clock.getDelta();
-            this.earth.rotation.y += delta * 0.025/*0.05*/;
-            cloudMesh.rotation.y += delta * 0.05;
-            starMesh.rotation.y -= 0.0002;
-
-            controls.update();
-            this.#renderer.render(this.#scene, this.#camera);
-
-            ring1.rotation.x = ring1.rotation.x * 0.95 + this.#mousePos.y * 0.05 * 1.2;
-            ring1.rotation.y = ring1.rotation.y * 0.95 + this.#mousePos.x * 0.05 * 1.2;
-
-            ring2.rotation.x = ring2.rotation.x * 0.95 + this.#mousePos.y * 0.05 * 0.375;
-            ring2.rotation.y = ring2.rotation.y * 0.95 + this.#mousePos.x * 0.05 * 0.375;
-
-            ring3.rotation.x = ring3.rotation.x * 0.95 - this.#mousePos.y * 0.05 * 0.275;
-            ring3.rotation.y = ring3.rotation.y * 0.95 - this.#mousePos.x * 0.05 * 0.275;
-
-
-            planesData.forEach(planeData => {
-                let plane = planeData.group;
-
-                plane.position.set(0, 0, 0);
-                plane.rotation.set(0, 0, 0);
-                plane.updateMatrixWorld();
-                /**
-                 * idea: first rotate like that:
-                 *
-                 *          y-axis
-                 *  airplane  ^
-                 *      \     |     /
-                 *       \    |    /
-                 *        \   |   /
-                 *         \  |  /
-                 *     angle ^
-                 *
-                 * then at the end apply a rotation on a random axis
-                 */
-                planeData.rot += delta * 0.25;
-                plane.rotateOnAxis(planeData.randomAxis, planeData.randomAxisRot); // random axis
-                plane.rotateOnAxis(new Vector3(0, 1, 0), planeData.rot);    // y-axis rotation
-                plane.rotateOnAxis(new Vector3(0, 0, 1), planeData.rad);    // this decides the radius
-                plane.translateY(planeData.yOff);
-                plane.rotateOnAxis(new Vector3(1, 0, 0), +Math.PI * 0.5);
-            });
-
-            this.#renderer.autoClear = false;
-            this.#renderer.render(ringsScene, ringsCamera);
-            this.#renderer.autoClear = true;
-
-
-            this.#renderer.xr.getCamera().position.copy( this.#camera.position);
-            console.log(this.#camera.position)
-            // this.#renderer.xr.getCamera().lookAt( this.#camera.target );
-            this.#renderer.xr.enabled = true;
-        });
+        /* START ANIMATION */
+        this.animate();
     }
 
 
@@ -858,7 +623,6 @@ export class Globe {
 
     #onWindowResize() { // everytime we call this, it will fit it according to the newly changed size
 
-
         window.addEventListener('resize', () => {
 
             this.#camera.aspect = window.innerWidth / window.innerHeight; // resets camera
@@ -870,6 +634,297 @@ export class Globe {
 
     }
 
+    setRenderer(){
+
+        this.#renderer = new WebGLRenderer({antialias: true, alpha: true});
+        this.#renderer.setSize(innerWidth, innerHeight);
+        this.#renderer.toneMapping = ACESFilmicToneMapping;
+        this.#renderer.outputEncoding = sRGBEncoding;
+        this.#renderer.physicallyCorrectLights = true;
+        this.#renderer.shadowMap.enabled = true;
+        this.#renderer.shadowMap.type = PCFSoftShadowMap;
+        // this.#renderer.domElement.style.display = "none"; // hides the canvas
+        document.body.appendChild(this.#renderer.domElement);
+        document.getElementsByTagName("CANVAS")[0].style.display = "none";
+
+    }
+
+    setSunLight(){
+
+        this.#sunLight = new DirectionalLight(
+            new Color("#FFFFFF").convertSRGBToLinear(),
+            3.5,
+        );
+        this.#sunLight.position.set(10, 20, 10);
+        this.#sunLight.castShadow = true;
+        this.#sunLight.shadow.mapSize.width = 512;
+        this.#sunLight.shadow.mapSize.height = 512;
+        this.#sunLight.shadow.camera.near = 0.5;
+        this.#sunLight.shadow.camera.far = 100;
+        this.#sunLight.shadow.camera.left = -10;
+        this.#sunLight.shadow.camera.bottom = -10;
+        this.#sunLight.shadow.camera.top = 10;
+        this.#sunLight.shadow.camera.right = 10;
+        this.#sunLight.intensity = 0.1
+        this.#scene.add(this.#sunLight);
+    }
+
+    setMoonLight(){
+
+        this.#moonLight = new DirectionalLight(
+            new Color("#77ccff").convertSRGBToLinear(),
+            0,
+        );
+        this.#moonLight.position.set(-10, 20, 10);
+        this.#moonLight.castShadow = true;
+        this.#moonLight.shadow.mapSize.width = 512;
+        this.#moonLight.shadow.mapSize.height = 512;
+        this.#moonLight.shadow.camera.near = 0.5;
+        this.#moonLight.shadow.camera.far = 100;
+        this.#moonLight.shadow.camera.left = -10;
+        this.#moonLight.shadow.camera.bottom = -10;
+        this.#moonLight.shadow.camera.top = 10;
+        this.#moonLight.shadow.camera.right = 10;
+        this.#scene.add(this.#moonLight);
+    }
+
+    setAmbientLight(){
+
+        const ambientLight = new AmbientLight("#77ccff", 1); // shows all the objects
+        this.#scene.add(ambientLight);
+
+    }
+
+    setPointLight(){
+        const pointLight = new PointLight("#77ccff", 1); // light pointing to the object
+        pointLight.position.set(5, 3, 5);
+        this.#scene.add( pointLight );
+    }
+
+    setOrbitControls(){
+
+        this.controls = new OrbitControls(this.#camera, this.#renderer.domElement);
+        this.controls.target.set(0, 0, 0);
+        this.controls.dampingFactor = 0.05;
+        this.controls.enableDamping = true;
+        this.controls.minDistance = 15; // prevent the user from zooming too far in
+        this.controls.maxDistance = 100; // prevent the user from zooming too far out
+
+    }
+
+    async setTexturesAndLoaders(){
+
+        let hdrFile = "dry_cracked_lake_4k.hdr";
+        let pmrem = new PMREMGenerator(this.#renderer);
+        let envmapTexture = await new RGBELoader()
+            .setDataType(FloatType)
+            .loadAsync(`assets/textures/${hdrFile}`);  // thanks to https://polyhaven.com/hdris !
+        let envMap = pmrem.fromEquirectangular(envmapTexture).texture;
+
+        this.textures = {
+            // thanks to https://free3d.com/user/ali_alkendi !
+            bump: await new TextureLoader().loadAsync("assets/textures/earthbump.jpg"),
+            map: await new TextureLoader().loadAsync("assets/textures/earthmap.jpg"),
+            spec: await new TextureLoader().loadAsync("assets/textures/earthspec.jpg"),
+            planeTrailMask: await new TextureLoader().loadAsync("assets/textures/trail.png"),
+            cloud: await new TextureLoader().load("./assets/textures/earthCloud.png"),
+            envMap
+        };
+
+    }
+
+    async setEarth(){
+
+        this.earth = new Mesh(
+            new SphereGeometry(this.earthRadius, 70, 70),
+            new MeshPhysicalMaterial({
+                map: this.textures.map,
+                roughnessMap: this.textures.spec,
+                bumpMap: this.textures.bump,
+                bumpScale: 0.05,
+                envMap : this.textures.envMap,
+                envMapIntensity: 0.4,
+                sheen: 1,
+                sheenRoughness: 0.75,
+                sheenColor: new Color("#ff8a00").convertSRGBToLinear(),
+                clearcoat: 0.5,
+            }),
+        );
+        this.earth.sunEnvIntensity = 0.4;
+        this.earth.moonEnvIntensity = 0.1;
+        this.earth.rotation.y += Math.PI * 1.25;
+        this.earth.receiveShadow = true;
+        this.earth.userData.earth = "earth";
+        this.#countryObjects.push(this.earth);
+        this.#scene.add(this.earth);
+
+        await this.addPoints(this.game.getCountries(), this.game.getCountryCount());
+
+    }
+
+    setClouds(){
+
+        const cloudGeometry = new SphereGeometry(10.2, 70, 140);
+        const cloudMaterial = new MeshPhongMaterial({
+
+            map: new TextureLoader().load("./assets/textures/earthCloud.png"),
+            transparent: true
+        });
+
+        this.cloudMesh = new Mesh(cloudGeometry, cloudMaterial);
+        this.cloudMesh.sunEnvIntensity = 0.4;
+        this.cloudMesh.moonEnvIntensity = 0.1;
+        this.cloudMesh.rotation.y += Math.PI * 1.25;
+        this.cloudMesh.receiveShadow = true;
+        this.#scene.add(this.cloudMesh);
+    }
+
+    setStars(){
+
+        const starGeometry = new SphereGeometry(80, 140, 140);
+        const starMaterial = new MeshBasicMaterial({ // this material does not interact with light, or light won't affect it
+
+            map: new TextureLoader().load("./assets/textures/galaxy.png"),
+            side: THREE.BackSide
+        });
+
+        this.starMesh = new Mesh(starGeometry, starMaterial);
+        this.#scene.add(this.starMesh);
+
+    }
+
+    setRings(){
+
+        const ringsScene = new Scene();
+
+        const ringsCamera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
+        ringsCamera.position.set(0, 0, 50);
+
+        const ring1 = new Mesh(
+            new RingGeometry(15, 13.5, 80, 1, 0),
+            new MeshPhysicalMaterial({
+                color: new Color("#FFCB8E").convertSRGBToLinear().multiplyScalar(200),
+                roughness: 0.25,
+                envMap : this.textures.envMap,
+                envMapIntensity: 1.8,
+                side: DoubleSide,
+                transparent: true,
+                opacity: 0.35,
+            })
+        );
+        ring1.name = "ring";
+        ring1.sunOpacity = 0.35;
+        ring1.moonOpacity = 0.03;
+        // ringsScene.add(ring1);
+
+        const ring2 = new Mesh(
+            new RingGeometry(16.5, 15.75, 80, 1, 0),
+            new MeshBasicMaterial({
+                color: new Color("#FFCB8E").convertSRGBToLinear(),
+                transparent: true,
+                opacity: 0.5,
+                side: DoubleSide,
+            })
+        );
+        ring2.name = "ring";
+        ring2.sunOpacity = 0.35;
+        ring2.moonOpacity = 0.1;
+        // ringsScene.add(ring2);
+
+        const ring3 = new Mesh(
+            new RingGeometry(18, 17.75, 80),
+            new MeshBasicMaterial({
+                color: new Color("#FFCB8E").convertSRGBToLinear().multiplyScalar(50),
+                transparent: true,
+                opacity: 0.5,
+                side: DoubleSide,
+            })
+        );
+        ring3.name = "ring";
+        ring3.sunOpacity = 0.35;
+        ring3.moonOpacity = 0.03;
+        // ringsScene.add(ring3);
+    }
+
+    async setPlanes(){
+
+        let plane = (await new GLTFLoader().loadAsync("assets/plane/scene.glb")).scene.children[0];
+        this.planesData = [
+            this.#makePlane(plane, this.textures.planeTrailMask, this.textures.envMap, this.#scene),
+            this.#makePlane(plane, this.textures.planeTrailMask, this.textures.envMap, this.#scene),
+            this.#makePlane(plane, this.textures.planeTrailMask, this.textures.envMap, this.#scene),
+            this.#makePlane(plane, this.textures.planeTrailMask, this.textures.envMap, this.#scene),
+            this.#makePlane(plane, this.textures.planeTrailMask, this.textures.envMap, this.#scene),
+        ];
+    }
+
+
+    animate(){
+
+        this.#renderer.setAnimationLoop(() => {
+
+            let delta = this.clock.getDelta();
+
+            if( this.pauseGlobeRotation ){
+
+                this.earth.rotation.y += delta * 0.001;
+
+            }else{
+
+                this.earth.rotation.y += delta * 0.025/*0.05*/;
+                this.cloudMesh.rotation.y += delta * 0.05;
+            }
+
+            this.starMesh.rotation.y -= 0.0002;
+
+            this.controls.update();
+
+            this.#renderer.render(this.#scene, this.#camera);
+            this.#renderer.autoClear = false;
+            // this.#renderer.render(ringsScene, ringsCamera);
+            this.#renderer.autoClear = true;
+            /*
+                        ring1.rotation.x = ring1.rotation.x * 0.95 + this.#mousePos.y * 0.05 * 1.2;
+                        ring1.rotation.y = ring1.rotation.y * 0.95 + this.#mousePos.x * 0.05 * 1.2;
+
+                        ring2.rotation.x = ring2.rotation.x * 0.95 + this.#mousePos.y * 0.05 * 0.375;
+                        ring2.rotation.y = ring2.rotation.y * 0.95 + this.#mousePos.x * 0.05 * 0.375;
+
+                        ring3.rotation.x = ring3.rotation.x * 0.95 - this.#mousePos.y * 0.05 * 0.275;
+                        ring3.rotation.y = ring3.rotation.y * 0.95 - this.#mousePos.x * 0.05 * 0.275;
+            */
+
+
+            this.planesData.forEach(planeData => {
+                let plane = planeData.group;
+
+                plane.position.set(0, 0, 0);
+                plane.rotation.set(0, 0, 0);
+                plane.updateMatrixWorld();
+                /**
+                 * idea: first rotate like that:
+                 *
+                 *          y-axis
+                 *  airplane  ^
+                 *      \     |     /
+                 *       \    |    /
+                 *        \   |   /
+                 *         \  |  /
+                 *     angle ^
+                 *
+                 * then at the end apply a rotation on a random axis
+                 */
+                planeData.rot += delta * 0.25;
+                plane.rotateOnAxis(planeData.randomAxis, planeData.randomAxisRot); // random axis
+                plane.rotateOnAxis(new Vector3(0, 1, 0), planeData.rot);    // y-axis rotation
+                plane.rotateOnAxis(new Vector3(0, 0, 1), planeData.rad);    // this decides the radius
+                plane.translateY(planeData.yOff);
+                plane.rotateOnAxis(new Vector3(1, 0, 0), +Math.PI * 0.5);
+            });
+
+        });
+
+    }
 }
 
 

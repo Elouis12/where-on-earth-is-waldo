@@ -1,23 +1,88 @@
 import {Globe} from "./Globe.js";
+import {UserAuthAPI} from "./userAuthAPI.js";
 
 
-
-function main(){
+async function main(){
 
 
     const globe = new Globe();
 
-    globe.initGlobe();
+    let userAuthAPI = new UserAuthAPI();
+
+    let userInfo = await userAuthAPI.userInfo();
+
+    console.log(userInfo)
+
+
+    // tp make it faster? load the globe without stuff and inside the if add them?
+
+    /*await*/ globe.initGlobe();
+
+
 
     // check when the globe and fetch responses have loaded
     const checkResources = setInterval(()=>{
 
-        if( typeof globe.earth !== "undefined") {
+        if( /*typeof globe.earth !== "undefined"*/ true ) {
 
             // show globe
-
-            document.getElementById("loader").classList.add("hide");
+            document.getElementById("loader-container").classList.add("hide");
+            document.getElementById("loader-container").classList.remove("loader-container");
             document.getElementsByTagName("CANVAS")[0].style.display = "block";
+
+            // load div content
+            let introDiv = document.getElementById('intro');
+
+
+            introDiv.innerHTML = `
+            
+                <h1>Where on Earth is Waldo?</h1>
+                <p><span id="welcome-title">Welcome!</span> Waldo is on the run and we must catch him before he escapes.
+                    Use your geographical knowledge to find him before he flees!
+                </p>
+
+                <button id="start-button" class="btn" onclick="window.location='/play'">Help Find Waldo</button>
+                
+            `
+
+            // load nav content
+            let navMenu = document.getElementById('nav-menu');
+
+            navMenu.innerHTML = `
+                
+                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
+                <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
+                <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+            
+            `;
+
+
+            // if user exits, display their name and remove sign up button
+            if( userInfo.length > 0 ){
+
+                // display user's id
+                let welcomeTitle = document.getElementById('welcome-title')
+                welcomeTitle.innerHTML = `Welcome, <span id="welcome-name">${userInfo[0].user_name}</span>!`;
+
+                // replace signing with login
+                let signUpNavItem = document.getElementById('signup-nav-item')
+                let loginNavItem = document.getElementById('login-nav-item')
+
+                // give it logout function from userAuth (bind it )
+                // loginNavItem.setAttribute()
+
+                signUpNavItem.remove();
+                loginNavItem.innerText = 'Logout';
+
+            }
+
+
+            /*globe.setStars();
+            globe.setCloud();
+            // globe.setSun();
+            globe.setMoon();
+            globe.setAmbientLight();*/
 
             clearInterval(checkResources);
 

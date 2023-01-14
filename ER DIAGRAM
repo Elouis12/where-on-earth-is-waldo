@@ -14,3 +14,20 @@
     ( user_name ) - [ USER ]  ────────────────────────────        has      ═══════════════════ [ USER_STATS ] - ( streak [daily log in] )
                    /        \                                                                  /      |      \
                ( id )       ( password [hashed] )                            ( modes played )   ( _user_id_ )    ( games played )
+
+
+
+
+               types of stats to track
+
+               1. games played - doughnut chart
+
+               2. percentage correct - bar graph ( x = game modes, y = average percentage correct )
+
+               3. need to work on - if less than a certain amount, display to the user they need to work on
+
+               4. streaks
+
+               5. recent section (game mode, country count picked, extra game mode picked, etc )
+
+               6. try next (next to streak section)

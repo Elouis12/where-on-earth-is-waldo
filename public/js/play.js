@@ -20,7 +20,8 @@ function main(){
             document.getElementById("settings-box").classList.remove("hide");
             document.getElementById("start-button").classList.remove("hide");
 
-            document.getElementById("loader").classList.add("hide");
+            document.getElementById("loader-container").classList.add("hide");
+            document.getElementById("loader-container").classList.remove("loader-container");
             document.getElementsByTagName("CANVAS")[0].style.display = "block";
 
             clearInterval(checkResources);

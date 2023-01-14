@@ -9,18 +9,31 @@
     <link rel="stylesheet" type="text/css" href="/css/toggle.css">
     <link rel="stylesheet" type="text/css" href="/css/settings.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
+    <link rel="stylesheet" type="text/css" href="/css/nav.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- JS -->
+    <script type="module" >
+
+        import {UserAuthAPI} from './js/userAuthAPI.js'
+
+        let userAuthAPI = new UserAuthAPI();
+
+        window.addEventListener('load', userAuthAPI.verifyToken.bind() );
+
+
+    </script>
+
     <script src='https://cdn.jsdelivr.net/npm/webxr-polyfill@latest/build/webxr-polyfill.js'></script>
 <!--    <script type="module" src="./js-obs/play.js"></script>-->
     <script type="module" src="./js/play.js"></script>
 <!--    <script type="text/javascript" src="./js-obs/settings.js"></script>-->
     <script type="text/javascript" src="./js/settings.js"></script>
 
+
 </head>
-<body >
+<body>
 
 <!--  NAV BAR  -->
 <nav id="navbar">
@@ -32,6 +45,8 @@
     <div id="navbar-container">
         <ul id="nav-menu">
             <li class="nav-items" onclick="window.location ='/'">Home</li>
+            <li class="nav-items" onclick="window.location ='/register'">Sign Up</li>
+            <li class="nav-items" onclick="window.location ='/login'">Login</li>
             <li class="nav-items" onclick="window.location ='/about'">About</li>
         </ul>
     </div>
@@ -219,7 +234,7 @@
             <div id="previous-next-button">
                 <input id="previous-button" class="btn previous-button visibilityHidden" type="button" value="Previous"  />
                 <input id="next-button" class="btn next-button" type="button" value="Next"  />
-                <input id="end-button" class="end-button" type="button" value="End"  onclick="window.location ='/play'" />
+                <input id="end-button" class="end-button" type="button" value="End"  onclick="window.location.reload()" />
             </div>
 
         </div>
@@ -259,7 +274,10 @@
 
 <!-- LOADING SCREEN -->
 
-<div id="loader" class="loader"></div>
+<div id="loader-container" class="loader-container">
+    <div id="loader" class="loader"></div>
+</div>
+
 
 <input id="start-button" class="btn hide" type="button" value="Find Waldo">
 

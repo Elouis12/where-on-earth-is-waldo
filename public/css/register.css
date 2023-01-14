@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*{
+    font-family: 'poppins', sans-serif;
+}
+
+html{
+
+    height: 100%;
+
+}
+body{
+
+    background-image: url("galaxy.png");
+    /*background-color: #5bfdba;*/
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+}
+
+.container{
+
+    height: 100%;
+}
+
+/* REGISTER */
+.register-container{
+
+    background-color: #f7f7f7;
+    height: 80%;
+    width: 80%;
+    margin: auto;
+    border-radius: 3px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.register-items{
+
+    background-color: #fff;
+    height: 80%;
+    width: 80%;
+
+    border-radius: 3px;
+
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+
+
+}
+
+
+
+/* HEADER */
+.register-items-header{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #000;
+    width: 100%;
+    height: 20%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.header-title{
+
+    text-align: center;
+
+    margin: 0;
+    color: #fff;
+
+    width: 80%;
+}
+
+/*.register-items{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}*/
+
+/* INPUTS */
+.input-container{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*padding-top: 20px;*/
+    /*padding-bottom: 20px;*/
+    /*background-color: #00d4ff;*/
+
+    height: 80%;
+
+
+
+}
+
+.input-container > * {
+
+
+}
+
+.input-container-items{
+
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*padding-top: 20px;*/
+
+    margin-bottom: 20px;
+
+    height: 10%;
+    border-color: black;
+
+    position: relative; /* to move exclamation mark around */
+
+}
+
+/* [ ICONS ] */
+.icon-container{
+
+    width: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #c1c1c1;
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.icon-container i {
+
+    color: #c1c1c1;
+}
+
+.issue-container{
+
+    position: absolute;
+    /*top: 50%;*/
+    right: 3%;
+    /*transform: translateY(-50%);*/
+
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.issue-container i {
+
+    color: #ff4c4c;
+}
+
+.issue-message{
+
+    position: absolute;
+    top: 50%;
+    right: -100%;
+    transform: translateX(100%) translateY(-50%);
+    height: max-content;
+    width: 100px;
+    padding: 5px;
+
+    background-color: #f7f7f7;
+    /*padding: 10px;*/
+    text-align: center;
+    font-size: 12px;
+    border-radius: 3px;
+    color: #ff4c4c;
+}
+
+.fa-exclamation-circle{
+
+    cursor: pointer;
+
+}
+
+.fa-exclamation-circle:hover + .issue-message {
+
+    visibility: visible;
+
+    -webkit-transition: all 150ms linear  ;
+    -moz-transition: all 150ms linear;
+
+}
+
+.hideVisibility{
+
+    visibility: hidden;
+}
+
+/* [ INPUT ] */
+.account-input{
+
+    width: 80%;
+    margin: 0;
+    height: 100%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    outline: none !important;
+    border: 1px #c1c1c1 solid;
+    padding-left: 10px;
+}
+
+/* BUTTONS */
+.signup-button, .login-button{
+
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    height: 40px;
+    border-radius: 5px;
+
+    /*margin-top: 20px ;*/
+    text-align: center;
+    width: 50%;
+
+}
+
+.signup-button:hover, .login-button:hover{
+
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    height: 40px;
+
+    cursor: pointer;
+}
+
+.signup-button:active, .login-button:active{
+
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    height: 40px;
+}
+
+
+/* SING IN / LOGIN TEXT */
+.account-text{
+
+    color: #c1c1c1;
+    font-size: 10pt;
+}
+
+.account-text{
+
+    font-size: 9pt;
+    color: grey;
+}
+
+.account-link,
+.account-link:visited,
+.account-link:active{
+
+    width: max-content;
+    color: rgb(0, 114, 255);
+    margin-bottom: 20px ;
+    text-decoration: none;
+
+}
