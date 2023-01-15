@@ -1,21 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+:root{
+
+
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    /*--color-white: #fff;*/
+    --color-info-dark: #78da1;
+    --color-info-light: #dce1eb;
+    /*--color-dark: #363949;*/
+    /*--color-light: rgba(132, 139, 200, 0.18);*/
+    --color-primary-variant: #111e88;
+    /*--color-dark-variant: #677483;*/
+    --color-background: #f6f6f9;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    /*--box-shadow: 0 2rem 3em var(--color-light);*/
+
+    /* DARK THEME */
+    --color-theme-dark: #181a1e;
+    --color-white: #202528 ;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0,0,0,0.4);
+    --box-shadow: 0 2rem 3em var(--color-light);
+}
+
 *{
-    font-family: 'poppins', sans-serif;
-}
-
-html{
-
-    height: 100%;
-
-}
-body{
-
-    background-image: url("galaxy.png");
-    /*background-color: #5bfdba;*/
-    height: 100%;
     margin: 0;
     padding: 0;
+    outline: 0;
+    appearance: none;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+body{
+
+    width: 100vw;
+    height: 100vh;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.88rem;
+    user-select: none;
+    /*width: 100vw;*/
+    /*height: 100vh;*/
+    /*background: linear-gradient(45deg, rgb(255 219 158), rgb(253 243 220));*/
+    /*background: linear-gradient(313deg, #0b1a2b 33%, #3a6291 111%);*/
+
+    /*background: url("../client/public-copy1/assets/textures/galaxy.png");*/
+    background: url("./galaxy.png");
 
 }
 
@@ -27,7 +71,8 @@ body{
 /* REGISTER */
 .register-container{
 
-    background-color: #f7f7f7;
+    /*background-color: #f7f7f7;*/
+    background-color: var(--color-theme-dark);
     height: 80%;
     width: 80%;
     margin: auto;
@@ -45,13 +90,15 @@ body{
 
 .register-items{
 
-    background-color: #fff;
+    /*background-color: #fff;*/
+    background-color: var(--color-light);
     height: 80%;
     width: 80%;
 
     border-radius: 3px;
 
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+    /*box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;*/
+    box-shadow: var(--box-shadow);
 
 
 }
@@ -136,10 +183,11 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #c1c1c1;
+    border: 1px solid var(--color-theme-dark);
 
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+    background-color: var(--color-theme-dark);
 }
 
 .icon-container i {
@@ -204,6 +252,11 @@ body{
     visibility: hidden;
 }
 
+.hide{
+
+    display: none;
+}
+
 /* [ INPUT ] */
 .account-input{
 
@@ -214,7 +267,7 @@ body{
     border-bottom-right-radius: 5px;
 
     outline: none !important;
-    border: 1px #c1c1c1 solid;
+    border: 1px var(--color-theme-dark) solid;
     padding-left: 10px;
 }
 
@@ -270,7 +323,9 @@ body{
 .account-link:active{
 
     width: max-content;
-    color: rgb(0, 114, 255);
+    /*color: rgb(0, 114, 255);*/
+    /*color: #7380ec;*/
+    color: #ffbb55;
     margin-bottom: 20px ;
     text-decoration: none;
 

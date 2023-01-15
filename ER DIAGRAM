@@ -31,3 +31,29 @@
                5. recent section (game mode, country count picked, extra game mode picked, etc )
 
                6. try next (next to streak section)
+
+
+
+
+
+               // FOR TABLE
+
+CREATE TABLE `users_stats` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `country_percent` decimal(10,0) DEFAULT NULL,
+  `daily_streak` varchar(100) DEFAULT NULL,
+  `last_logged_in` datetime DEFAULT CURRENT_TIMESTAMP,
+  `games_played` int DEFAULT NULL,
+  `hints` int DEFAULT NULL,
+  `flags` int DEFAULT NULL,
+  `countries` int DEFAULT NULL,
+  `capitals` int DEFAULT NULL,
+  `hints_percentage` double DEFAULT NULL,
+  `capitals_percentage` double DEFAULT NULL,
+  `flags_percentage` double DEFAULT NULL,
+  `countries_percentage` double DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `users_stats_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

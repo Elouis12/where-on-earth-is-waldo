@@ -11,10 +11,12 @@
     <title>Where on Earth is Waldo?</title>
 
        <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="css/nav.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="css/toggle.css">
     <link rel="stylesheet" type="text/css" href="css/loader.css">
+
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+<!--    <link rel="stylesheet" type="text/css" href="css/toggle.css">-->
+
     <link rel="stylesheet" type="text/css" href="css/skeletonLoading.css">
 
       <!-- JS -->
@@ -25,22 +27,27 @@
 <body>
 
 
-    <!--  NAV BAR  -->
-    <nav id="navbar">
+<main>
 
-        <div id="menu-container">
-<!--            <input id="toggle-button"  class="day" type="button" >-->
-        </div>
 
-        <div id="navbar-container">
-            <ul id="nav-menu">
-                <li class="nav-items skeleton skeleton-text">text</li>
-                <li class="nav-items skeleton skeleton-text">text</li>
-                <li class="nav-items skeleton skeleton-text">text</li>
-            </ul>
-        </div>
 
-    </nav>
+
+<!--  NAV BAR  -->
+<nav id="navbar">
+
+    <div id="menu-container">
+        <!--            <input id="toggle-button"  class="day" type="button" >-->
+    </div>
+
+    <div id="navbar-container">
+        <ul id="nav-menu">
+            <li id="home-nav-item" class="nav-items skeleton skeleton-body-text">Home</li>
+            <li id="login-nav-item" class="nav-items skeleton skeleton-body-text">Login</li>
+            <li id="about-nav-item" class="nav-items skeleton skeleton-body-text">About</li>
+        </ul>
+    </div>
+
+</nav>
 
 
     <!--  INTRO  -->
@@ -50,12 +57,21 @@
 
             <div id="intro" class="intro">
 
-                <h1 class="skeleton skeleton-text">text</h1>
-                <p  class="skeleton skeleton-text">text</p>
-                <p  class="skeleton skeleton-text">text</p>
-                <p  class="skeleton skeleton-text">text</p>
+                <div class="skeleton skeleton-text">
+                    <h1>Where on Earth is Waldo?</h1>
+                </div>
 
-                <button id="start-button" class="skeleton skeleton-body-text btn">text button</button>
+                <div class="skeleton skeleton-text">
+                    <p>.</p>
+                </div>
+                <div class="skeleton skeleton-text">
+                    <p>.</p>
+                </div>
+                <div class="skeleton skeleton-text">
+                    <p>.</p>
+                </div>
+
+                <button id="start-button" class="skeleton skeleton-body-text btn">Help Find Waldo</button>
 
             </div>
 
@@ -71,6 +87,8 @@
     <div class="sun-background"></div>
     <div class="moon-background"></div>
 
+
+</main>
 
 </body>
 </html>

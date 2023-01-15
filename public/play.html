@@ -2,33 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Where on Earth is Waldo? | Play</title>
+    <title>Play | Where on Earth is Waldo?</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/play.css">
     <link rel="stylesheet" type="text/css" href="/css/toggle.css">
     <link rel="stylesheet" type="text/css" href="/css/settings.css">
-    <link rel="stylesheet" type="text/css" href="/css/loader.css">
+    <link rel="stylesheet" type="text/css" href="css/loader.css">
     <link rel="stylesheet" type="text/css" href="/css/nav.css">
+    <link rel="stylesheet" type="text/css" href="/css/skeletonloading.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- JS -->
-    <script type="module" >
-
-        import {UserAuthAPI} from './js/userAuthAPI.js'
-
-        let userAuthAPI = new UserAuthAPI();
-
-        window.addEventListener('load', userAuthAPI.verifyToken.bind() );
-
-
-    </script>
-
+    <!--  SCRIPT  -->
     <script src='https://cdn.jsdelivr.net/npm/webxr-polyfill@latest/build/webxr-polyfill.js'></script>
-<!--    <script type="module" src="./js-obs/play.js"></script>-->
+
     <script type="module" src="./js/play.js"></script>
-<!--    <script type="text/javascript" src="./js-obs/settings.js"></script>-->
     <script type="text/javascript" src="./js/settings.js"></script>
 
 
@@ -44,10 +33,10 @@
 
     <div id="navbar-container">
         <ul id="nav-menu">
-            <li class="nav-items" onclick="window.location ='/'">Home</li>
-            <li class="nav-items" onclick="window.location ='/register'">Sign Up</li>
-            <li class="nav-items" onclick="window.location ='/login'">Login</li>
-            <li class="nav-items" onclick="window.location ='/about'">About</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/'">Home</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/register'">Sign Up</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/login'">Login</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/about'">About</li>
         </ul>
     </div>
 

@@ -1,4 +1,5 @@
 import {GeoAPI} from './GeoAPI.js'
+import {Stats} from './Stats.js'
 
 export class Game{
 
@@ -15,8 +16,13 @@ export class Game{
     timesWrong = 0; // find how many times the user clicked on the wrong country
     #found = 0; // number of times user found waldo
 
+    #gameOver = false;
+
+    #stats;
+
     constructor(){
 
+        this.#stats = new Stats();
         this.#initGame();
 
     }
@@ -211,9 +217,20 @@ export class Game{
 
     #setCountryCount(){
 
-         const countryCountTextBox = document.getElementById("country-count");
+        const countryCountTextBox = document.getElementById("country-count");
 
-        this.#countryCount =  Number( countryCountTextBox.value );
+        const listOfCountries = document.getElementsByClassName("select-country");
+
+        if( listOfCountries.length > 0 ){
+
+            this.#countryCount = listOfCountries.length;
+
+        }else if( Number( countryCountTextBox.value ) > 0 ){
+
+            this.#countryCount = listOfCountries.length;
+
+        }
+
 
     }
 
@@ -298,7 +315,7 @@ export class Game{
 /*
      PREPARES THE ROUND AFTER USER GETS IT CORRECTLY
 */
-    #setNextRound(country){
+    async #setNextRound(country){
 
 
         let nextRoundButton = document.getElementById("next-round-button");
@@ -329,8 +346,17 @@ export class Game{
 
         this.#updateFoundCountDiv();
 
-        // USER GOT ALL COUNTRIES
+
+        // USER WENT THROUGH ALL COUNTRIES
         if( this.getCountries().length === 0 ){
+
+
+            this.#gameOver = true;
+
+            // save the user's game stats
+            let percentageCorrect = ( this.#found / this.getCountryCount() ).toFixed(2);
+
+            await this.#stats.saveStats(this.#getGameMode(), this.getExtraGameMode(), this.getCountryCount(), percentageCorrect, new Date().toLocaleDateString() );
 
             nextRoundButton.setAttribute("value", `Waldo Has Finally Been Captured in ${ country.country }!`/*`You've Found Waldo ( in ${ country.country } and ) in All Countries!`*/);
             // foundSpan.classList.remove("hide"); // keep the total user found

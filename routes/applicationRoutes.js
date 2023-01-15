@@ -20,6 +20,12 @@ router.get('/register', /*JWTAuthController.authenticateJWT,*/ applicationContro
 
 router.get('/login', /*JWTAuthController.authenticateJWT,*/ applicationController.getLoginPage )
 
+router.post('/save-stats', /*JWTAuthController.authenticateJWT,*/ applicationController.postUserStats )
+
+router.post('/get-stats', /*JWTAuthController.authenticateJWT,*/ applicationController.getUserStats )
+
+router.post('/save-streaks', /*JWTAuthController.authenticateJWT,*/ applicationController.postStreak )
+
 router.get('/*', applicationController.get404Page );
 
 

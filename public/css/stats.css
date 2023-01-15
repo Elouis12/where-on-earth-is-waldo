@@ -1,17 +1,17 @@
 :root{
 
 
-    --color-primary: #7380ec;
+    /*--color-primary: #7380ec;*/
     --color-danger: #ff7782;
     --color-success: #41f1b6;
     --color-warning: #ffbb55;
-    --color-white: #fff;
+    /*--color-white: #fff;*/
     --color-info-dark: #78da1;
     --color-info-light: #dce1eb;
-    --color-dark: #363949;
-    --color-light: rgba(132, 139, 200, 0.18);
+    /*--color-dark: #363949;*/
+    /*--color-light: rgba(132, 139, 200, 0.18);*/
     --color-primary-variant: #111e88;
-    --color-dark-variant: #677483;
+    /*--color-dark-variant: #677483;*/
     --color-background: #f6f6f9;
 
     --card-border-radius: 2rem;
@@ -22,8 +22,17 @@
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
 
+    /*--box-shadow: 0 2rem 3em var(--color-light);*/
+
+    /* DARK THEME */
+    --color-theme-dark: #181a1e;
+    --color-white: #202528 ;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0,0,0,0.4);
     --box-shadow: 0 2rem 3em var(--color-light);
 }
+
 
 
 *{
@@ -44,14 +53,28 @@ body{
     height: 100vh;
     font-family: "Poppins", sans-serif;
     font-size: 0.88rem;
-    background: var(--color-background);
+    /*background: var(--color-background);*/
+    /*background: var(--color-theme-dark);*/
+    background: url("./galaxy.png");
+
     user-select: none;
     overflow-x: hidden;
     color:  var(--color-dark);
+    /* DARK THEME */
+    --color-theme-dark: #181a1e;
+    --color-white: #202528 ;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0,0,0,0.4);
+    --box-shadow: 0 2rem 3em var(--color-light);
+
 }
+
 /*  MAIN */
 main{
-    margin-top: 1.4rem;
+    position: relative;
+    top: 100px;
+    /*margin-top: 1.4rem;*/
     width: 90%;
     margin-left: auto;
     margin-right: auto;
@@ -110,7 +133,7 @@ main .insights > div.expenses span{
 
 }
 
-main .insights > div.income span{
+main .insights > div.games-played span{
 
     background: var(--color-success);
 
@@ -171,7 +194,7 @@ main .insights .expenses svg circle{
 }
 
 
-main .insights .income svg circle{
+main .insights .games-played svg circle{
 
     stroke-dashoffset: 35;
     stroke-dasharray: 110;
@@ -292,7 +315,7 @@ main .recent-orders a{
     padding: 0.6rem;
     color: var(--color-white);
     border-radius: 50%;
-    background: var(--color-primary);
+    /*background: var(--color-primary);*/
     display: flex;
 }
 
@@ -326,6 +349,31 @@ main .recent-orders a{
     flex-basis: 30%;
 }
 
+.danger{
+
+    color: var(--color-danger);
+}
+
+.danger-background{
+
+    background: var(--color-danger);
+}
+
+.warning-background{
+
+    background: var(--color-warning);
+}
+
+.success-background{
+
+    background: var(--color-success);
+}
+
+.primary-background{
+
+    background: var(--color-primary);
+}
+
 /* CHARTS */
 
 .charts{
@@ -357,4 +405,46 @@ main .recent-orders a{
 .charts .chart:hover{
 
     box-shadow: none;
+}
+
+
+.hide{
+
+    display: none;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 1000px) {
+
+    .recent{
+
+        display: flex;
+        flex-direction: column-reverse;
+        /*justify-content: space-between;*/
+        /*align-items: start;*/
+        /*gap: 1rem;*/
+    }
+
+    main .recent-orders{
+
+        width: 100%;
+    }
+
+    .sales-analytics{
+
+        width: 100%;
+    }
+
+    .charts{
+
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        /*justify-content: center;*/
+        /*align-items: center;*/
+        /*gap: 1rem;*/
+        width: 100%;
+
+    }
+
 }

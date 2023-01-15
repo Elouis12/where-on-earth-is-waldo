@@ -1,4 +1,8 @@
 let path = require("path");
+const jwt = require('./JWTAuthController');
+let {db} = require('../config/db');
+const dotEnv = require("dotenv");
+dotEnv.config();
 
 
 let getHomePage = (req, resp)=>{
@@ -46,6 +50,364 @@ let get404Page = (req, resp)=>{
 }
 
 
+
+let postUserStats =  (req, resp)=>{
+
+    let { refreshToken, gameMode, extraGameMode, countriesPicked, percentCorrect, date } = req.body;
+
+    try{
+
+
+        // get user id from token if valid
+        let userId = parseInt(
+
+            jwt.verifyJWT(
+                refreshToken,
+                process.env.JWT_REFRESH_SECRET,
+            ).id
+        );
+
+        let postRecordSQL = `
+            INSERT INTO users_stats(
+                user_id, 
+                game_mode, 
+                extra_game_mode,  
+                countries_picked, 
+                percent_correct,
+                date_added
+            )
+            VALUES( 
+                ${userId},
+                '${gameMode}',
+                '${extraGameMode}', 
+                ${parseInt(countriesPicked)}, 
+                ${parseFloat(percentCorrect)}, 
+                '${date}'
+             )`
+        /* POST RECORD */
+        db.query( postRecordSQL, (error, results)=>{
+
+            if( error ){
+
+                return resp.status(401).json('user record not stored');
+
+            }else{
+
+                // update games played, game mode percentage
+                let getUserStats = `
+                    
+                    SELECT
+                        games_played,
+                        hints_percentage,
+                        capitals_percentage,
+                        flags_percentage,
+                        countries_percentage,
+                        hints_played,
+                        capitals_played,
+                        flags_played,
+                        countries_played
+                    FROM users
+                    WHERE id = ${userId}
+                
+                `
+
+                // get user stats
+                db.query( getUserStats, ( error, results )=>{
+
+                    if( results ){
+
+                        let userStats = results[0];
+
+                        let modePlayedToUpdate;
+                        let modePercentageToUpdate;
+
+
+                        switch (gameMode){
+
+                            case 'hints':
+
+                                // user playing for the first time
+                                if( userStats.hints_played === null ){
+
+                                    modePercentageToUpdate = `hints_percentage = ${ parseFloat(percentCorrect) }`
+                                    modePlayedToUpdate = `hints_played = ${1}`
+
+                                    // user has records already
+                                }else{
+
+                                    let played = parseInt(userStats.hints_played);
+
+                                    modePercentageToUpdate = ` hints_percentage = ${ ( ( ( userStats.hints_played * userStats.hints_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.hints_played + 1 ) ).toFixed(2) }`
+                                    modePlayedToUpdate = ` hints_played = ${ ++played }`
+
+                                }
+                                break;
+
+                            case 'flags':
+
+                                    // user playing for the first time
+                                    if( userStats.flags_played === null ){
+
+                                        modePercentageToUpdate = `flags_percentage = ${ parseFloat(percentCorrect) }`
+                                        modePlayedToUpdate = `flags_played = ${1}`
+
+                                        // user has records already
+                                    }else{
+
+                                        let played = parseInt(userStats.flags_played);
+
+                                        modePercentageToUpdate = ` flags_percentage = ${ ( ( ( userStats.flags_played * userStats.flags_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.flags_played + 1 ) ).toFixed(2) }`
+                                        modePlayedToUpdate = ` flags_played = ${ ++played }`
+
+                                    }
+                                    break;
+
+                            case 'capitals':
+
+                                    // user playing for the first time
+                                    if( userStats.capitals_played === null ){
+
+                                        modePercentageToUpdate = `capitals_percentage = ${ parseFloat(percentCorrect) }`
+                                        modePlayedToUpdate = `capitals_played = ${1}`
+
+                                        // user has records already
+                                    }else{
+
+                                        let played = parseInt(userStats.capitals_played);
+
+                                        modePercentageToUpdate = ` capitals_percentage = ${ ( ( ( userStats.capitals_played * userStats.capitals_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.capitals_played + 1 ) ).toFixed(2) }`
+                                        modePlayedToUpdate = ` capitals_played = ${ ++played }`
+
+                                    }
+                                    break;
+
+                            case 'countries':
+
+                                    // user playing for the first time
+                                    if( userStats.countries_played === null ){
+
+                                        modePercentageToUpdate = `countries_percentage = ${ parseFloat(percentCorrect) }`
+                                        modePlayedToUpdate = `countries_played = ${1}`
+
+                                        // user has records already
+                                    }else{
+
+                                        let played = parseInt(userStats.countries_played);
+
+                                        modePercentageToUpdate = ` countries_percentage = ${ ( ( ( userStats.countries_played * userStats.countries_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.countries_played + 1 ) ).toFixed(2) }`
+                                        modePlayedToUpdate = ` countries_played = ${ ++played }`
+
+                                    }
+                                    break;
+
+                        }
+
+                        let gamesPlayed = userStats.games_played === null ? 1 : ++userStats.games_played;
+
+/*                        let updateUsersSQL = `
+                            
+                            UPDATE 
+                                users
+                            SET games_played = ${gamesPlayed} 
+                            WHERE id = ${userId};
+                            
+                            UPDATE 
+                                users
+                            SET ${modePlayedToUpdate}
+                            WHERE id = ${userId};  
+                                                        
+                            UPDATE 
+                                users
+                            SET ${modePercentageToUpdate}
+                            WHERE id = ${userId};                               
+                        `*/
+
+                        let gamesPlayedQuery = ` UPDATE 
+                                users
+                            SET games_played = ${gamesPlayed} 
+                            WHERE id = ${userId};
+                        `
+                        let modesPlayedQuery = `UPDATE 
+                                users
+                            SET ${modePlayedToUpdate}
+                            WHERE id = ${userId};
+                        `
+                        let modePercentage = `UPDATE 
+                                users
+                            SET ${modePercentageToUpdate}
+                            WHERE id = ${userId};
+                        `
+                        let lastDatePlayed = `UPDATE 
+                                users
+                            SET last_logged_in = '${date}'
+                            WHERE id = ${userId};
+                        `
+
+                        // made it an array because of syntax issue when running multiple updates in the variable 'updateUsersSQL'
+                        let queriesToRun = [ gamesPlayedQuery, modesPlayedQuery, modePercentage, lastDatePlayed ];
+
+                        for( let x = 0; x < queriesToRun.length; x++){
+
+                            db.query( queriesToRun[x], (error, results)=>{
+
+                                if( error ){
+
+                                    return resp.status(401).json('user record not stored');
+
+                                }
+
+                            } )
+                        }
+
+                        return resp.status(200).json('success');
+
+                    }
+                } );
+
+                // return resp.status(200).json('success');
+            }
+
+        } );
+
+
+    }catch (e){
+
+        console.log(e);
+        // have user re-login
+        return resp.status(401).json('user record not stored');
+
+    }
+
+
+}
+
+let getUserStats = (req, resp)=>{
+
+    let { refreshToken } = req.body;
+
+    let resultsArray = [];
+
+
+    try{
+
+        let userId = parseInt(jwt.verifyJWT(
+
+            refreshToken,
+            process.env.JWT_REFRESH_SECRET
+        ).id);
+
+
+        let sql = `
+        
+            SELECT 
+                game_mode,
+                extra_game_mode,
+                percent_correct,
+                countries_picked,
+                date_added
+            FROM 
+                users_stats 
+            WHERE user_id = ${ userId } 
+            ORDER BY id DESC
+
+    `
+
+        // get users general stats
+        db.query( sql, (error, results)=>{
+
+            if(error){
+
+                return resp.json('could not get users');
+
+            }else if(results){
+
+                resultsArray.push( results );
+
+                let sql = `
+                    
+                    SELECT 
+                        daily_streak,
+                        last_logged_in,
+                        games_played,
+                        hints_percentage,
+                        capitals_percentage,
+                        flags_percentage,
+                        countries_percentage,
+                        hints_played,
+                        capitals_played,
+                        flags_played,
+                        countries_played
+                    FROM users
+                    WHERE id = ${ userId }
+                  
+                `
+
+                // get users specific stats
+                db.query(sql, (error, results)=>{
+
+                    if( error || results.length <= 0 ){
+
+                        return resp.json('could not get users');
+
+                    }else if( results ){
+
+                        resultsArray.push( results[0] );
+
+                        return resp.status(200).json(resultsArray)
+
+                    }
+                })
+            }
+
+        } );
+
+    }catch (e) {
+
+        console.log(e)
+    }
+}
+
+
+let postStreak = (req, resp)=>{
+
+    let {daily_streak, refreshToken} = req.body;
+
+
+    try{
+
+        let userId = parseInt( jwt.verifyJWT(
+            refreshToken,
+            process.env.JWT_REFRESH_SECRET
+        ).id );
+
+        let sql =  `
+        
+            UPDATE users
+            SET daily_streak = ${daily_streak}
+            WHERE id = ${userId}
+            
+        `
+
+        db.query(sql, (error, results)=>{
+
+            if(error){
+
+                return resp.status(401).json('streak not updated');
+            }else{
+
+                return resp.status(201).json(daily_streak);
+
+            }
+
+        })
+
+    }catch (e) {
+
+        console.log(e);
+    }
+
+}
+
 module.exports = {
 
     getHomePage,
@@ -54,6 +416,9 @@ module.exports = {
     getAboutPage,
     getPlayPage,
     getStatsPage,
-    get404Page
+    get404Page,
+    postUserStats,
+    getUserStats,
+    postStreak
 
 }

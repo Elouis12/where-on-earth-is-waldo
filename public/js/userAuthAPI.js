@@ -9,6 +9,15 @@ export class UserAuthAPI{
 
     _passwordConfirmation;
 
+    logoutUser(){
+
+        localStorage.setItem('accessToken', '');
+        localStorage.setItem('refreshToken', '');
+
+        window.location.href = '/login';
+    }
+
+
     /* SEND USER CREDENTIALS TO BACKEND TO BE EVALUATED */
     async registerUser(e){
 
@@ -66,7 +75,7 @@ export class UserAuthAPI{
 
                 inputs[0].children[ 0 ].children[0].style.color = '#ff4c4c';
                 inputs[0].children[ 2 ].children[0].classList.remove('hideVisibility');
-                // inputs[0].children[ 2 ].children[1].innerText = message.issues.username;
+                inputs[0].children[ 2 ].children[1].innerText = message.issues.username;
 
             }else{
 
@@ -92,8 +101,6 @@ export class UserAuthAPI{
 
                 inputs[2].children[ 0 ].children[0].style.color = '#ff4c4c';
                 inputs[2].children[ 2 ].children[0].classList.remove('hideVisibility');
-
-                console.log(message.issues.password)
 
                 inputs[2].children[ 2 ].children[1].innerText = '';
                 for( let x = 0; x < message.issues.password.length; x++ ){
@@ -220,9 +227,7 @@ export class UserAuthAPI{
 
     async verifyToken(){
 
-        // so the user doesn't see the page while we check to see if they're authorized
-        document.body.style.display = 'none';
-
+        // verify access token
         let message = await fetch(
 
             "http://localhost:5000/auth/verify-token",
@@ -243,8 +248,7 @@ export class UserAuthAPI{
             (e)=> console.log(e)
         );
 
-
-        // make call to verify token
+        // make call to refresh the token
         if( message === 'unauthorized' ){
 
             let newAccessToken = await fetch(
@@ -272,28 +276,41 @@ export class UserAuthAPI{
         }
 
 
-        if( message === 'authorized' && ( window.location.href.includes( '/register' ) ) ){
 
-            alert('logged in already');
+
+        // user is logged in and tries to access register or login page
+        if( message === 'authorized' &&
+            (
+                window.location.href.includes( '/register' )
+                ||
+                window.location.href.includes( '/login' )
+
+            )
+        ){
 
             // send user back to main page
             window.location.href = '/'
-            // return;
+            return;
         }
 
         // display the page if user has access
-        if( message === 'authorized' || message === 'unauthorized'  ){
+        if( message === 'authorized' ){
 
-            document.body.style.display = 'block';
+            // document.body.style.display = 'block';
+            document.body.children[0].style.display = 'block';
 
         }
 
         // if the user does not have access, send them back to the login page
         if(
             message === 'restricted' &&
-            ( window.location.href.includes( '/play' ) ) ){
+            ( window.location.href.includes( '/stats' ) ) ){
 
             window.location.href = '/login';
+
+        }else{
+
+            document.body.children[0].style.display = 'block';
 
         }
     }

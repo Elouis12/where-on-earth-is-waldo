@@ -4,6 +4,7 @@ const emailValidator= require("email-validator");
 const inputValidator= require("node-input-validator");
 const dotEnv = require("dotenv");
 dotEnv.config();
+const jwt = require('jsonwebtoken');
 let { db } = require("../config/db.js");
 
 
@@ -66,7 +67,7 @@ let postRegister = async (req, resp) => {
     if( !username || typeof username !== 'string' ){
 
         issues.username = 'Invalid username';
-        // return resp.json({issue:'username', error: 'Invalid username'});
+
     }else if( userByUsername.length > 0 ){
 
         issues.username = 'Username already exist';
@@ -74,11 +75,11 @@ let postRegister = async (req, resp) => {
     }
 
 
+
     // verify email
     if( !email || typeof email !== 'string' || !emailValidator.validate(email) ){
 
         issues.email = 'Invalid email';
-        // return resp.json({issue:'email', error: 'Invalid email'});
 
     }
     if( userByEmail.length > 0 ){
@@ -95,16 +96,12 @@ let postRegister = async (req, resp) => {
         let allMessages = messages[0].slice(16);
 
         issues.password = allMessages.split('.');
-        // issues.password = 'Invalid password';
-        // return resp.json({issue:'password', error: 'Invalid password'});
     }
 
     // verify passwords match
     if( passwordConfirmation === "" || passwordConfirmation !== plainTextPassword ){
 
         issues.passwordConfirmation = 'Passwords do not match';
-        // return resp.json({issue:'Passwords do not match', error: 'Passwords do not match'});
-
     }
 
     if( Object.keys(issues).length > 0 ){
@@ -118,8 +115,8 @@ let postRegister = async (req, resp) => {
 
         let sql = `
             
-            INSERT INTO users( user_name, email, password )
-            values( '${username}', '${email}', '${password}' );
+            INSERT INTO users( user_name, email, password, daily_streak )
+            values( '${username}', '${email}', '${password}', ${0} );
         
         `
         db.query( sql );
@@ -209,7 +206,7 @@ let postLogin = async (req, resp) => {
             id,
             username,
             process.env.JWT_REFRESH_SECRET,
-            '60s'
+            '1d'
 
         );
 
@@ -226,13 +223,12 @@ let postLogin = async (req, resp) => {
 }
 
 
-const jwt = require('jsonwebtoken');
 
 let getAccessToken = (req, resp) => {
 
-    try{
+    let { refreshToken } = req.body;
 
-        let { refreshToken } = req.body;
+    try{
 
         // verify the refresh token coming in making sure it wasn't tampered with
         const userInfo = jwt.verify( // gives decoded version of middle part -> { _id , username }
@@ -312,7 +308,8 @@ let getUserInfo = (req, resp) => {
 
     }catch (e){
 
-        console.log(e.name)
+        console.log(e.name);
+
         if (e.name === 'TokenExpiredError') {
 
             resp.json({unauthorized : 'unauthorized'})

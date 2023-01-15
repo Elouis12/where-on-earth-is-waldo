@@ -1,15 +1,19 @@
 import {Globe} from "./Globe.js";
+import {UserAuthAPI} from "./userAuthAPI.js";
 
 
 
-function main(){
+async function main(){
 
 
     const globe = new Globe();
 
+    let userAuthAPI = new UserAuthAPI();
+
+    let userInfo = await userAuthAPI.userInfo();
+
     globe.initGlobe();
     globe.addButtons();
-
 
     // check when the globe and fetch responses have loaded
     const checkResources = setInterval(()=>{
@@ -24,15 +28,40 @@ function main(){
             document.getElementById("loader-container").classList.remove("loader-container");
             document.getElementsByTagName("CANVAS")[0].style.display = "block";
 
+
+            // load nav content
+            let navMenu = document.getElementById('nav-menu');
+
+            // if user exits, display their name and remove sign up button
+            if( userInfo.length > 0 ){
+
+                navMenu.innerHTML = `
+                
+                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="stats-nav-item" class="nav-items" onclick="window.location ='/stats'">Stats</li>
+                <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+                <li id="logout-nav-item" class="nav-items">Logout</li>
+            
+                `;
+
+                document.getElementById('logout-nav-item').addEventListener('click', userAuthAPI.logoutUser.bind() )
+
+            }else{
+
+                navMenu.innerHTML = `
+                
+                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
+                <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
+                <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+            
+            `;
+            }
+
             clearInterval(checkResources);
 
         }
     },1000)
-
-}
-
-function showLoadingScreen(){
-
 
 }
 

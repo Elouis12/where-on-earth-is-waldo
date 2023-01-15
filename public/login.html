@@ -9,25 +9,22 @@
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-<!--  &lt;!&ndash; JS &ndash;&gt;
+  <!-- JS -->
   <script type="module" >
 
     import {UserAuthAPI} from './js/userAuthAPI.js'
 
     let userAuthAPI = new UserAuthAPI();
 
-    // click works for now, better to use 'load'
-    document.body.addEventListener('click', userAuthAPI.verifyToken.bind() );
+    window.addEventListener('load', userAuthAPI.verifyToken.bind() );
 
-    document.body.click();
-
-  </script>-->
+  </script>
 
 </head>
 <body>
 
 
-<div class="container">
+<main class="container hide">
 
   <!--  NAV BAR  -->
   <nav id="navbar">
@@ -91,7 +88,6 @@
 
         <p class="account-text">Don't have an account? <a class="account-link" href="/register">Sign up</a></p>
 
-
       </div>
 
 
@@ -107,7 +103,7 @@
 
   </form>
 
-</div>
+</main>
 
 
 

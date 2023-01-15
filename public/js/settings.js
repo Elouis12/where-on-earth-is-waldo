@@ -64,7 +64,7 @@ function highlightSelection(currentElement){
         // remove all the others selected
         for( let x = 0; x < gameModeUl.length; x+=1  ){
 
-            if( gameModeUl[x] !== currentElement && // is not th one we just selected
+            if( gameModeUl[x] !== currentElement && // is not the one we just selected
                 gameModeUl[x].getAttribute("class") === "selected-mode" // has a highlight on it
             ){
 

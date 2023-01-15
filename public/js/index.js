@@ -11,8 +11,6 @@ async function main(){
 
     let userInfo = await userAuthAPI.userInfo();
 
-    console.log(userInfo)
-
 
     // tp make it faster? load the globe without stuff and inside the if add them?
 
@@ -23,7 +21,7 @@ async function main(){
     // check when the globe and fetch responses have loaded
     const checkResources = setInterval(()=>{
 
-        if( /*typeof globe.earth !== "undefined"*/ true ) {
+        if( typeof globe.earth !== "undefined" /*true*/ ) {
 
             // show globe
             document.getElementById("loader-container").classList.add("hide");
@@ -48,16 +46,6 @@ async function main(){
             // load nav content
             let navMenu = document.getElementById('nav-menu');
 
-            navMenu.innerHTML = `
-                
-                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
-                <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
-                <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
-                <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
-            
-            `;
-
-
             // if user exits, display their name and remove sign up button
             if( userInfo.length > 0 ){
 
@@ -65,16 +53,27 @@ async function main(){
                 let welcomeTitle = document.getElementById('welcome-title')
                 welcomeTitle.innerHTML = `Welcome, <span id="welcome-name">${userInfo[0].user_name}</span>!`;
 
-                // replace signing with login
-                let signUpNavItem = document.getElementById('signup-nav-item')
-                let loginNavItem = document.getElementById('login-nav-item')
+                navMenu.innerHTML = `
+                
+                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="stats-nav-item" class="nav-items" onclick="window.location ='/stats'">Stats</li>
+                <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+                <li id="logout-nav-item" class="nav-items">Logout</li>
+            
+                `;
 
-                // give it logout function from userAuth (bind it )
-                // loginNavItem.setAttribute()
+                document.getElementById('logout-nav-item').addEventListener('click', userAuthAPI.logoutUser.bind() )
 
-                signUpNavItem.remove();
-                loginNavItem.innerText = 'Logout';
+            }else{
 
+                navMenu.innerHTML = `
+                
+                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
+                <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
+                <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+            
+            `;
             }
 
 
