@@ -5,27 +5,43 @@ dotEnv.config();
 let signJWT = (id, username, secret, expiration) => {
 
 
-    return jwt.sign(
+    // no expiration date for the token
+    if( !expiration ){
 
-{
-            id,
-            username
-        },
+        return jwt.sign(
 
-        secret,
+            {
+                id,
+                username
+            },
+            secret
+        )
 
- {
-            expiresIn : expiration
-        }
+    }else{
 
-    )
+        return jwt.sign(
+
+            {
+                id,
+                username
+            },
+
+            secret,
+
+            {
+                expiresIn : expiration
+            }
+
+        )
+    }
+
 }
 
 let verifyJWT = (token, secret) => {
 
     try {
 
-        return jwt.verify( token, secret);
+        return jwt.verify( token, secret );
 
     }catch (e){
 

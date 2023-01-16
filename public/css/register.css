@@ -330,3 +330,14 @@ body{
     text-decoration: none;
 
 }
+
+.email-error{
+
+    margin-bottom: 5px;
+    visibility: hidden;
+
+}
+.email-error-text{
+
+    color: var(--color-danger);
+}

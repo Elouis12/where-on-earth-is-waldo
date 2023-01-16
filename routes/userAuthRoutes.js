@@ -12,6 +12,7 @@ router.post('/login', userAuth.postLogin );
 router.post('/user-info', userAuth.getUserInfo );
 router.post('/verify-token', JWTAuth.authenticateJWT );
 router.post('/refresh-token', userAuth.getAccessToken );
+router.get('/query', userAuth.verifyEmailToken );
 router.post('/logout', userAuth.deleteLogout );
 
 

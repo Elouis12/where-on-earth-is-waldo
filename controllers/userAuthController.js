@@ -5,6 +5,7 @@ const inputValidator= require("node-input-validator");
 const dotEnv = require("dotenv");
 dotEnv.config();
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 let { db } = require("../config/db.js");
 
 
@@ -74,14 +75,13 @@ let postRegister = async (req, resp) => {
 
     }
 
-
-
     // verify email
     if( !email || typeof email !== 'string' || !emailValidator.validate(email) ){
 
         issues.email = 'Invalid email';
 
     }
+
     if( userByEmail.length > 0 ){
 
         issues.email = 'Email already exist';
@@ -111,19 +111,68 @@ let postRegister = async (req, resp) => {
 
     const password = await bcrypt.hash(plainTextPassword, 10);
 
+    /* EVERYTHING IS GOOD */
     try{
 
         let sql = `
             
-            INSERT INTO users( user_name, email, password, daily_streak )
-            values( '${username}', '${email}', '${password}', ${0} );
+            INSERT INTO users( user_name, email, password, daily_streak, games_played, verified )
+            values( '${username}', '${email}', '${password}', ${0}, ${0}, ${0} );
         
         `
         db.query( sql );
 
         console.log('User created successfully @' + process.env.DB);
-        return resp.status(202).json( {success:'success'} );
 
+
+        let id = await getUserByEmail(email).then( resp => resp ).catch( (e)=>{console.log(e)} )
+
+        console.log(id[0].id)
+        let emailToken = JWTAuth.signJWT(
+
+            id[0].id.toString(),
+            username,
+            process.env.JWT_EMAIL_SECRET
+        );
+
+        // localhost:5000/api/query?name=ernesto
+        // localhost:5000/api/query?name=d&limit=1
+
+        // send user email to verify account
+        let body = `
+                
+                <h3
+                    style="
+                        margin: auto;
+                    "
+                >
+                Please confirm your account
+                </h3>
+                               
+                <a 
+                    style="
+                    
+                        border: 1px solid #000;
+                        height: 40px;
+                        border-radius: 5px;
+                        margin-top: 20px ;
+                        text-align: center;
+                        width: 50%;
+                        background: #7380ec;
+                        /*background-color: #000;*/
+                        color: #fff;
+                        text-decoration: none;
+                    "
+                    href="https://where-on-earth-is-waldo.onrender.com/auth/query?token=${emailToken}"
+                >
+                Activate Account
+                </a>
+        
+        `
+
+        console.log(`/auth/query?token=${emailToken}`)
+        sendEmail(email, "Please Activate Your 'Where on Earth is Waldo Account?'", body);
+        return resp.status(202).json( {success:'success'} );
 
     }catch (e){
 
@@ -162,7 +211,6 @@ let postLogin = async (req, resp) => {
     // GRAB THE RECORD MATCHING THE NAME OR EMAIL
     let userExists = ( userByUsername.length > 0 ) || ( userByEmail.length > 0 )
 
-    console.log(userExists)
 
     // PERSON DOES NOT EXISTS
     if(  !userExists ){
@@ -172,18 +220,17 @@ let postLogin = async (req, resp) => {
 
     let user;
 
+    // if logging in through username
     if( userByUsername.length > 0 ){
 
         user = userByUsername;
 
+    // if logging in through email
     }else if( userByEmail.length > 0 ){
 
         user = userByEmail;
 
     }
-
-    console.log( await bcrypt.compare(password, user[0].password) );
-
 
     // USERNAME AND PASSWORD CORRECT
     if( await bcrypt.compare(password, user[0].password ) ){
@@ -191,11 +238,11 @@ let postLogin = async (req, resp) => {
         // this is public BUT if anyone tempers with it, everything else becomes invalidated
         // sign the token with the payload { id, username } and secret { obhbrbfhbrub }
 
-        let id = user[0].id.toString();
+        let id = user[0].id;
         let username = user[0].user_name;
 
         const accessToken = JWTAuth.signJWT(
-            id,
+            id.toString(),
             username,
             process.env.JWT_ACCESS_SECRET,
             '30s'
@@ -203,17 +250,47 @@ let postLogin = async (req, resp) => {
         );
 
         const refreshToken = JWTAuth.signJWT(
-            id,
+            id.toString(),
             username,
             process.env.JWT_REFRESH_SECRET,
             '1d'
 
         );
 
+        // check if user has verified account through email
+
+        let verifyUserSQL = `
+
+        SELECT verified
+        FROM users
+        WHERE id = ${id}
+    `
+
+        db.query( verifyUserSQL, (error, results)=>{
+
+            if( error ) {
+
+                return resp.json({error : 'email not verified'});
+            }
+
+            if( results.length > 0 && results[0].verified === 1 ){
+
+                // send them a token to use till we decide to expire it
+                return resp.json({success:'success', accessToken:accessToken, refreshToken: refreshToken})
+
+            }else{
+
+                return resp.json({error : 'email not verified'});
+            }
+
+
+        } )
+
+
         // send them a token to use till we decide to expire it
         // also set it to the header
         // req.headers['authorization'] = 'Bearer ' + token;
-        return resp.json({success:'success', accessToken:accessToken, refreshToken: refreshToken})
+        // return resp.json({success:'success', accessToken:accessToken, refreshToken: refreshToken})
 
     }else{
 
@@ -356,6 +433,78 @@ let deleteLogout = (req, resp) => {
 }
 
 
+let sendEmail = (receiver, subject, body)=>{
+
+    var transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    var mailOptions = {
+        from: process.env.EMAIL_MY_EMAIL,
+        to: receiver,
+        subject: subject,
+        html: body
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error.name);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+}
+
+
+let verifyEmailToken = (req, resp)=>{
+
+    let { token } = req.query;
+
+
+    console.log(token);
+
+    try{
+
+        // get id from token query
+        let userId = parseInt( JWTAuth.verifyJWT(
+
+            token,
+            process.env.JWT_EMAIL_SECRET
+
+        ).id );
+
+        // update the user to verified
+        let verifyUserSQL = `
+        UPDATE users
+        SET verified = ${1}
+        WHERE id = ${userId}
+    `
+
+        db.query( verifyUserSQL, (error, results)=>{
+
+            if( error ){
+
+                return resp.status(401).json({error : 'email not verified'});
+
+            }else{
+
+                return resp.json({success : 'email verified'});
+            }
+
+        } );
+
+    }catch (e) {
+
+        console.log(e)
+        return resp.status(401).json({error : 'email not verified'});
+    }
+
+}
 
 module.exports = {
 
@@ -363,6 +512,8 @@ module.exports = {
     postLogin,
     getUserInfo,
     getAccessToken,
-    deleteLogout
+    deleteLogout,
+    sendEmail,
+    verifyEmailToken
 }
 

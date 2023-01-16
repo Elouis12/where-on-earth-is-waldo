@@ -163,6 +163,7 @@ export class UserAuthAPI{
 
         let inputs = document.getElementsByClassName('input-container-items');
 
+        let emailError = document.getElementById("email-error");
 
         if( message.success ){
 
@@ -171,8 +172,12 @@ export class UserAuthAPI{
             localStorage.setItem('refreshToken', message.refreshToken)
             window.location.href = '/'
 
+            emailError.style.visibility = 'hidden';
+
         }else {
 
+
+            // issues with credentials
             if ( message.issue ) {
 
                 // email or username
@@ -185,15 +190,33 @@ export class UserAuthAPI{
                 inputs[1].children[2].children[0].classList.remove('hideVisibility');
                 inputs[1].children[2].children[1].innerText = message.issue;
 
-            } else {
+                emailError.style.visibility = 'hidden';
+
+
+                // issue with email verification
+            } else if( message.error ){
 
                 // email or username
                 inputs[0].children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
                 inputs[0].children[2].children[0].classList.add('hideVisibility');
 
                 // password
+                inputs[1].children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
+                inputs[1].children[2].children[0].classList.add('hideVisibility');
+
+                emailError.style.visibility = 'visible';
+
+            }else {
+
+                // email or username
                 inputs[0].children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
                 inputs[0].children[2].children[0].classList.add('hideVisibility');
+
+                // password
+                inputs[1].children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
+                inputs[1].children[2].children[0].classList.add('hideVisibility');
+
+                emailError.style.visibility = 'hidden';
 
             }
 
