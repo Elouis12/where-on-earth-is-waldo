@@ -433,9 +433,9 @@ let deleteLogout = (req, resp) => {
 }
 
 
-let sendEmail = (receiver, subject, body)=>{
+let sendEmail = async (receiver, subject, body)=>{
 
-    var transporter = nodemailer.createTransport({
+    var transporter = await nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         auth: {
             user: process.env.EMAIL_USERNAME,
@@ -450,7 +450,7 @@ let sendEmail = (receiver, subject, body)=>{
         html: body
     };
 
-    transporter.sendMail(mailOptions, function(error, info){
+    await transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log(error.name);
         } else {
