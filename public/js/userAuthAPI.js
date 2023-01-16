@@ -45,9 +45,8 @@ export class UserAuthAPI{
 
         /*this._*/ let passwordConfirmation = document.getElementById("password-confirmation").value;
 
-
         let message = await fetch(
-            'https://where-on-earth-is-waldo.onrender.com/auth/register',
+            '/auth/register',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },
@@ -147,7 +146,7 @@ export class UserAuthAPI{
 
 
         let message = await fetch(
-            'https://where-on-earth-is-waldo.onrender.com/auth/login',
+            '/auth/login',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },

@@ -162,7 +162,6 @@ let postLogin = async (req, resp) => {
     // GRAB THE RECORD MATCHING THE NAME OR EMAIL
     let userExists = ( userByUsername.length > 0 ) || ( userByEmail.length > 0 )
 
-    console.log(userExists)
 
     // PERSON DOES NOT EXISTS
     if(  !userExists ){
@@ -237,8 +236,6 @@ let getAccessToken = (req, resp) => {
             process.env.JWT_REFRESH_SECRET
         )
 
-
-        console.log(userInfo)
 
         let userId = userInfo.id;
         let username =  userInfo.username;
