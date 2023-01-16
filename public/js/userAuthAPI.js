@@ -47,7 +47,7 @@ export class UserAuthAPI{
 
 
         let message = await fetch(
-            '/auth/register',
+            'https://where-on-earth-is-waldo.onrender.com/auth/register',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },
@@ -147,7 +147,7 @@ export class UserAuthAPI{
 
 
         let message = await fetch(
-            '/auth/login',
+            'https://where-on-earth-is-waldo.onrender.com/auth/login',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },
@@ -207,7 +207,7 @@ export class UserAuthAPI{
     async userInfo(){
 
         let message = await fetch(
-            '/auth/user-info',
+            'https://where-on-earth-is-waldo.onrender.com/auth/user-info',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },
@@ -230,7 +230,7 @@ export class UserAuthAPI{
         // verify access token
         let message = await fetch(
 
-            "/auth/verify-token",
+            "https://where-on-earth-is-waldo.onrender.com/auth/verify-token",
             {
                 method: 'POST',
                 headers : {
@@ -253,7 +253,7 @@ export class UserAuthAPI{
 
             let newAccessToken = await fetch(
 
-                "/auth/refresh-token",
+                "https://where-on-earth-is-waldo.onrender.com/auth/refresh-token",
                 {
                     method: 'POST',
                     headers : {
@@ -320,7 +320,7 @@ export class UserAuthAPI{
     async refreshToken(){
 
         let message = await fetch(
-            '/auth/refresh-token',
+            'https://where-on-earth-is-waldo.onrender.com/auth/refresh-token',
             {
                 method : 'POST',
                 body : JSON.stringify({
