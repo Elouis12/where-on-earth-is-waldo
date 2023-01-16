@@ -17,7 +17,6 @@ async function main(){
     /*await*/ globe.initGlobe();
 
 
-
     // check when the globe and fetch responses have loaded
     const checkResources = setInterval(()=>{
 
