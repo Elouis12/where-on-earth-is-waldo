@@ -15,7 +15,7 @@ export class Stats{
 
     async getUserStats(){
 
-        let stats =  await fetch( '/get-stats',
+        let stats =  await fetch( 'http://localhost:5000/get-stats',
         {
                 method: 'POST',
                 headers : {
@@ -111,7 +111,7 @@ export class Stats{
         }
 
         // update streaks
-        let streaksCount =   await fetch( '/save-streaks',
+        let streaksCount =   await fetch( 'http://localhost:5000/save-streaks',
                 {
                     method: 'POST',
                     headers : {
@@ -322,7 +322,7 @@ export class Stats{
     async saveStats(gameMode, extraGameMode, countriesPicked, percentCorrect, date){
 
         // make api call to save stats to db for that user
-        await fetch( '/save-stats',
+        await fetch( 'http://localhost:5000/save-stats',
         {
                 method: 'POST',
                 headers : {
