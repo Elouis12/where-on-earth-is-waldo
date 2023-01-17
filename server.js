@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
 const bodyParser = require("body-parser");
+const favicon = require("serve-favicon");
 const cors = require("cors");
 const { db } = require("./config/db");
 
@@ -18,9 +19,12 @@ app.use(express.urlencoded( { extended: true } ) );
 app.use( cors() );
 
 
+
 // render index file
 app.use( express.static('./public') );
 
+// add favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 
 // user authentication routes
