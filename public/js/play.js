@@ -18,7 +18,7 @@ async function main(){
     // check when the globe and fetch responses have loaded
     const checkResources = setInterval(()=>{
 
-        if( typeof globe.earth !== "undefined" && globe.game.getCountries().length > 0 ) {
+        if( typeof globe.earth !== "undefined" && globe.game.getSelectedCountries().length > 0 ) {
 
             // show actual screen
             document.getElementById("settings-box").classList.remove("hide");

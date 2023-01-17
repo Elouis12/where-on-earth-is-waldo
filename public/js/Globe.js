@@ -100,7 +100,17 @@ export class Globe {
             this.game.start(); // start the game
 
             // add dots
-            this.addPoints(this.game.getCountries(), this.game.getCountryCount());
+
+            // if user wants to add all points to the globe
+            if( this.game.getExtraGameMode() === "all" ){
+
+                this.addPoints(this.game.getAllCountries(), this.game.getAllCountries().length);
+
+            }else{
+
+                this.addPoints(this.game.getSelectedCountries(), this.game.getCountryCount(), true);
+
+            }
 
         });
 
@@ -115,14 +125,22 @@ export class Globe {
 
 
             // restart will be called
-            if (this.game.getCountries().length <= 0) { // game is over
+            if (this.game.getSelectedCountries().length <= 0) { // game is over
 
                 // will populate country again with random country
                 this.game.startNextRound(); // start the next round
 
                 // add coords according to the populated countries
-                this.addPoints(this.game.getCountries(), this.game.getCountryCount());
+                // if user wants to add all points to the globe
+                if( this.game.getExtraGameMode() === "all" ){
 
+                    this.addPoints(this.game.getAllCountries(), this.game.getAllCountries().length);
+
+                }else{
+
+                    this.addPoints(this.game.getSelectedCountries(), this.game.getCountryCount(), true);
+
+                }
             } else {
 
                 this.game.startNextRound(); // start the next round
@@ -168,7 +186,7 @@ export class Globe {
     /*
         ADD THE POINTS TO THE GLOBE
     */
-    addPoints(countryArray, countryCount) {
+    addPoints(countryArray, countryCount, addAllPoints) {
 
 
         // user added a count greater than what the array holds
@@ -178,6 +196,7 @@ export class Globe {
             return;
         }
 
+
         // remove the ones already on the globe
         if (this.#countryObjects.length > 0) {
 
@@ -186,14 +205,17 @@ export class Globe {
             this.#countryObjects = []; // reset the country objects array
         }
 
+        // uses either the amount of countries customly selected or the number of countries given in input box
         const listOfCountries = document.getElementsByClassName("select-country");
-        const count = listOfCountries.length > 0 ? this.game.getCountries().length : countryCount;
+        // const countriesCount = listOfCountries.length > 0 ? this.game.getSelectedCountries().length : countryCount;
 
+        const countriesCount = countryCount;
 
         /* POINT OF INTEREST */
         let geometry = new SphereGeometry(0.1, 20, 20);
 
-        for (let x = 0; x < count; x += 1) {
+
+        for (let x = 0; x < countriesCount; x += 1) {
 
             let calCoords = this.#calcPosFromLatLonRad(Number(countryArray[x].lat), Number(countryArray[x].lon), this.earthRadius);
 
@@ -279,7 +301,7 @@ export class Globe {
                         for (let x = 0; x < this.#countryObjects.length; x += 1) {
 
                             // found the dot that matches the current country
-                            if (this.#countryObjects[x].userData.country === this.game.getCountries()[0].country) {
+                            if (this.#countryObjects[x].userData.country === this.game.getSelectedCountries()[0].country) {
 
                                 this.#countryObjects[x].material.color.setHex(this.#redHexValue);
 
@@ -309,7 +331,7 @@ export class Globe {
 
                                         // when user clicks next or previous then that object will no longer match the first country in our game class
                                     }else if(
-                                        this.#countryObjects[x].userData.country !== this.game.getCountries()[0].country
+                                        this.#countryObjects[x].userData.country !== this.game.getSelectedCountries()[0].country
                                     ){
 
                                         // set to white
@@ -758,7 +780,7 @@ export class Globe {
         this.#countryObjects.push(this.earth);
         this.#scene.add(this.earth);
 
-        await this.addPoints(this.game.getCountries(), this.game.getCountryCount());
+        // await this.addPoints(this.game.getSelectedCountries(), this.game.getCountryCount());
 
     }
 

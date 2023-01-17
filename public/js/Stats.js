@@ -10,11 +10,13 @@ export class Stats{
 
     constructor() {
 
+
+        // add these to the stats.html page instead of constructor
         let showAllButton = document.getElementById("show-all-button");
         let showLessButton = document.getElementById("show-less-button");
 
-        showAllButton.addEventListener("click", this.#showAll);
-        showLessButton.addEventListener("click", this.#showLess);
+        if( showAllButton ){ showAllButton.addEventListener("click", this.#showAll);  }
+        if( showLessButton ){ showLessButton.addEventListener("click", this.#showLess);  }
 
     }
 

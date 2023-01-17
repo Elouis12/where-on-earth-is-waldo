@@ -3,6 +3,7 @@ import {Stats} from './Stats.js'
 
 export class Game{
 
+    #countriesAll = []; // all countries so globe can contain all points
     #countriesQueue = [];
     #countriesTemp = []; // so we can restart
     // #waldoText = "Waldo Has Escaped! Find Him Again!";
@@ -10,7 +11,7 @@ export class Game{
     #difficulty; // -3 is how many hints to show
     #gameMode;
     #extraGameMode;
-    #countryCount = 0; // max country user can use
+    #countryCount;
 
 
     timesWrong = 0; // find how many times the user clicked on the wrong country
@@ -22,6 +23,7 @@ export class Game{
 
     constructor(){
 
+        this.#stats = new Stats();
         this.#initGame();
 
     }
@@ -66,15 +68,14 @@ export class Game{
          // const difficulty = this.#getDifficulty();
          const countryCount = this.getCountryCount();
 
-
          if(
              listOfCountries.length <= 0 &&
-             ( isNaN(countryCount) || countryCount < 1 || countryCount > this.getCountries().length )
+             ( isNaN(countryCount) || countryCount < 1 || countryCount > this.getSelectedCountries().length )
          ){
 
              let messageParagraph = document.getElementById("country-count-message");
 
-             messageParagraph.innerText = `Count cannot be less than 1 or greater than ${ this.getCountries().length }`;
+             messageParagraph.innerText = `Count cannot be less than 1 or greater than ${ this.getSelectedCountries().length }`;
              return;
          }
 
@@ -117,7 +118,7 @@ export class Game{
 
         // remove attempts if only 1 country is left or user selected 1 country
          let attemptSpan = document.getElementById("attempt-span");
-         if( this.getCountries().length === 1 ){
+         if( this.getSelectedCountries().length === 1 ){
 
              // show attempts
              attemptSpan.classList.add("hide");
@@ -226,7 +227,7 @@ export class Game{
 
         }else if( Number( countryCountTextBox.value ) > 0 ){
 
-            this.#countryCount = listOfCountries.length;
+            this.#countryCount = countryCountTextBox.value;
 
         }
 
@@ -244,18 +245,18 @@ export class Game{
             set.add( listOfCountries[x].children[0].innerText );
         }
 
-        for( let x = 0; x < this.getCountries().length; x+=1 ){
+        for( let x = 0; x < this.getSelectedCountries().length; x+=1 ){
 
-            if( !set.has( this.getCountries()[x].country ) ){
+            if( !set.has( this.getSelectedCountries()[x].country ) ){
 
-                this.getCountries()[x] = null;
+                this.getSelectedCountries()[x] = null;
             }
         }
 
-        this.#countriesQueue = this.getCountries().filter( countries =>  countries !== null );
+        this.#countriesQueue = this.getSelectedCountries().filter( countries =>  countries !== null );
 
         // save it into temp
-        this.#countriesTemp = this.getCountries().slice();
+        this.#countriesTemp = this.getSelectedCountries().slice();
 
     }
 
@@ -347,7 +348,7 @@ export class Game{
 
 
         // USER WENT THROUGH ALL COUNTRIES
-        if( this.getCountries().length === 0 ){
+        if( this.getSelectedCountries().length === 0 ){
 
 
             this.#gameOver = true;
@@ -393,6 +394,8 @@ export class Game{
 */
 
     async #setCountries(countriesData){
+
+        this.#countriesAll = countriesData.slice(); // now that its set
 
         this.#countriesQueue = countriesData.slice(); // now that its set
         this.#countriesTemp = countriesData.slice(); // now that its set
@@ -451,10 +454,10 @@ export class Game{
         let hintsDiv = document.getElementById("hints-div");
         hintsDiv.innerHTML = "";
 
-        let country = this.getCountries()[ this.getCountries().length - 1 ] ; // get the last country
+        let country = this.getSelectedCountries()[ this.getSelectedCountries().length - 1 ] ; // get the last country
 
-        this.getCountries().unshift( country ); // put it in the front
-        this.getCountries().pop(); // remove it
+        this.getSelectedCountries().unshift( country ); // put it in the front
+        this.getSelectedCountries().pop(); // remove it
 
 
         this.#displayTextAccordingToGameMode( this.#getGameMode() );
@@ -501,9 +504,9 @@ export class Game{
             let hintsDiv = document.getElementById("hints-div");
             hintsDiv.innerHTML = "";
 
-            let country = this.getCountries().shift(); // get the first country
+            let country = this.getSelectedCountries().shift(); // get the first country
 
-            this.getCountries().push( country ); // push it to the back
+            this.getSelectedCountries().push( country ); // push it to the back
 
             this.#displayTextAccordingToGameMode( this.#getGameMode() );
 
@@ -596,7 +599,7 @@ export class Game{
 
 
         // show attempts as long as countries > 1
-        if( this.getCountries().length > 1 ){
+        if( this.getSelectedCountries().length > 1 ){
 
             attemptSpan.classList.remove("hide");
 
@@ -640,10 +643,10 @@ export class Game{
 
         // SET COUNTRIES LEFT COUNT
         remainingCountriesCount.innerHTML =
-            this.getCountries().length <= 0 ? // hints div is filled up with the facts
+            this.getSelectedCountries().length <= 0 ? // hints div is filled up with the facts
                 0 // put 0
                 :
-                this.getCountries().length - 1 ; // -1 because we're always at one country
+                this.getSelectedCountries().length - 1 ; // -1 because we're always at one country
 
     }
 
@@ -665,9 +668,14 @@ export class Game{
         foundCountSpan.innerText = `${ this.#found } / ${ countriesTotal }`
     }
 
-    getCountries(){
+    getSelectedCountries(){
 
         return this.#countriesQueue;
+    }
+
+    getAllCountries(){
+
+        return this.#countriesAll;
     }
 
 
