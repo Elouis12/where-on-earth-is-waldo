@@ -14,7 +14,6 @@ let JWTAuth = require('./JWTAuthController.js');
 
 let getUserByUsername = (username) => {
 
-    //simple function to get growth items
     return new Promise((resolve, reject) => {
         let sql = `SELECT id, user_name, password FROM users WHERE user_name = '${username}'`;
         db.query(sql, function (err, result){
@@ -30,7 +29,6 @@ let getUserByUsername = (username) => {
 
 let getUserByEmail = (email) => {
 
-    //simple function to get growth items
     return new Promise((resolve, reject) => {
         let sql = `SELECT id, user_name, email, password FROM users WHERE email = '${email}'`;
         db.query(sql, function (err, result){
@@ -171,7 +169,7 @@ let postRegister = async (req, resp) => {
         `
 
         console.log(`/auth/query?token=${emailToken}`)
-        sendEmail(email, "Please Activate Your 'Where on Earth is Waldo Account?'", body);
+        await sendEmail(email, "Please Activate Your 'Where on Earth is Waldo Account?'", body);
         return resp.status(202).json( {success:'success'} );
 
     }catch (e){

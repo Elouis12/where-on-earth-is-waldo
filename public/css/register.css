@@ -257,6 +257,17 @@ body{
     display: none;
 }
 
+.password-icon i{
+
+    /*border: solid 1px lightgrey;*/
+    /*border-radius: 100%;*/
+}
+
+.password-icon:hover{
+
+    cursor: pointer;
+}
+
 /* [ INPUT ] */
 .account-input{
 

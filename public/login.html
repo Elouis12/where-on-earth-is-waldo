@@ -18,6 +18,25 @@
 
     window.addEventListener('load', userAuthAPI.verifyToken.bind() );
 
+    let passwordIcons = document.getElementsByClassName('password-icon');
+
+    // allow users to see password
+    for( let x = 0; x < passwordIcons.length; x++ ){
+
+      passwordIcons[x].addEventListener('click', ()=>{
+
+        if( passwordIcons[x].parentElement.children[1].getAttribute('type') === 'password' ){
+
+          passwordIcons[x].parentElement.children[1].setAttribute('type', 'text')
+
+        }else{
+
+          passwordIcons[x].parentElement.children[1].setAttribute('type', 'password')
+
+        }
+      })
+
+    }
   </script>
 
 </head>
@@ -71,7 +90,7 @@
 
         <div class="input-container-items" >
 
-          <div class="icon-container">
+          <div class="icon-container password-icon">
             <i class="input-icon fa-solid fa-key"></i>
           </div>
           <input id="password" class="account-input" type="password" placeholder="Password" />

@@ -19,109 +19,29 @@
 
         window.addEventListener('load', userAuthAPI.verifyToken.bind() );
 
+        let passwordIcons = document.getElementsByClassName('password-icon');
+
+        // allow users to see password
+        for( let x = 0; x < passwordIcons.length; x++ ){
+
+            passwordIcons[x].addEventListener('click', ()=>{
+
+                if( passwordIcons[x].parentElement.children[1].getAttribute('type') === 'password' ){
+
+                    passwordIcons[x].parentElement.children[1].setAttribute('type', 'text')
+
+                }else{
+
+                    passwordIcons[x].parentElement.children[1].setAttribute('type', 'password')
+
+                }
+            })
+
+        }
+
     </script>
 </head>
 <body>
-
-<!--
-        &lt;!&ndash;  NAV BAR  &ndash;&gt;
-        <nav id="navbar">
-
-            <div id="menu-container">
-                &lt;!&ndash;            <input id="toggle-button"  class="day" type="button" >&ndash;&gt;
-            </div>
-
-            <div id="navbar-container">
-                <ul id="nav-menu">
-                    <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
-                    <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
-                    <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
-                </ul>
-            </div>
-
-        </nav>
-
-    <form class="register-gif-container">
-
-        <div class="register-container">
-
-            <div class="input-container" >
-
-                <div class="icon-container">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-
-                <input type="text" placeholder="Username" />
-
-                <div class="issue-container">
-                    <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                    <span class="issue-message hideVisibility"></span>
-                </div>
-
-            </div>
-
-            <div class="input-container" >
-
-                <div class="icon-container">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>
-
-                <input type="text" placeholder="Email" />
-
-                <div class="issue-container">
-                    <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                    <span class="issue-message hideVisibility"></span>
-                </div>
-
-
-            </div>
-
-            <div class="input-container" >
-
-                <div class="icon-container">
-                    <i class="input-icon fa-solid fa-key"></i>
-                </div>
-                <input type="text" placeholder="Password" />
-
-
-                <div class="issue-container">
-                    <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                    <ul class="issue-message hideVisibility"></ul>
-                </div>
-
-            </div>
-
-            <div class="input-container" >
-
-                <div class="icon-container">
-                    <i class="input-icon fa-solid fa-key"></i>
-                </div>
-                <input type="text" placeholder="Confirm Password" />
-
-                <div class="issue-container">
-                    <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                    <span class="issue-message hideVisibility"></span>
-                </div>
-
-            </div>
-
-
-            <input id="signup-button" type="button" class="signup-button" value="Sign Up">
-
-            <p class="account-text">Already have an account? <a class="account-link" href="/login">Login</a></p>
-
-        </div>
-
-&lt;!&ndash;        <div class="gif"></div>&ndash;&gt;
-
-
-&lt;!&ndash;        <script type="text/javascript" src="./js/userAuthAPI.js" ></script>&ndash;&gt;
-&lt;!&ndash;        <script type="text/javascript" src="./js/RegisterUser.js" ></script>&ndash;&gt;
-        <script type="module" src="js/RegisterUser.js" ></script>
-
-    </form>
--->
-
 
 <div class="container hide">
 
@@ -185,7 +105,7 @@
 
                 <div class="input-container-items" >
 
-                    <div class="icon-container">
+                    <div class="icon-container password-icon">
                         <i class="input-icon fa-solid fa-key"></i>
                     </div>
                     <input id="password" class="account-input" type="password" placeholder="Password" />
@@ -201,7 +121,7 @@
 
                 <div class="input-container-items" >
 
-                    <div class="icon-container">
+                    <div class="icon-container password-icon">
                         <i class="input-icon fa-solid fa-key"></i>
                     </div>
                     <input id="password-confirmation" class="account-input" type="password" placeholder="Confirm password" />
