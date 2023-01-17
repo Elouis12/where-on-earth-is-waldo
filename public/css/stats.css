@@ -263,11 +263,36 @@ main table tbody tr:last-child td{
 }
 
 
-main .recent-orders a{
+/*main .recent-orders a{
 
     text-align: center;
     display: block;
     margin: 1rem;
+}*/
+
+main .recent-orders .button-div{
+
+    display: flex;
+    justify-self: center;
+    align-items: center;
+
+    width: 100%;
+}
+
+main .recent-orders input[type="button"]{
+
+    text-align: center;
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 3rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--color-theme-dark);
+    /*color: #101010;*/
+    color: var(--color-warning);
+    /*transition: background, color ease-in-out 1000ms 5000ms;*/
+
 }
 
 

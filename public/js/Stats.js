@@ -10,8 +10,14 @@ export class Stats{
 
     constructor() {
 
+        let showAllButton = document.getElementById("show-all-button");
+        let showLessButton = document.getElementById("show-less-button");
+
+        showAllButton.addEventListener("click", this.#showAll);
+        showLessButton.addEventListener("click", this.#showLess);
 
     }
+
 
     async getUserStats(){
 
@@ -43,9 +49,14 @@ export class Stats{
 
         for( let x = 0; x < Object.keys( userStats[0] ).length; x++ ){
 
-            let record = `
+            let record;
+
+            // only show the top 10 recent activities
+            if( x > 9 ){
+
+                record = `
             
-                    <tr>
+                    <tr class="table-row hide">
                         <td>${x+1}</td>
                         <td>${userStats[0][x].game_mode}</td>
                         <td>${userStats[0][x].extra_game_mode}</td>
@@ -57,12 +68,98 @@ export class Stats{
                     </tr>
             
             `
+            }else{
+
+                record = `
+            
+                    <tr class="table-row">
+                        <td>${x+1}</td>
+                        <td>${userStats[0][x].game_mode}</td>
+                        <td>${userStats[0][x].extra_game_mode}</td>
+                        <td>${userStats[0][x].countries_picked}</td>
+                        <td>${userStats[0][x].percent_correct * 100}%</td>
+                        <td>${userStats[0][x].date_added}</td>
+    <!--                    <td class="warning">Pending</td>-->
+    <!--                    <td class="primary">Details</td>-->
+                    </tr>
+            
+            `
+            }
+
 
             table.insertAdjacentHTML('beforeend', record);
 
             // console.log(record);
         }
         // console.log(userStats[0][1]);
+    }
+
+    #showAll(){
+
+        let tableRow = document.getElementsByClassName("table-row");
+
+
+        for( let x = 0; x < tableRow.length; x+=1 ){
+
+            // if element is hidden then show it
+            if( tableRow[x].classList.contains("hide") ){
+
+                tableRow[x].classList.remove("hide");
+            }
+        }
+
+
+        // show the show less button and remove show all
+        let showLessButton = document.getElementById("show-less-button");
+        showLessButton.classList.remove('hide');
+
+        let showAllButton = document.getElementById("show-all-button");
+        showAllButton.classList.add('hide');
+
+/*        // add show less button functionality
+        let showAllButton = document.getElementById("show-all-button");
+
+        showAllButton.setAttribute("value", "Show Less");
+        showAllButton.removeEventListener("click", this.#showAll);
+        showAllButton.addEventListener("click", this.#showLess);
+    */
+    }
+
+    #showLess(){
+
+        let tableRow = document.getElementsByClassName("table-row");
+
+
+        for( let x = 0; x < tableRow.length; x+=1 ){
+
+            if( x > 9 ){
+
+                // hide the rest of the elements
+                // if( tableRow[x].classList.contains("hide") ){
+
+                    tableRow[x].classList.add("hide");
+                // }
+            }
+
+        }
+
+        // show the show all button and remove show less
+
+        let showLessButton = document.getElementById("show-less-button");
+        showLessButton.classList.add('hide');
+
+        let showAllButton = document.getElementById("show-all-button");
+        showAllButton.classList.remove('hide');
+
+        /*
+                // add show all button functionality
+                let showAllButton = document.getElementById("show-all-button");
+
+                showAllButton.setAttribute("value", "Show All");
+                showAllButton.removeEventListener("click", this.#showLess);
+                showAllButton.addEventListener("click", this.#showAll);
+        */
+
     }
 
     async updateGraphs(){
@@ -133,9 +230,9 @@ export class Stats{
 
         dateText.innerText = new Date().toLocaleDateString();
 
-        averageText.innerText = this.#percentArray.reduce((a, b) => {
+        averageText.innerText = ( this.#percentArray.reduce((a, b) => {
             return a + b;
-        }) / this.#percentArray.length;
+        }) / this.#percentArray.length ).toFixed(2);
 
         gamesPlayedText.innerText = this.#dataArray.reduce((a, b) => {
             return a + b;

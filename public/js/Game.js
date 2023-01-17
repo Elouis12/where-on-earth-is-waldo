@@ -22,7 +22,6 @@ export class Game{
 
     constructor(){
 
-        this.#stats = new Stats();
         this.#initGame();
 
     }

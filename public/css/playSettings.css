@@ -1,0 +1,213 @@
+:root{
+
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    /*--color-white: #fff;*/
+    --color-info-dark: #78da1;
+    --color-info-light: #dce1eb;
+    /*--color-dark: #363949;*/
+    /*--color-light: rgba(132, 139, 200, 0.18);*/
+    --color-primary-variant: #111e88;
+    /*--color-dark-variant: #677483;*/
+    --color-background: #f6f6f9;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    /*--box-shadow: 0 2rem 3em var(--color-light);*/
+
+    /* DARK THEME */
+    --color-theme-dark: #181a1e;
+    --color-white: #202528 ;
+    --color-dark: #edeffd;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0,0,0,0.4);
+    --box-shadow: 0 2rem 3em var(--color-light);
+
+}
+
+.settings-box {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width : 50%;
+    transform: translate(-50%, -50%);
+    /*background: #d9d9d9;*/
+    /*background: #e3e7f3;*/
+    border-radius: 5px;
+
+}
+
+.settings-modes-div:first-child >.settings-box-title,
+.settings-modes-div:first-child
+{
+
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.settings-modes-div:last-child >.settings-box-title,
+.settings-modes-div:last-child
+{
+
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+
+.settings-box-title {
+    padding : 30px;
+    background : #0e1012/*#101010*/ /*#020024*//*#333333*//*#2d2f31*/;
+    color : white;
+    font-size : 1.2em;
+    font-variant : small-caps;
+    cursor : pointer;
+    display: block;
+
+}
+
+.settings-box-title:not(:last-child)::after {
+    float: right;
+    right: 10%;
+    content: "+";
+}
+
+.slide {
+
+    clear:both;
+    height:0px;
+    overflow-y: scroll;
+    text-align: center;
+    transition: height .4s ease;
+    margin: 0;
+    padding: 0;
+    /*position: relative;*/
+}
+
+.slide li {
+
+    padding : 20px;
+    list-style: none;
+    cursor: pointer;
+    /*position: relative;*/
+
+}
+
+.settings-modes-div{
+
+    position: relative;
+    /*background: #e3e7f3;*/
+    /*color: #8395ca;*/
+    background: #fff;
+    color: #020024;
+
+}
+
+.settings-mode{
+
+    position: absolute;
+    top: 0;
+    left: 5px;
+    font-size: 15px;
+}
+
+
+input[id="country-count"]{
+
+    height: 100%;
+    font-size : 1.2em;
+    /*background : #2d2f31;*/
+    background: transparent;
+    /*position: relative;*/
+    border-radius: 5px;
+    text-align: center;
+    color: #d9d9d9;
+    /*background: transparent;*/
+
+
+}
+
+.settings-modes-div > input[type="checkbox"] {position: absolute; opacity: 0; height: 0px;}
+
+
+
+.settings-modes-div:hover /*> input:checked*/   .slide { height: 192px;}
+/*.settings-modes-div > input:checked + .slide { height: 192px;}*/
+
+
+/* SETTINGS */
+
+#start-button{
+
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+/*ul*/.slide > li:hover  .settings-info{
+
+    display: block;
+    position: absolute;
+    /*top: 32%;*/
+    top: 32%;
+    right: 0%;
+    width: 100px;
+    transform: translate(100%/*, 50%*/);
+/*    background: #e3e7f3;
+    color: #8395ca;*/
+    background: #fff;
+    color: #020024;
+    padding: 5px;
+    font-size: 10pt;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+}
+
+
+.select-country, .selected-mode{
+
+  /*background: #8395ca;
+  color: #e3e7f3 ;*/
+  background: /*#101010*/ /*#e8fbe8*/ /*#edeffd*/ #ffbb55;
+  /*color: #fff ;*/
+    border-bottom: white 1px solid;
+
+}
+
+
+
+#select-all-country-li{
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    cursor: default;
+}
+
+#search-box{
+
+    width: 80%;
+    border: none;
+    border-bottom: 1px black solid;
+    font-family: 'Poppins', serif ;
+    text-align: center;
+
+}
+
+#search-box:focus-within{
+
+    outline: none;
+    border: none;
+    border-bottom: 1px black solid;
+}

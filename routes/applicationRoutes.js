@@ -7,7 +7,6 @@ let applicationController = require("../controllers/applicationController.js")
 let JWTAuthController = require("../controllers/JWTAuthController.js")
 
 
-
 router.get('/', applicationController.getAboutPage )
 
 router.get('/about', applicationController.getAboutPage )
