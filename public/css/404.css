@@ -539,7 +539,7 @@ button {
 
 html, body{
 
-    background: url("galaxy.png");
+    background: url("../assets/images/galaxy.png");
     font-family: 'Poppins', serif;
     height: 100%;
     /*background-size: 100%;*/

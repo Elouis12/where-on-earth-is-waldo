@@ -37,7 +37,7 @@ async function main(){
 
                 navMenu.innerHTML = `
                 
-                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../favicon.ico" alt=""></li>
                 <li id="stats-nav-item" class="nav-items" onclick="window.location ='/stats'">Stats</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
                 <li id="settings-nav-item" class="nav-items" onclick="window.location ='/settings'">Settings</li>
@@ -50,7 +50,7 @@ async function main(){
 
                 navMenu.innerHTML = `
                 
-                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../favicon.ico" alt=""></li>
                 <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
                 <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>

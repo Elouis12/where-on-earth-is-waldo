@@ -55,7 +55,7 @@ async function main(){
 
                 navMenu.innerHTML = `
                 
-                <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
+                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../favicon.ico" alt=""></li>
                 <li id="stats-nav-item" class="nav-items" onclick="window.location ='/stats'">Stats</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/settings'">Settings</li>
