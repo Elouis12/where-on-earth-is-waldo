@@ -77,15 +77,21 @@ body{
 
 }
 
-
 .container{
+
+    width: 80%;
+    height: 90%;
+
+}
+
+.settings-container{
 
     display: flex;
     /*width: 100%;*/
     /*height: 100%;*/
     color: white;
-    width: 80%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     margin: auto;
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius-1);

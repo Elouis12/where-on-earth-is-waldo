@@ -20,156 +20,160 @@
 
         window.addEventListener('load', userAuthAPI.verifyToken.bind() );
 
-
     </script>
 
 </head>
 <body>
 
 
-<!--  NAV BAR  -->
-<nav id="navbar">
+<div class="container hide">
 
-    <div id="menu-container">
-        <!--        <input id="toggle-button"  class="day" type="button" >-->
-    </div>
+    <!--  NAV BAR  -->
+    <nav id="navbar">
 
-    <div id="navbar-container">
-        <ul id="nav-menu">
-            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/'">Home</li>
-            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/play'">Find Waldo</li>
-            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/stats'">Stats</li>
-            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/about'">About</li>
-        </ul>
-    </div>
-
-</nav>
-
-
-<div class="container">
-
-    <div class="left-container">
-
-        <div class="user-image">
-<!--            <i class="fa-solid fa-user"></i>-->
-        </div>
-        <h1 id="username-text" class="username-text"></h1>
-
-        <div class="delete-logout-buttons-container">
-
-            <input id="logout-btn" class="btn" type="button" value="Logout">
-            <input id="delete-account-btn" class="btn" type="button" value="Delete Account">
-
+        <div id="menu-container">
+            <!--        <input id="toggle-button"  class="day" type="button" >-->
         </div>
 
-    </div>
+        <div id="navbar-container">
+            <ul id="nav-menu">
+                <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/'">Home</li>
+                <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/play'">Find Waldo</li>
+                <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/stats'">Stats</li>
+                <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/about'">About</li>
+            </ul>
+        </div>
 
-    <div class="right-container">
+    </nav>
 
-
-        <div class="right-container-items">
-
-            <h1>Account Settings</h1>
-
-            <div class="input-container">
-
-                <div class="input-items" >
-
-                    <h3>Username</h3>
-
-                    <div class="input-container-items">
-
-                        <div id="username-issue-container" class="issue-container">
-                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                            <span id="username-message" class="issue-message hideVisibility"></span>
-                        </div>
-
-                        <input id="username-input" class="account-input" disabled type="text" placeholder="Username" />
-
-                        <div class="icon-container">
-                            <i class="fa-solid fa-pencil"></i>
-                        </div>
+    <div class="settings-container">
 
 
-                    </div>
+        <div class="left-container">
 
-                </div>
-
-                <div class="input-items" >
-
-                    <h3>Email</h3>
-
-                    <div class="input-container-items">
-
-                        <div id="email-issue-container" class="issue-container">
-                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                            <span id="email-message" class="issue-message hideVisibility"></span>
-                        </div>
-
-                        <input id="email-input" class="account-input" disabled type="email" placeholder="Email" />
-
-                        <div class="icon-container">
-                            <i class="fa-solid fa-pencil"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="input-items" >
-
-                    <h3>Current Password</h3>
-
-                    <div class="input-container-items">
-
-                        <div id="current-password-issue-container" class="issue-container">
-                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                            <span id="current-password-message" class="issue-message hideVisibility"></span>
-                        </div>
-
-                        <input id="current-password-input" class="account-input" disabled type="text" placeholder="*******" />
-
-                        <div class="icon-container">
-                            <i class="fa-solid fa-pencil"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="input-items" >
-
-                    <h3>New Password</h3>
-
-                    <div class="input-container-items">
-
-                        <div id="new-password-issue-container" class="issue-container">
-                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
-                            <span id="new-password-message" class="issue-message hideVisibility"></span>
-                        </div>
-
-                        <input id="new-password-input" class="account-input" disabled type="text" placeholder="*******" />
-
-                        <div class="icon-container">
-                            <i class="fa-solid fa-pencil"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
+            <div class="user-image">
+                <!--            <i class="fa-solid fa-user"></i>-->
             </div>
+            <h1 id="username-text" class="username-text"></h1>
 
-            <div id="update-cancel-buttons" class="update-cancel-buttons hide" >
+            <div class="delete-logout-buttons-container">
 
-                <input id="update-btn" class="btn update-btn" type="button" value="Update">
-                <input id="cancel-btn" class="btn cancel-btn" type="button" value="Cancel">
+                <input id="logout-btn" class="btn" type="button" value="Logout">
+                <input id="delete-account-btn" class="btn" type="button" value="Delete Account">
 
             </div>
 
         </div>
 
+        <div class="right-container">
+
+
+            <div class="right-container-items">
+
+                <h1>Account Settings</h1>
+
+                <div class="input-container">
+
+                    <div class="input-items" >
+
+                        <h3>Username</h3>
+
+                        <div class="input-container-items">
+
+                            <div id="username-issue-container" class="issue-container">
+                                <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                                <span id="username-message" class="issue-message hideVisibility"></span>
+                            </div>
+
+                            <input id="username-input" class="account-input" disabled type="text" placeholder="Username" />
+
+                            <div class="icon-container">
+                                <i class="fa-solid fa-pencil"></i>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="input-items" >
+
+                        <h3>Email</h3>
+
+                        <div class="input-container-items">
+
+                            <div id="email-issue-container" class="issue-container">
+                                <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                                <span id="email-message" class="issue-message hideVisibility"></span>
+                            </div>
+
+                            <input id="email-input" class="account-input" disabled type="email" placeholder="Email" />
+
+                            <div class="icon-container">
+                                <i class="fa-solid fa-pencil"></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="input-items" >
+
+                        <h3>Current Password</h3>
+
+                        <div class="input-container-items">
+
+                            <div id="current-password-issue-container" class="issue-container">
+                                <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                                <span id="current-password-message" class="issue-message hideVisibility"></span>
+                            </div>
+
+                            <input id="current-password-input" class="account-input" disabled type="text" placeholder="*******" />
+
+                            <div class="icon-container">
+                                <i class="fa-solid fa-pencil"></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="input-items" >
+
+                        <h3>New Password</h3>
+
+                        <div class="input-container-items">
+
+                            <div id="new-password-issue-container" class="issue-container">
+                                <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                                <span id="new-password-message" class="issue-message hideVisibility"></span>
+                            </div>
+
+                            <input id="new-password-input" class="account-input" disabled type="text" placeholder="*******" />
+
+                            <div class="icon-container">
+                                <i class="fa-solid fa-pencil"></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="update-cancel-buttons" class="update-cancel-buttons hide" >
+
+                    <input id="update-btn" class="btn update-btn" type="button" value="Update">
+                    <input id="cancel-btn" class="btn cancel-btn" type="button" value="Cancel">
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 
 </div>
 
