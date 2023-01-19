@@ -223,9 +223,16 @@ exitModal.addEventListener('click', ()=>{
 
 })
 
-modalContainer.addEventListener('click', ()=>{
+modalContainer.addEventListener('click', (e)=>{
 
-    modalContainer.classList.add('hide');
+    // although z-index is applied to the white container within the modal container,
+    // clicking on it hide the modal container as well
+
+    if( e.target.classList.contains('delete-modal-container') ){
+
+        modalContainer.classList.add('hide');
+
+    }
 
 })
 
