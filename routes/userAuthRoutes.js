@@ -10,9 +10,11 @@ let userAuth = require("../controllers/userAuthController.js")
 router.post('/register', userAuth.postRegister );
 router.post('/login', userAuth.postLogin );
 router.post('/user-info', userAuth.getUserInfo );
+router.post('/update-user-info', userAuth.updateUserInfo );
 router.post('/verify-token', JWTAuth.authenticateJWT );
 router.post('/refresh-token', userAuth.getAccessToken );
 router.get('/query', userAuth.verifyEmailToken );
+router.post('/delete-account', userAuth.deleteAccount );
 router.post('/logout', userAuth.deleteLogout );
 
 

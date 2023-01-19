@@ -23,8 +23,6 @@
 
         window.addEventListener('load', userAuthAPI.verifyToken.bind() );
 
-        document.getElementById('logout-nav-item').addEventListener('click', userAuthAPI.logoutUser.bind() )
-
 
     </script>
 
@@ -61,7 +59,7 @@
             <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
             <li id="play-nav-item" class="nav-items" onclick="window.location ='/play'">Find Waldo</li>
             <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
-            <li id="logout-nav-item" class="nav-items" onclick="window.location ='/logout'">Logout</li>
+            <li id="setting-nav-item" class="nav-items" onclick="window.location ='/settings'">Settings</li>
         </ul>
     </div>
 

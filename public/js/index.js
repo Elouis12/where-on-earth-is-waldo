@@ -58,11 +58,9 @@ async function main(){
                 <li id="home-nav-item" class="nav-items" onclick="window.location ='/'">Home</li>
                 <li id="stats-nav-item" class="nav-items" onclick="window.location ='/stats'">Stats</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
-                <li id="logout-nav-item" class="nav-items">Logout</li>
+                <li id="about-nav-item" class="nav-items" onclick="window.location ='/settings'">Settings</li>
             
                 `;
-
-                document.getElementById('logout-nav-item').addEventListener('click', userAuthAPI.logoutUser.bind() )
 
             }else{
 

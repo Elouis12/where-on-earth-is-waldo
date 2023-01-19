@@ -247,6 +247,50 @@ export class UserAuthAPI{
     }
 
 
+    async updateUserInfo(username, email, currentPassword, newPassword){
+
+        let message = await fetch(
+            '/auth/update-user-info',
+            {
+                method : 'POST',
+                headers: { "Content-Type": "application/json" },
+                body : JSON.stringify({
+                    username : username,
+                    email : email,
+                    currentPassword : currentPassword,
+                    newPassword : newPassword,
+                    refreshToken : localStorage.getItem("refreshToken"),
+                })
+            }
+
+        ).then( resp => resp.json() )
+            .catch( (e) => { console.log(e) } );
+
+        return message;
+
+    }
+
+    async deleteAccount(){
+
+        let message = await fetch(
+
+            '/auth/delete-account',
+            {
+                method : 'POST',
+                headers: { "Content-Type": "application/json" },
+                body : JSON.stringify({
+                    refreshToken : localStorage.getItem("refreshToken"),
+                })
+            }
+
+        ).then( resp => resp.json() )
+            .catch( (e) => { console.log(e) } );
+
+        return message;
+
+    }
+
+
 
     async verifyToken(){
 
@@ -327,7 +371,11 @@ export class UserAuthAPI{
         // if the user does not have access, send them back to the login page
         if(
             message === 'restricted' &&
-            ( window.location.href.includes( '/stats' ) ) ){
+            (
+                window.location.href.includes( '/stats' ) ||
+                window.location.href.includes( '/settings' )
+            )
+        ){
 
             window.location.href = '/login';
 
@@ -355,7 +403,6 @@ export class UserAuthAPI{
         ).then( resp => resp.json() )
             .catch( (e) => { console.log(e) } );
 
-        alert('yos')
         if( message ){
 
         }

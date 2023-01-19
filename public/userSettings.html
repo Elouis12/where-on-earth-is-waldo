@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings | Where on Earth is Waldo?</title>
+
+    <link rel="stylesheet" type="text/css" href="css/userSettings.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+
+    <!-- JS -->
+    <script type="module" >
+
+        import {UserAuthAPI} from './js/userAuthAPI.js'
+
+        let userAuthAPI = new UserAuthAPI();
+
+        window.addEventListener('load', userAuthAPI.verifyToken.bind() );
+
+
+    </script>
+
+</head>
+<body>
+
+
+<!--  NAV BAR  -->
+<nav id="navbar">
+
+    <div id="menu-container">
+        <!--        <input id="toggle-button"  class="day" type="button" >-->
+    </div>
+
+    <div id="navbar-container">
+        <ul id="nav-menu">
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/'">Home</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/play'">Find Waldo</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/stats'">Stats</li>
+            <li class="nav-items skeleton skeleton-body-text" onclick="window.location ='/about'">About</li>
+        </ul>
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="left-container">
+
+        <div class="user-image">
+<!--            <i class="fa-solid fa-user"></i>-->
+        </div>
+        <h1 id="username-text" class="username-text"></h1>
+
+        <div class="delete-logout-buttons-container">
+
+            <input id="logout-btn" class="btn" type="button" value="Logout">
+            <input id="delete-account-btn" class="btn" type="button" value="Delete Account">
+
+        </div>
+
+    </div>
+
+    <div class="right-container">
+
+
+        <div class="right-container-items">
+
+            <h1>Account Settings</h1>
+
+            <div class="input-container">
+
+                <div class="input-items" >
+
+                    <h3>Username</h3>
+
+                    <div class="input-container-items">
+
+                        <div id="username-issue-container" class="issue-container">
+                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                            <span id="username-message" class="issue-message hideVisibility"></span>
+                        </div>
+
+                        <input id="username-input" class="account-input" disabled type="text" placeholder="Username" />
+
+                        <div class="icon-container">
+                            <i class="fa-solid fa-pencil"></i>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="input-items" >
+
+                    <h3>Email</h3>
+
+                    <div class="input-container-items">
+
+                        <div id="email-issue-container" class="issue-container">
+                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                            <span id="email-message" class="issue-message hideVisibility"></span>
+                        </div>
+
+                        <input id="email-input" class="account-input" disabled type="email" placeholder="Email" />
+
+                        <div class="icon-container">
+                            <i class="fa-solid fa-pencil"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="input-items" >
+
+                    <h3>Current Password</h3>
+
+                    <div class="input-container-items">
+
+                        <div id="current-password-issue-container" class="issue-container">
+                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                            <span id="current-password-message" class="issue-message hideVisibility"></span>
+                        </div>
+
+                        <input id="current-password-input" class="account-input" disabled type="text" placeholder="*******" />
+
+                        <div class="icon-container">
+                            <i class="fa-solid fa-pencil"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="input-items" >
+
+                    <h3>New Password</h3>
+
+                    <div class="input-container-items">
+
+                        <div id="new-password-issue-container" class="issue-container">
+                            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+                            <span id="new-password-message" class="issue-message hideVisibility"></span>
+                        </div>
+
+                        <input id="new-password-input" class="account-input" disabled type="text" placeholder="*******" />
+
+                        <div class="icon-container">
+                            <i class="fa-solid fa-pencil"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="update-cancel-buttons" class="update-cancel-buttons hide" >
+
+                <input id="update-btn" class="btn update-btn" type="button" value="Update">
+                <input id="cancel-btn" class="btn cancel-btn" type="button" value="Cancel">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="delete-modal-container" class="delete-modal-container hide">
+
+    <div class="delete-modal">
+
+        <div id="exit-modal" class="exit-modal">
+            <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+
+        <h1>Sorry to see you go :(</h1>
+
+        <p>Confirm below to delete your account</p>
+        <div>
+            <input id="keep-account-btn" class="btn keep-account-btn" type="button" value="Keep My Account!">
+            <input id="confirm-delete-account-btn" class="btn delete-account-btn" type="button" value="Delete">
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script type="module" src="js/userSettings.js" ></script>
+
+</body>
+</html>

@@ -1,5 +1,26 @@
 let { db } = require("../config/db.js");
 
+
+const query = (sql)=>{
+
+    return new Promise( (resolve, reject)=>{
+
+
+        db.query( sql, (error, results)=>{
+
+            if( error ){
+
+                reject(error);
+
+            }else{
+
+                resolve(results);
+            }
+
+        } )
+
+    } )
+}
 const getUser = (req, resp) => {
 
     const sql = `
@@ -46,5 +67,6 @@ const getUserStats = (req, resp) => {
 
 module.exports = {
 
-    getUser
+    getUser,
+    query
 }

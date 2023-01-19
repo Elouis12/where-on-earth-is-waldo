@@ -44,6 +44,13 @@ let getStatsPage = (req, resp)=>{
 }
 
 
+let getSettingsPage = (req, resp)=>{
+
+    resp.sendFile( path.resolve( __dirname, '../public/userSettings.html') );
+
+}
+
+
 let get404Page = (req, resp)=>{
 
     resp.sendFile( path.resolve( __dirname, '../public/404.html') );
@@ -417,6 +424,7 @@ module.exports = {
     getAboutPage,
     getPlayPage,
     getStatsPage,
+    getSettingsPage,
     get404Page,
     postUserStats,
     getUserStats,
