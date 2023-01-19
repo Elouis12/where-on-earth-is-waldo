@@ -69,7 +69,7 @@ for( let x = 0; x < editIcons.length; x++ ){
     // input boxes
     accountInputs[x].addEventListener('keyup', ()=>{
 
-        updateAndCancelButton.classList.remove('hide');
+        updateAndCancelButton.classList.remove('hideVisibility');
 
     })
 
@@ -93,7 +93,7 @@ cancelButton.addEventListener('click', async ()=>{
     await addSettingsInformation();
 
     // hide buttons
-    updateAndCancelButton.classList.add('hide');
+    updateAndCancelButton.classList.add('hideVisibility');
 
     // remove any error messages
     document.getElementById('username-issue-container').children[0].classList.add('hideVisibility')
@@ -199,7 +199,7 @@ updateButton.addEventListener('click', async (e)=>{
         }
 
         // hide update and cancel div
-        updateAndCancelButton.classList.add('hide');
+        updateAndCancelButton.classList.add('hideVisibility');
 
     }
 
