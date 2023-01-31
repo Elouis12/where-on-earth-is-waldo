@@ -118,6 +118,16 @@ updateButton.addEventListener('click', async (e)=>{
     if( currentPasswordInput.disabled ){ currentPasswordValue = false; }
     if( newPasswordInput.disabled ){ newPasswordValue = false; }
 
+
+    // user entered a new password but did ot enter current one
+    if( !currentPasswordValue && newPasswordValue.length > 0 ){
+
+        document.getElementById('current-password-issue-container').children[0].classList.remove('hideVisibility')
+        document.getElementById('current-password-message').innerText = 'Enter your current password';
+
+        return;
+    }
+
     let message = await userAuthAPI.updateUserInfo(
         usernameValue,
         emailValue,
@@ -171,6 +181,7 @@ updateButton.addEventListener('click', async (e)=>{
 
         }
 
+    // UPDATE SUCCESSFUL
     }else{
 
         // remove any error messages
@@ -195,8 +206,15 @@ updateButton.addEventListener('click', async (e)=>{
             accountInputs[x].disabled = true;
             accountInputs[x].style.cursor = "not-allowed";
 
+            // remove input values for password inputs
+            if( accountInputs[x].classList.contains('password-input') ){
+
+                accountInputs[x].value = "";
+            }
             // editIcons[x].click();
         }
+
+
 
         // hide update and cancel div
         updateAndCancelButton.classList.add('hideVisibility');
