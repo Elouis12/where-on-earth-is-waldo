@@ -140,7 +140,7 @@
                     <span>Regular</span>
                     <i class="fa-solid fa-earth-europe"></i>
                 </span>
-            </span>
+        </span>
         <!--            </label>-->
         <input type="checkbox" ><!--id="touch"-->
 
@@ -169,7 +169,7 @@
                     <span>Countries</span>
                     <i class="fa-solid fa-earth-europe"></i>
                 </span>
-            </span>
+        </span>
         <!--            </label>-->
         <input type="checkbox" ><!--id="touch"-->
 
@@ -181,8 +181,8 @@
                 <p>Select All</p>
                 <div class="item">
                     <div class="toggle-pill-color">
-                        <input type="checkbox" id="pill3" name="check" onclick="selectAllCountries()">
-                        <label for="pill3"></label>
+                        <input type="checkbox" id="select-all-country-checkbox" name="check" onclick="selectAllCountries()">
+                        <label for="select-all-country-checkbox"></label>
                     </div>
                 </div>
             </li>
@@ -196,11 +196,30 @@
     </div>
     <div class="settings-modes-div">
 
-            <span class="settings-box-title">
-                <span class="settings-mode">Country Count</span>
+        <div class="settings-box-title">
+            <span class="settings-mode">Country Count</span>
+
+            <!-- COUNTRY COUNT INPUT -->
+            <div class="country-count-container" >
+                <p>Country Count</p>
                 <input size="1" maxlength="3" id="country-count" type="text" value="0" >
                 <span id="country-count-message"></span>
-            </span>
+            </div>
+
+            <!-- ADD ONLY SELECTED COUNTRIES -->
+            <div class="country-count-container">
+                <p>Add Only Selected Countries</p>
+                <div class="item">
+                    <div class="toggle-pill-color">
+                        <input type="checkbox" id="add-selected-country-checkbox" name="check">
+                        <label for="add-selected-country-checkbox"></label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
 
     </div>
 

@@ -679,6 +679,15 @@ export class Game{
     }
 
 
+    /*
+        CHECK IF USER WANTS ALL COUNTRIES ON THE GLOBE OR ONLY THE ONES SELECTED
+    */
+    userAddedAllCountries(){
+
+        let selectAllCountriesBox = document.getElementById("add-selected-country-checkbox");
+
+        return !!selectAllCountriesBox.checked;
+    }
 /*
     RANDOMIZE ARRAY SO EACH TIME USER GETS DIFFERENT COUNTRY WHEN ACCESSING SITE
 */

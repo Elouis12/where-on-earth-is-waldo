@@ -148,7 +148,7 @@ function selectAllCountries(){
 
     const listOfCountries = document.getElementById("country-options-ul").children;
 
-    const checkbox = document.getElementById("pill3");
+    const checkbox = document.getElementById("select-all-country-checkbox");
 
     const countryInputBox = document.getElementById("country-count");
 

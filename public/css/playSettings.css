@@ -46,7 +46,7 @@
 
 }
 
-.settings-modes-div:first-child >.settings-box-title,
+.settings-modes-div:first-child /*>.settings-box-title*/,
 .settings-modes-div:first-child
 {
 
@@ -54,7 +54,7 @@
     border-top-left-radius: 5px;
 }
 
-.settings-modes-div:last-child >.settings-box-title,
+.settings-modes-div:last-child /*>.settings-box-title*/,
 .settings-modes-div:last-child
 {
 
@@ -210,4 +210,14 @@ input[id="country-count"]{
     outline: none;
     border: none;
     border-bottom: 1px black solid;
+}
+
+
+
+.country-count-container{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

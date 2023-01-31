@@ -102,7 +102,7 @@ export class Globe {
             // add dots
 
             // if user wants to add all points to the globe
-            if( this.game.getExtraGameMode() === "all" ){
+            if( this.game.userAddedAllCountries() ){
 
                 this.addPoints(this.game.getAllCountries(), this.game.getAllCountries().length);
 
@@ -132,7 +132,7 @@ export class Globe {
 
                 // add coords according to the populated countries
                 // if user wants to add all points to the globe
-                if( this.game.getExtraGameMode() === "all" ){
+                if( this.game.userAddedAllCountries() ){
 
                     this.addPoints(this.game.getAllCountries(), this.game.getAllCountries().length);
 
@@ -141,6 +141,7 @@ export class Globe {
                     this.addPoints(this.game.getSelectedCountries(), this.game.getCountryCount(), true);
 
                 }
+
             } else {
 
                 this.game.startNextRound(); // start the next round
