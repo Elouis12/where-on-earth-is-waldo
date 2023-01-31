@@ -46,7 +46,7 @@
 
 }
 
-.settings-modes-div:first-child /*>.settings-box-title*/,
+.settings-modes-div:first-child >.settings-box-title,
 .settings-modes-div:first-child
 {
 
@@ -54,13 +54,14 @@
     border-top-left-radius: 5px;
 }
 
-.settings-modes-div:last-child /*>.settings-box-title*/,
+.settings-modes-div:last-child >.settings-box-title,
 .settings-modes-div:last-child
 {
 
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
 }
+
 
 
 .settings-box-title {
@@ -72,6 +73,11 @@
     cursor : pointer;
     display: block;
 
+}
+
+#country-count-settings-box-title{
+
+    cursor: default;
 }
 
 .settings-box-title:not(:last-child)::after {
@@ -115,7 +121,7 @@
 
     position: absolute;
     top: 0;
-    left: 5px;
+    left: 15px;
     font-size: 15px;
 }
 

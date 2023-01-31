@@ -144,6 +144,8 @@ function disableCountryCountBox(){
 
     }
 }
+
+
 function selectAllCountries(){
 
     const listOfCountries = document.getElementById("country-options-ul").children;

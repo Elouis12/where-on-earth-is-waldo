@@ -95,6 +95,7 @@ export class Game{
          if( listOfCountries.length > 0 ){
 
              this.#customCountryOptions();
+
          // USE SELECTED COUNT OF COUNTRIES
          }else{
 

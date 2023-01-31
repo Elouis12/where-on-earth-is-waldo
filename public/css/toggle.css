@@ -31,7 +31,7 @@
     transition: all 0.2s ease-in-out;
 }
 .toggle-pill-color input[type="checkbox"]:checked + label {
-    background: #101010/*#47cf73*/;
+    background: /*#101010*//*#47cf73*/#ffbb55;
 }
 .toggle-pill-color input[type="checkbox"]:checked + label:before {
     box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
