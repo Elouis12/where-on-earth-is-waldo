@@ -18,6 +18,7 @@ export class Stats{
         if( showAllButton ){ showAllButton.addEventListener("click", this.#showAll);  }
         if( showLessButton ){ showLessButton.addEventListener("click", this.#showLess);  }
 
+
     }
 
 
@@ -93,7 +94,16 @@ export class Stats{
 
             // console.log(record);
         }
-        // console.log(userStats[0][1]);
+
+        let tableRows = document.getElementsByClassName("table-row");
+        let activityButtonDiv = document.getElementById("activity-button-div");
+
+        // hide show all / show less if there's less than 10 items
+        if( tableRows.length <= 10 ){ // 11 to account
+
+            activityButtonDiv.style.visibility = "hidden";
+
+        }
     }
 
     #showAll(){
