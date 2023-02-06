@@ -6,6 +6,7 @@ const dotEnv = require("dotenv");
 dotEnv.config();
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const mjml = require('mjml');
 let { db } = require("../config/db.js");
 
 
@@ -137,39 +138,54 @@ let postRegister = async (req, resp) => {
         // localhost:5000/api/query?name=d&limit=1
 
         // send user email to verify account
-        let body = `
+
+        const body = mjml(`
+                <mjml>
                 
-                <h3
-                    style="
-                        margin: auto;
-                    "
-                >
-                Please confirm your account
-                </h3>
-                               
-                <a 
-                    style="
-                    
-                        border: 1px solid #000;
-                        height: 40px;
-                        border-radius: 5px;
-                        margin-top: 20px ;
-                        text-align: center;
-                        width: 50%;
-                        background: #7380ec;
-                        /*background-color: #000;*/
-                        color: #fff;
-                        text-decoration: none;
-                    "
-                    href="https://where-on-earth-is-waldo.onrender.com/auth/query?token=${emailToken}"
-                >
-                Activate Account
-                </a>
-        
-        `
+                  <mj-head>
+                    <mj-style>
+                      @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css";
+                    </mj-style>
+                  </mj-head>
+                
+                  <mj-body>
+                
+                    <mj-section>
+                      <mj-column>
+                        <mj-image align="left" width="100px" src="https://whereonearthiswaldo.onrender.com/favicon.ico"></mj-image>
+                      </mj-column>
+                
+                    </mj-section>
+                
+                    <mj-section background-color="black">
+                      <mj-column>
+                        <mj-text align="center" color="white" font-size="40px"><i class="fa-regular fa-envelope"></i></mj-text>
+                      </mj-column>
+                    </mj-section>
+                
+                    <mj-section>
+                      <mj-column>
+                
+                        <mj-text align="center" font-size="40px">Email Confirmation</mj-text>
+                
+                        <mj-text align="center">Thank you for creating your account.</mj-text>
+                        <mj-text align="center">Please confirm your email address.</mj-text>
+                
+                        <mj-button background-color="black" href="https://whereearthiswaldo.onrender.com/auth/query?token=${emailToken}">Verify Email Address</mj-button>
+                      </mj-column>
+                
+                    </mj-section>
+                  </mj-body>
+                </mjml>
+                `)
+
+        /*
+          Print the responsive HTML generated and MJML errors if any
+        */
+        console.log(body.html)
 
         console.log(`/auth/query?token=${emailToken}`)
-        await sendEmail(email, "Please Activate Your 'Where on Earth is Waldo Account?'", body);
+        await sendEmail(email, "Please Activate Your 'Where on Earth is Waldo Account?'", body.html);
         return resp.status(202).json( {success:'success'} );
 
     }catch (e){
@@ -492,7 +508,8 @@ let verifyEmailToken = (req, resp)=>{
 
             }else{
 
-                return resp.json({success : 'email verified'});
+                return resp.redirect('/');
+                // return resp.json({success : 'email verified'});
             }
 
         } );
