@@ -19,28 +19,10 @@ app.use(express.urlencoded( { extended: true } ) );
 
 app.use( cors() );
 
-
-const htmlOutput = mjml(`
-  <mjml>
-    <mj-body>
-      <mj-section>
-        <mj-column>
-          <mj-text>
-            Hello World!
-          </mj-text>
-        </mj-column>
-      </mj-section>
-    </mj-body>
-  </mjml>
-`)
-
-/*
-  Print the responsive HTML generated and MJML errors if any
-*/
-console.log(htmlOutput.html)
-
 // render index file
 app.use( express.static('./public') );
+app.use( express.static('public') );
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // add favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))

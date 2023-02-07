@@ -1,4 +1,4 @@
-let path = require("path");
+let path = require('path');
 const jwt = require('./JWTAuthController');
 let {db} = require('../config/db');
 const dotEnv = require("dotenv");
@@ -47,6 +47,13 @@ let getStatsPage = (req, resp)=>{
 let getSettingsPage = (req, resp)=>{
 
     resp.sendFile( path.resolve( __dirname, '../public/userSettings.html') );
+
+}
+
+
+let getResetPasswordPage = (req, resp)=>{
+
+    resp.sendFile( path.resolve( __dirname, '../public/resetPassword.html') );
 
 }
 
@@ -425,6 +432,7 @@ module.exports = {
     getPlayPage,
     getStatsPage,
     getSettingsPage,
+    getResetPasswordPage,
     get404Page,
     postUserStats,
     getUserStats,

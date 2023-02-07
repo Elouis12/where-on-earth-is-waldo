@@ -14,6 +14,9 @@ router.post('/update-user-info', userAuth.updateUserInfo );
 router.post('/verify-token', JWTAuth.authenticateJWT );
 router.post('/refresh-token', userAuth.getAccessToken );
 router.get('/query', userAuth.verifyEmailToken );
+router.get('/reset', /*JWTAuthController.authenticateJWT,*/ userAuth.getCreatePasswordPage )
+router.post('/reset-password', userAuth.resetPassword );
+router.post('/create-password', userAuth.createPassword );
 router.post('/delete-account', userAuth.deleteAccount );
 router.post('/logout', userAuth.deleteLogout );
 

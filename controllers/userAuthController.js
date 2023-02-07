@@ -1,3 +1,4 @@
+const path = require('path');
 const bcrypt = require('bcryptjs');
 const passwordComplexity = require("joi-password-complexity");
 const emailValidator= require("email-validator");
@@ -126,7 +127,6 @@ let postRegister = async (req, resp) => {
 
         let id = await getUserByEmail(email).then( resp => resp ).catch( (e)=>{console.log(e)} )
 
-        console.log(id[0].id)
         let emailToken = JWTAuth.signJWT(
 
             id[0].id.toString(),
@@ -179,12 +179,6 @@ let postRegister = async (req, resp) => {
                 </mjml>
                 `)
 
-        /*
-          Print the responsive HTML generated and MJML errors if any
-        */
-        console.log(body.html)
-
-        console.log(`/auth/query?token=${emailToken}`)
         await sendEmail(email, "Please Activate Your 'Where on Earth is Waldo Account?'", body.html);
         return resp.status(202).json( {success:'success'} );
 
@@ -719,12 +713,146 @@ let updateUserInfo = async (req, resp)=>{
 
 }
 
+// when user clicks reset password from client, send them an email
+let resetPassword = async (req, resp) => {
+
+    let { email } = req.body;
+
+    let issues = {};
+
+    // verify email
+    if( !email || typeof email !== 'string' || !emailValidator.validate(email) ){
+
+        issues.email = 'Invalid email';
+
+        return resp.json( { issues } );
+
+    }
+
+    let passwordToken = JWTAuth.signJWT(
+
+        email,
+        email,
+        process.env.JWT_EMAIL_SECRET,
+        '1800s' // 30 minutes
+    );
+
+    const body = mjml(`
+                <mjml>
+                
+                  <mj-head>
+                    <mj-style>
+                      @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css";
+                    </mj-style>
+                  </mj-head>
+                
+                  <mj-body>
+                
+                    <!--<mj-section>
+                      <mj-column>
+                        <mj-image align="left" width="100px" src="https://whereonearthiswaldo.onrender.com/favicon.ico"></mj-image>
+                      </mj-column>
+                
+                    </mj-section>-->
+                
+                    <mj-section background-color="black">
+                      <mj-column>
+                        <mj-text align="center" color="white" font-size="40px"><i class="fa-solid fa-key"></i></mj-text>
+                      </mj-column>
+                    </mj-section>
+                
+                    <mj-section>
+                      <mj-column>
+                
+                        <mj-text align="center" font-size="40px">Password Reset</mj-text>
+                
+                        <mj-text align="center">Click the Button Below to Reset Your Password</mj-text>
+                        <mj-text align="center">This link is valid for 30 minutes</mj-text>
+                
+                        <mj-button background-color="black" href="https://whereearthiswaldo.onrender.com/auth/reset?token=${passwordToken}">Reset Password</mj-button>
+                      </mj-column>
+                
+                    </mj-section>
+                  </mj-body>
+                </mjml>
+                `)
+
+
+    await sendEmail(email, "Request to Reset Password", body.html);
+
+    return resp.json({success:'success'})
+
+}
+
+let createPassword = async (req, resp)=>{
+
+    let { resetToken, password, passwordConfirmation } = req.body;
+
+    let issues = {};
+
+    try{
+
+        // check token is valid
+        let email;
+
+        let userInfo = jwt.verify( resetToken, process.env.JWT_EMAIL_SECRET);
+
+        email = userInfo.id;
+
+        // verify password
+        if( !password || typeof password !== 'string' || passwordComplexity().validate(password).error ){
+
+            let messages = (passwordComplexity().validate(password).error).toString().split("{")
+            let allMessages = messages[0].slice(16);
+
+            issues.password = allMessages.split('.');
+        }
+
+        // verify passwords match
+        if( passwordConfirmation === "" || passwordConfirmation !== password ){
+
+            issues.passwordConfirmation = 'Passwords do not match';
+        }
+
+        // if there are any issues
+        if( Object.keys(issues).length > 0 ){
+
+            return resp.json( { issues } );
+        }
+
+        // no issues, update passwords
+        let sql = `
+            
+                UPDATE users
+                SET password = '${password}'
+                WHERE email = '${email}'
+            `
+            db.query( sql );
+
+
+            return resp.json( {success:'success'} );
+
+        }catch (e) {
+
+
+        console.log(e)
+        return resp.json(  'restricted' );
+
+    }
+
+}
+
+// to take user to create new password page after clicking email
+let getCreatePasswordPage = (req, resp)=>{
+
+    resp.sendFile( path.resolve( __dirname, '../public/createPassword.html') );
+
+}
 
 let deleteAccount = async (req, resp)=>{
 
     let { refreshToken } = req.body;
 
-    console.log(refreshToken)
     try {
 
         // VERIFY REFRESHTOKEN
@@ -775,6 +903,9 @@ module.exports = {
     sendEmail,
     verifyEmailToken,
     updateUserInfo,
+    getCreatePasswordPage,
+    resetPassword,
+    createPassword,
     deleteAccount
 }
 

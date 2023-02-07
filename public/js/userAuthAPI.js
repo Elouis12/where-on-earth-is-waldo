@@ -291,6 +291,65 @@ export class UserAuthAPI{
     }
 
 
+    // for when resetting password
+    async verifyResetToken(){
+
+        let resetToken = window.location.href.split('=')[1];
+
+        // verify reset token
+        let message = await fetch(
+
+            "/auth/verify-token",
+            {
+                method: 'POST',
+                headers : {
+
+                    'Content-type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    resetToken: resetToken
+                })
+            }
+        ).then(
+            resp => resp.json()
+        ).catch(
+            (e)=> console.log(e)
+        );
+
+        if( message === 'restricted' ){
+
+            document.getElementById('header-title').innerText = "Request Expired"
+            let inputContainer = document.getElementById('input-container');
+
+            // hide everything except go home button
+            for( let x = 0; x < inputContainer.children.length; x++  ){
+
+                if( inputContainer.children[x].getAttribute('id') !== 'invalid-request-button'  ){
+
+                    inputContainer.children[x].classList.add('hide')
+
+                // show the go home button
+                }else{
+
+                    inputContainer.children[x].classList.remove('hide')
+
+                }
+            }
+
+            return false;
+        }
+
+        document.body.classList.remove('hide');
+
+        return true;
+
+    }
+
+    // where user create password get these implementations from ForgotPassword.js
+    async createPassword(){
+
+
+    }
 
     async verifyToken(){
 

@@ -53,41 +53,62 @@ let verifyJWT = (token, secret) => {
 let authenticateJWT = async (req, resp, next)=>{
 
 
-    let { accessToken, refreshToken } = req.body;
+    let { accessToken, refreshToken, resetToken } = req.body;
 
-    // no access token nor refresh tokens were found
-    if( !refreshToken || !accessToken ){
 
-        return resp.json('restricted');
+    if( resetToken ){
 
-    }
-        // check refresh token
-        jwt.verify( refreshToken, process.env.JWT_REFRESH_SECRET, (error, decoded)=>{
+            jwt.verify( resetToken, process.env.JWT_EMAIL_SECRET, (error, decoded)=> {
 
-            if( error ){
+                if (error) {
 
-                return resp.json('restricted'); // to have user log back in
+                    return resp.json('restricted'); // to have user log back in
 
-            // it is a valid refresh token, check the access token did not expire
-            }else{
+                    // it is a valid reset token
+                }else{
 
-                // check access token
-                /*jwt.verify( accessToken, process.env.JWT_ACCESS_SECRET, (error, decoded)=>{
+                    return resp.json('authorized'); // to have user log back in
 
-                    if( error ){
+                }
+            });
 
-                        return resp.json('unauthorized'); // to have user log back in
+    }else if ( refreshToken ){
+            // check refresh token
+            jwt.verify( refreshToken, process.env.JWT_REFRESH_SECRET, (error, decoded)=>{
 
-                    }else{*/
+                if( error ){
 
-                        return resp.json('authorized');
+                    return resp.json('restricted'); // to have user log back in
+
+                    // it is a valid refresh token, check the access token did not expire
+                }else{
+
+                    // check access token
+                    /*jwt.verify( accessToken, process.env.JWT_ACCESS_SECRET, (error, decoded)=>{
+
+                        if( error ){
+
+                            return resp.json('unauthorized'); // to have user log back in
+
+                        }else{*/
+
+                    return resp.json('authorized');
                     /*}
 
                 } );*/
 
-            }
+                }
 
-        } );
+            } );
+
+    // no reset, access token nor refresh tokens were found
+    }else if( !resetToken || !refreshToken || !accessToken ){
+
+        console.log('3')
+            return resp.json('restricted');
+
+        }
+
 
 }
 

@@ -19,6 +19,8 @@ router.get('/register', /*JWTAuthController.authenticateJWT,*/ applicationContro
 
 router.get('/login', /*JWTAuthController.authenticateJWT,*/ applicationController.getLoginPage )
 
+router.get('/reset-password', /*JWTAuthController.authenticateJWT,*/ applicationController.getResetPasswordPage )
+
 router.get('/settings', /*JWTAuthController.authenticateJWT,*/ applicationController.getSettingsPage )
 
 router.post('/save-stats', /*JWTAuthController.authenticateJWT,*/ applicationController.postUserStats )

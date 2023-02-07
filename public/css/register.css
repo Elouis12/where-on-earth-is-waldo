@@ -285,7 +285,9 @@ body{
 }
 
 /* BUTTONS */
-.signup-button, .login-button{
+.signup-button,
+.login-button,
+.reset-password-button{
 
     background-color: #000;
     color: #fff;
@@ -299,7 +301,9 @@ body{
 
 }
 
-.signup-button:hover, .login-button:hover{
+.signup-button:hover,
+.login-button:hover,
+.reset-password-button:hover{
 
     background-color: #fff;
     color: #000;
@@ -309,7 +313,9 @@ body{
     cursor: pointer;
 }
 
-.signup-button:active, .login-button:active{
+.signup-button:active,
+.login-button:active,
+.reset-password-button:active{
 
     background-color: #000;
     color: #fff;
@@ -317,6 +323,12 @@ body{
     height: 40px;
 }
 
+/* PASSWORD RESET TEXT */
+
+.password-reset-text{
+
+    color: var(--color-success);
+}
 
 /* SING IN / LOGIN TEXT */
 .account-text{
