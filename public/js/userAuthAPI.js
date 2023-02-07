@@ -404,12 +404,14 @@ export class UserAuthAPI{
 
 
 
-        // user is logged in and tries to access register or login page
+        // user is logged in and tries to access certain pages
         if( message === 'authorized' &&
             (
                 window.location.href.includes( '/register' )
                 ||
                 window.location.href.includes( '/login' )
+                ||
+                window.location.href.includes( '/reset-password' )
 
             )
         ){
