@@ -281,6 +281,7 @@ let postLogin = async (req, resp) => {
 
         db.query(verifyUserSQL, (error, results) => {
 
+            console.log('ok')
             if (error) {
 
                 return resp.json({error: 'email not verified'});
@@ -881,7 +882,6 @@ let createPassword = async (req, resp) => {
             issues.password = allMessages.split('.');
         }
 
-        console.log(passwordConfirmation === password)
         // verify passwords match
         if (passwordConfirmation !== password) {
 
@@ -895,14 +895,20 @@ let createPassword = async (req, resp) => {
         }
 
         // no issues, update passwords
-        let sql = `
-            
-                UPDATE users
-                SET password = '${password}'
-                WHERE email = '${email}'
-            `
-        db.query(sql);
 
+        let hashedNewPassword = await bcrypt.hash(password, 10);
+
+        let updatePassword = `
+                    UPDATE users
+                    SET password = '${hashedNewPassword}'
+                    WHERE email = '${email}'
+                `
+
+        db.query(updatePassword);
+
+        // ADD FEATURE : remove token from the db or wait until time is up to rest again
+            // this is because we don't want users to spam change passwords using that link,
+            // once they click reset password and it goes through, prevent them from trying to make another too soon
 
         return resp.json({success: 'success'});
 
