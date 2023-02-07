@@ -729,6 +729,17 @@ let resetPassword = async (req, resp) => {
 
     }
 
+    let userByEmail = await getUserByEmail(email)
+        .then( resp => resp )
+        .catch( (e) => { console.log(e) } )
+
+
+    // user does not exists in the db, don't send an email
+    if( userByEmail.length <= 0 ){
+
+        return;
+    }
+
     let passwordToken = JWTAuth.signJWT(
 
         email,

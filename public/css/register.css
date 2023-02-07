@@ -327,6 +327,7 @@ body{
 
 .password-reset-text{
 
+    text-align: center;
     color: var(--color-success);
 }
 
