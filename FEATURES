@@ -1,0 +1,60 @@
+ADDING 30 MINUTE INTERVAL FOR PASSWORD RESET REQUES
+
+    1. add 2 entries to db for users
+        * time requested
+        * time for new request
+
+        ex. if user requested a password reset at
+            10 : 38
+
+
+            TIME REQUESTED COLUMN
+
+            get hours - 10
+            get minutes - 48
+
+            convert all to seconds
+
+            hour 10 - 36000
+            minute 30 - 1800
+
+            add them
+
+            total seconds 37800
+
+
+            TIME FOR NEW REQUEST
+
+            add 30 minutes or 1800 seconds
+
+            so
+
+            at  hour 11 we can make another request OR
+
+            at 37800 + 1800 = 39600 seconds we can
+
+
+
+           WHEN CHECKING DB
+
+           TIME FOR NEW REQUEST - TIME REQUESTED
+
+           if 39600 (11) - 37800 (10:30) >= 1800
+
+           then let them
+
+
+
+           OR CHECK IF TOKEN EXPIRED?
+
+           IN DB REQUEST TOKEN set time for 30 minutes
+
+           when clicking the rest button check db to see if it has expired
+           this eliminated the issue if say the user made a reset password at 11:40 (42000) and time for new is 12:10 (43800)
+
+           this causes problems in military and regular time
+
+           if military time - when user makes request at hour 23 and 30 minutes later it is a new day at hour 0
+           if regular time - when user makes request at hour 12 and 30 minutes later it is at hour 1
+
+           both ways we have to make checks to see, so tokens would be better

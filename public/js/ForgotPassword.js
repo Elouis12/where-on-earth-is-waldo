@@ -9,7 +9,7 @@ async function resetPassword(){
     let email = document.getElementById("email");
 
     let message = await fetch(
-        'auth/reset-password',
+        'http://localhost:5000/auth/reset-password',
         {
             headers: { // this made us not get an empty object
                 "Content-Type": "application/json"
@@ -22,30 +22,48 @@ async function resetPassword(){
     ).then( resp => resp.json() )
         .catch( (e)=>{ console.log(e) } )
 
-    if( message.issues ){
+
+    if( message === 'restricted' ){
+
+        // reset/remove icon and messages
+        email.parentElement.children[0].children[0].style.color = '#c1c1c1';
+        email.parentElement.children[2].children[0].classList.add('hideVisibility');
+        document.getElementById('reset-sent-text').classList.add('hide');
+
+
+        // tell user to check email
+        document.getElementById('reset-sent-text').classList.remove('hide');
+        document.getElementById("password-reset-text").classList.add('hide')
+
+    }else if( message.issues ){
 
         if( message.issues.email ){
 
             // tell user to enter valid email format
-            email.parentElement.children[0].children[0].style.color = '#ff4c4c';
+            email.parentElement.children[0].children[0].style.color = '#ff4c4c'
             email.parentElement.children[2].children[0].classList.remove('hideVisibility');
             email.parentElement.children[2].children[1].innerText = message.issues.email;
 
+            // hide messages
+            document.getElementById('reset-sent-text').classList.add('hide');
+            document.getElementById("password-reset-text").classList.add('hide')
+
         }
 
-        return;
 
-
+    // successfully sent message (or email does not exists to send one)
     }else{
 
-        email.parentElement.children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
+        email.parentElement.children[0].children[0].style.color = '#c1c1c1';
         email.parentElement.children[2].children[0].classList.add('hideVisibility');
+        document.getElementById('reset-sent-text').classList.add('hide');
+
+        email.value = '';
+
+        // show reset text
+        document.getElementById("password-reset-text").classList.remove('hide')
 
     }
-
-    email.value = '';
-    // show reset text
-    document.getElementById("password-reset-text").classList.remove('hideVisibility')
 
 }
 

@@ -329,6 +329,14 @@ body{
 
     text-align: center;
     color: var(--color-success);
+    width: 50%;
+}
+
+.reset-sent-text{
+
+    text-align: center;
+    color: var(--color-warning);
+    width: 50%;
 }
 
 /* SING IN / LOGIN TEXT */
