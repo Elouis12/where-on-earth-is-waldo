@@ -881,8 +881,9 @@ let createPassword = async (req, resp) => {
             issues.password = allMessages.split('.');
         }
 
+        console.log(passwordConfirmation === password)
         // verify passwords match
-        if (passwordConfirmation === "" || passwordConfirmation !== password) {
+        if (passwordConfirmation !== password) {
 
             issues.passwordConfirmation = 'Passwords do not match';
         }

@@ -9,7 +9,7 @@ async function resetPassword(){
     let email = document.getElementById("email");
 
     let message = await fetch(
-        'http://localhost:5000/auth/reset-password',
+        '/auth/reset-password',
         {
             headers: { // this made us not get an empty object
                 "Content-Type": "application/json"
@@ -74,8 +74,9 @@ async function createPassword(){
     let password = document.getElementById("reset-password");
     let passwordConfirmation = document.getElementById("reset-password-confirmation");
 
+    // check if valid
     let message = await fetch(
-        'http://localhost:5000/auth/create-password',
+        '/auth/create-password',
         {
             headers: { // this made us not get an empty object
                 "Content-Type": "application/json"
@@ -116,6 +117,10 @@ async function createPassword(){
     // there's issues with password inputs
     }else if( message.issues ){
 
+
+        // hide reset text
+        document.getElementById("password-reset-text").classList.add('hideVisibility')
+
         if( message.issues.password ){
 
             // tell user to enter valid email format
@@ -134,20 +139,24 @@ async function createPassword(){
 
         }
 
-        return;
-
 
     }else{
 
-        password.parentElement.children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
+        password.parentElement.children[0].children[0].style.color = '#c1c1c1';
         password.parentElement.children[2].children[0].classList.add('hideVisibility');
 
-        passwordConfirmation.parentElement.children[0].children[0].style.color = 'hsl(142, 90%, 61%)';
+        passwordConfirmation.parentElement.children[0].children[0].style.color = '#c1c1c1';
         passwordConfirmation.parentElement.children[2].children[0].classList.add('hideVisibility');
 
+        password.value = '';
+        passwordConfirmation.value = '';
+
+        // show reset text
+        document.getElementById("password-reset-text").classList.remove('hideVisibility')
+
+
     }
-    // show rest text
-    document.getElementById("password-reset-text").classList.remove('hideVisibility')
+
 }
 
 
