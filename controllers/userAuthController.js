@@ -150,11 +150,11 @@ let postRegister = async (req, resp) => {
                 
                   <mj-body>
                 
-                    <mj-section>
+<!--                    <mj-section>
                       <mj-column>
                         <mj-image align="left" width="100px" src="https://whereonearthiswaldo.onrender.com/favicon.ico"></mj-image>
                       </mj-column>
-                
+                -->
                     </mj-section>
                 
                     <mj-section background-color="black">
@@ -171,7 +171,7 @@ let postRegister = async (req, resp) => {
                         <mj-text align="center">Thank you for creating your account.</mj-text>
                         <mj-text align="center">Please confirm your email address.</mj-text>
                 
-                        <mj-button background-color="black" href="https://whereearthiswaldo.onrender.com/auth/query?token=${emailToken}">Verify Email Address</mj-button>
+                        <mj-button background-color="black" href="https://whereonearthiswaldo.onrender.com/auth/query?token=${emailToken}">Verify Email Address</mj-button>
                       </mj-column>
                 
                     </mj-section>
@@ -769,7 +769,7 @@ let resetPassword = async (req, resp) => {
                         <mj-text align="center">Click the Button Below to Reset Your Password</mj-text>
                         <mj-text align="center">This link is valid for 30 minutes</mj-text>
                 
-                        <mj-button background-color="black" href="https://whereearthiswaldo.onrender.com/auth/reset?token=${passwordToken}">Reset Password</mj-button>
+                        <mj-button background-color="black" href="https://whereonearthiswaldo.onrender.com/auth/reset?token=${passwordToken}">Reset Password</mj-button>
                       </mj-column>
                 
                     </mj-section>
