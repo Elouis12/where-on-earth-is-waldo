@@ -302,7 +302,7 @@ export class Globe {
                         for (let x = 0; x < this.#countryObjects.length; x += 1) {
 
                             // found the dot that matches the current country
-                            if (this.#countryObjects[x].userData.country === this.game.getSelectedCountries()[0].country) {
+                            if ( ( this.game.getSelectedCountries() !== null ) && this.#countryObjects[x].userData.country === this.game.getSelectedCountries()[0].country) {
 
                                 this.#countryObjects[x].material.color.setHex(this.#redHexValue);
 

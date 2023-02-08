@@ -44,8 +44,6 @@ async function main(){
             
                 `;
 
-                document.getElementById('logout-nav-item').addEventListener('click', userAuthAPI.logoutUser.bind() )
-
             }else{
 
                 navMenu.innerHTML = `
