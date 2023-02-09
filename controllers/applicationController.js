@@ -420,9 +420,6 @@ let postStreak = async (req, resp) => {
             
         `
 
-        console.log(currentDay.toLocaleDateString())
-        console.log(lastLoggedIn.toLocaleDateString())
-
         // user logged in one day after day, don't update
 
         // (made localDateString() -> 1/1/00 otherwise it will make both
@@ -434,6 +431,8 @@ let postStreak = async (req, resp) => {
             they are now different
 
         */
+
+
         if(  currentDay.toLocaleDateString() !== lastLoggedIn.toLocaleDateString() && daysDifference(currentDay, lastLoggedIn) === 1 ){
 
             // get current streak;
