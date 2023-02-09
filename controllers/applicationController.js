@@ -399,11 +399,10 @@ let postStreak = async (req, resp) => {
 
         // get last played and current day
 
-        let currentDay = new Date(new Date().toLocaleDateString());
+        let currentDay = new Date();
 
         let lastLoggedInSQL = `SELECT last_logged_in FROM users WHERE id = ${userId} `
         let lastLoggedIn = new Date(await query(lastLoggedInSQL).then(results => results[0].last_logged_in));
-
 
         // to see if user logged in within < 24 hours
         const daysDifference = (currentDay, lastLoggedIn) =>{
@@ -413,15 +412,25 @@ let postStreak = async (req, resp) => {
         }
 
         let setDailyStreaksSQL;
+        let getDailyStreakSQL = `
+        
+            SELECT daily_streak
+            FROM users
+            WHERE id = ${userId}
+            
+        `
 
         // user logged in one day after day, don't update
         if(  currentDay !== lastLoggedIn && daysDifference(currentDay, lastLoggedIn) === 1 ){
+
+            // get current streak;
+            let currentStreak = await query(getDailyStreakSQL).then(results => results[0].daily_streak)
 
             // increase in streaks
             setDailyStreaksSQL = `
         
                 UPDATE users
-                SET daily_streak = ${daily_streak+1}
+                SET daily_streak = ${currentStreak+1}
                 WHERE id = ${userId}
             
             `
@@ -447,18 +456,15 @@ let postStreak = async (req, resp) => {
         let setLastLoggedInSQL = `
         
             UPDATE users
-            SET last_logged_in = '${lastLoggedIn}'
+            SET last_logged_in = '${currentDay.toLocaleDateString()}'
             WHERE id = ${userId}
             
         `
-        let getDailyStreakSQL = `
-        
-            SELECT daily_streak
-            FROM users
-            WHERE id = ${userId}
-            
-        `
+
+        // update last logged in with current day
         await query(setLastLoggedInSQL);
+
+        // update daily streak and send to client
         await query(getDailyStreakSQL)
             .then((results)=>{
 
