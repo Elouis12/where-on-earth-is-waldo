@@ -210,6 +210,7 @@ export class Stats{
         let averageText = document.getElementById('average-percent-text');
 
 
+<<<<<<< HEAD
         let currentDay = new Date(new Date().toLocaleDateString());
         let lastDayPlayed = new Date(this.#last_date_played);
 
@@ -233,6 +234,8 @@ export class Stats{
             this.#daily_streak = 0;
         }
 
+=======
+>>>>>>> add_waldo
         // update streaks
         let streaksCount =   await fetch( '/save-streaks',
                 {
@@ -242,7 +245,6 @@ export class Stats{
                         'Content-type' : 'application/json'
                     },
                     body : JSON.stringify({
-                        daily_streak: ( daysDifference(currentDay, lastDayPlayed) === 1 ? ++this.#daily_streak : 0 ),
                         refreshToken: localStorage.getItem('refreshToken')
                     })
                 }
@@ -252,7 +254,7 @@ export class Stats{
 
 
         streaksText.innerText = streaksCount;
-
+        
 
         dateText.innerText = new Date().toLocaleDateString();
 

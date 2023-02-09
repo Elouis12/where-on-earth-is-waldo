@@ -17,6 +17,7 @@ import {
     sRGBEncoding,
     Mesh,
     SphereGeometry,
+    BoxGeometry,
     MeshBasicMaterial,
     Vector2,
     DirectionalLight,
@@ -46,7 +47,6 @@ import {Game} from "./Game.js";
 export class Globe {
 
     game;
-
 
     #scene;
     earth;
@@ -233,7 +233,10 @@ export class Globe {
             pointOfInterestMesh.userData.lon = countryArray[x].lon; // when user gets it correct
             pointOfInterestMesh.position.set(calCoords[0], calCoords[1], calCoords[2]);
 
+            // to iterate through ( use to see if user got point correct )
             this.#countryObjects.push(pointOfInterestMesh);
+
+            // add them to the earth
             this.earth.add(pointOfInterestMesh);
 
         }
@@ -247,7 +250,7 @@ export class Globe {
 
 
         // WHEN THE USER CLICKS (THE RIGHT) POINT(S)
-        document.addEventListener("pointerdown", (event) => {
+        document.addEventListener("pointerdown", async (event) => {
 
             const mouse3D = new Vector2(
                 event.clientX / window.innerWidth * 2 - 1,
@@ -262,7 +265,7 @@ export class Globe {
 
 
             // if black already
-            if (intersects.length > 0 && intersects[0].object.userData.selected ) {
+            if (intersects.length > 0 && intersects[0].object.userData.selected) {
 
                 return;
 
@@ -282,9 +285,46 @@ export class Globe {
 
                         this.earth.remove(intersects[0].object);
 
+                    }else{
+
+
+                        // const waldoGeometry = new SphereGeometry(0.25, 20, 20);
+                        const waldoGeometry = new BoxGeometry(0.25, 10, 10);
+                        // const waldoGeometry = new SphereGeometry(0.1, 20, 20);
+                        const waldoMaterial = new MeshPhongMaterial({
+
+                            map: await new TextureLoader().load("./assets/images/waldo.png"),
+                            transparent: true
+                        });
+
+
+
+                        // grab the positions of the current point
+
+                        let currentPosition = intersects[0].object.position;
+
+                        // remove it
+                        // this.earth.remove(intersects[0].object);
+
+                        // add the waldo image
+                        let pointOfInterestMesh = new Mesh(waldoGeometry, waldoMaterial);
+
+                        // pointOfInterestMesh.rotation.y = Math.PI / 4;
+                        pointOfInterestMesh.rotation.z = Math.PI / 2;
+                        // this.#scene.remove(this.earth);
+                        // this.#scene.add( pointOfInterestMesh );
+
+                        pointOfInterestMesh.scale.set(1, 1, 1);
+                        pointOfInterestMesh.position.set( currentPosition.x, currentPosition.y, currentPosition.z )
+
+                        this.earth.remove(intersects[0].object);
+                        this.earth.add( pointOfInterestMesh );
+
+                        // intersects[0].object.userData.selected = true;
+                        // intersects[0].object.material.color.setHex(this.#blackHexValue);
+
+
                     }
-                    intersects[0].object.userData.selected = true;
-                    intersects[0].object.material.color.setHex(this.#blackHexValue);
 
                 } else {
 
@@ -293,7 +333,7 @@ export class Globe {
                     this.game.updateAttemptsCountDiv();
 
                     // show the blinking text
-                    if ( this.game.timesWrong === 3 ) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
+                    if (this.game.timesWrong === 3) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
 
                         document.getElementById("show-answer").classList.remove("hide");
                         document.getElementById("found-span").classList.add("hide");
@@ -302,7 +342,7 @@ export class Globe {
                         for (let x = 0; x < this.#countryObjects.length; x += 1) {
 
                             // found the dot that matches the current country
-                            if ( ( this.game.getSelectedCountries() !== null ) && this.#countryObjects[x].userData.country === this.game.getSelectedCountries()[0].country) {
+                            if ((this.game.getSelectedCountries() !== null) && this.#countryObjects[x].userData.country === this.game.getSelectedCountries()[0].country) {
 
                                 this.#countryObjects[x].material.color.setHex(this.#redHexValue);
 
@@ -331,9 +371,9 @@ export class Globe {
                                         clearInterval(blinkDot);
 
                                         // when user clicks next or previous then that object will no longer match the first country in our game class
-                                    }else if(
+                                    } else if (
                                         this.#countryObjects[x].userData.country !== this.game.getSelectedCountries()[0].country
-                                    ){
+                                    ) {
 
                                         // set to white
                                         this.#countryObjects[x].material.color.setHex(this.#whiteHexValue);

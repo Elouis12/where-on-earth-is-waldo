@@ -1,6 +1,7 @@
 let path = require('path');
 const jwt = require('./JWTAuthController');
 let {db} = require('../config/db');
+let {query} = require('../models/userModel.js');
 const dotEnv = require("dotenv");
 dotEnv.config();
 
@@ -383,40 +384,92 @@ let getUserStats = (req, resp)=>{
 }
 
 
-let postStreak = (req, resp)=>{
+let postStreak = async (req, resp) => {
 
-    let {daily_streak, refreshToken} = req.body;
+    let {refreshToken} = req.body;
 
 
-    try{
+    try {
 
-        let userId = parseInt( jwt.verifyJWT(
+        let userId = parseInt(jwt.verifyJWT(
             refreshToken,
             process.env.JWT_REFRESH_SECRET
-        ).id );
+        ).id);
 
-        let sql =  `
+
+        // get last played and current day
+
+        let currentDay = new Date(new Date().toLocaleDateString());
+
+        let lastLoggedInSQL = `SELECT last_logged_in FROM users WHERE id = ${userId} `
+        let lastLoggedIn = new Date(await query(lastLoggedInSQL).then(results => results[0].last_logged_in));
+
+
+        // to see if user logged in within < 24 hours
+        const daysDifference = (currentDay, lastLoggedIn) =>{
+            let difference = currentDay.getTime() - lastLoggedIn.getTime();
+            let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+            return TotalDays;
+        }
+
+        let setDailyStreaksSQL;
+
+        // user logged in one day after day, don't update
+        if(  currentDay !== lastLoggedIn && daysDifference(currentDay, lastLoggedIn) === 1 ){
+
+            // increase in streaks
+            setDailyStreaksSQL = `
+        
+                UPDATE users
+                SET daily_streak = ${daily_streak+1}
+                WHERE id = ${userId}
+            
+            `
+            // update the streaks
+            await query(setDailyStreaksSQL);
+
+        }else if( daysDifference(currentDay, lastLoggedIn) > 1 ){
+
+            // set to 0
+            setDailyStreaksSQL = `
+        
+                UPDATE users
+                SET daily_streak = ${0}
+                WHERE id = ${userId}
+            
+            `
+            // update the streaks
+            await query(setDailyStreaksSQL);
+        }
+
+
+
+        let setLastLoggedInSQL = `
         
             UPDATE users
-            SET daily_streak = ${daily_streak}
+            SET last_logged_in = '${lastLoggedIn}'
             WHERE id = ${userId}
             
         `
+        let getDailyStreakSQL = `
+        
+            SELECT daily_streak
+            FROM users
+            WHERE id = ${userId}
+            
+        `
+        await query(setLastLoggedInSQL);
+        await query(getDailyStreakSQL)
+            .then((results)=>{
 
-        db.query(sql, (error, results)=>{
+                return resp.status(201).json(results[0].daily_streak);
 
-            if(error){
+            })
+            .catch((e)=>{ console.log(e) });
 
-                return resp.status(401).json('streak not updated');
-            }else{
 
-                return resp.status(201).json(daily_streak);
 
-            }
-
-        })
-
-    }catch (e) {
+    } catch (e) {
 
         console.log(e);
     }
