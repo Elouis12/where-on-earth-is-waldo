@@ -213,10 +213,24 @@ export class Stats{
         let currentDay = new Date(new Date().toLocaleDateString());
         let lastDayPlayed = new Date(this.#last_date_played);
 
+
+
         const daysDifference = (currentDay, lastDayPlayed) =>{
             let difference = currentDay.getTime() - lastDayPlayed.getTime();
             let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
             return TotalDays;
+        }
+
+        alert(currentDay)
+        alert(lastDayPlayed)
+
+        if( currentDay !== lastDayPlayed && daysDifference(currentDay, lastDayPlayed) === 1 ){
+
+            ++this.#daily_streak;
+
+        }else if( daysDifference(currentDay, lastDayPlayed) > 1 ){
+
+            this.#daily_streak = 0;
         }
 
         // update streaks
