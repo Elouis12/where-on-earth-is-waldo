@@ -25,7 +25,7 @@ export class Stats{
     async getUserStats(){
 
         let stats =  await fetch( '/get-stats',
-        {
+            {
                 method: 'POST',
                 headers : {
 
@@ -128,13 +128,13 @@ export class Stats{
         let showAllButton = document.getElementById("show-all-button");
         showAllButton.classList.add('hide');
 
-/*        // add show less button functionality
-        let showAllButton = document.getElementById("show-all-button");
+        /*        // add show less button functionality
+                let showAllButton = document.getElementById("show-all-button");
 
-        showAllButton.setAttribute("value", "Show Less");
-        showAllButton.removeEventListener("click", this.#showAll);
-        showAllButton.addEventListener("click", this.#showLess);
-    */
+                showAllButton.setAttribute("value", "Show Less");
+                showAllButton.removeEventListener("click", this.#showAll);
+                showAllButton.addEventListener("click", this.#showLess);
+            */
     }
 
     #showLess(){
@@ -149,7 +149,7 @@ export class Stats{
                 // hide the rest of the elements
                 // if( tableRow[x].classList.contains("hide") ){
 
-                    tableRow[x].classList.add("hide");
+                tableRow[x].classList.add("hide");
                 // }
             }
 
@@ -210,51 +210,25 @@ export class Stats{
         let averageText = document.getElementById('average-percent-text');
 
 
-<<<<<<< HEAD
-        let currentDay = new Date(new Date().toLocaleDateString());
-        let lastDayPlayed = new Date(this.#last_date_played);
-
-
-
-        const daysDifference = (currentDay, lastDayPlayed) =>{
-            let difference = currentDay.getTime() - lastDayPlayed.getTime();
-            let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-            return TotalDays;
-        }
-
-        alert(currentDay)
-        alert(lastDayPlayed)
-
-        if( currentDay !== lastDayPlayed && daysDifference(currentDay, lastDayPlayed) === 1 ){
-
-            ++this.#daily_streak;
-
-        }else if( daysDifference(currentDay, lastDayPlayed) > 1 ){
-
-            this.#daily_streak = 0;
-        }
-
-=======
->>>>>>> add_waldo
         // update streaks
         let streaksCount =   await fetch( '/save-streaks',
-                {
-                    method: 'POST',
-                    headers : {
+            {
+                method: 'POST',
+                headers : {
 
-                        'Content-type' : 'application/json'
-                    },
-                    body : JSON.stringify({
-                        refreshToken: localStorage.getItem('refreshToken')
-                    })
-                }
-            )
-                .then( resp => resp.json() )
-                .catch( (e)=>{ console.log(e) } );
+                    'Content-type' : 'application/json'
+                },
+                body : JSON.stringify({
+                    refreshToken: localStorage.getItem('refreshToken')
+                })
+            }
+        )
+            .then( resp => resp.json() )
+            .catch( (e)=>{ console.log(e) } );
 
 
         streaksText.innerText = streaksCount;
-        
+
 
         dateText.innerText = new Date().toLocaleDateString();
 
@@ -448,7 +422,7 @@ export class Stats{
 
         // make api call to save stats to db for that user
         await fetch( '/save-stats',
-        {
+            {
                 method: 'POST',
                 headers : {
 
@@ -465,7 +439,7 @@ export class Stats{
             }
         )
             .then( resp => resp.json() )
-                .catch( (e)=>{ console.log(e) } )
+            .catch( (e)=>{ console.log(e) } )
     }
 }
 

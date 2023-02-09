@@ -161,82 +161,82 @@ let postUserStats =  (req, resp)=>{
 
                             case 'flags':
 
-                                    // user playing for the first time
-                                    if( userStats.flags_played === null ){
+                                // user playing for the first time
+                                if( userStats.flags_played === null ){
 
-                                        modePercentageToUpdate = `flags_percentage = ${ parseFloat(percentCorrect) }`
-                                        modePlayedToUpdate = `flags_played = ${1}`
+                                    modePercentageToUpdate = `flags_percentage = ${ parseFloat(percentCorrect) }`
+                                    modePlayedToUpdate = `flags_played = ${1}`
 
-                                        // user has records already
-                                    }else{
+                                    // user has records already
+                                }else{
 
-                                        let played = parseInt(userStats.flags_played);
+                                    let played = parseInt(userStats.flags_played);
 
-                                        modePercentageToUpdate = ` flags_percentage = ${ ( ( ( userStats.flags_played * userStats.flags_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.flags_played + 1 ) ).toFixed(2) }`
-                                        modePlayedToUpdate = ` flags_played = ${ ++played }`
+                                    modePercentageToUpdate = ` flags_percentage = ${ ( ( ( userStats.flags_played * userStats.flags_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.flags_played + 1 ) ).toFixed(2) }`
+                                    modePlayedToUpdate = ` flags_played = ${ ++played }`
 
-                                    }
-                                    break;
+                                }
+                                break;
 
                             case 'capitals':
 
-                                    // user playing for the first time
-                                    if( userStats.capitals_played === null ){
+                                // user playing for the first time
+                                if( userStats.capitals_played === null ){
 
-                                        modePercentageToUpdate = `capitals_percentage = ${ parseFloat(percentCorrect) }`
-                                        modePlayedToUpdate = `capitals_played = ${1}`
+                                    modePercentageToUpdate = `capitals_percentage = ${ parseFloat(percentCorrect) }`
+                                    modePlayedToUpdate = `capitals_played = ${1}`
 
-                                        // user has records already
-                                    }else{
+                                    // user has records already
+                                }else{
 
-                                        let played = parseInt(userStats.capitals_played);
+                                    let played = parseInt(userStats.capitals_played);
 
-                                        modePercentageToUpdate = ` capitals_percentage = ${ ( ( ( userStats.capitals_played * userStats.capitals_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.capitals_played + 1 ) ).toFixed(2) }`
-                                        modePlayedToUpdate = ` capitals_played = ${ ++played }`
+                                    modePercentageToUpdate = ` capitals_percentage = ${ ( ( ( userStats.capitals_played * userStats.capitals_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.capitals_played + 1 ) ).toFixed(2) }`
+                                    modePlayedToUpdate = ` capitals_played = ${ ++played }`
 
-                                    }
-                                    break;
+                                }
+                                break;
 
                             case 'countries':
 
-                                    // user playing for the first time
-                                    if( userStats.countries_played === null ){
+                                // user playing for the first time
+                                if( userStats.countries_played === null ){
 
-                                        modePercentageToUpdate = `countries_percentage = ${ parseFloat(percentCorrect) }`
-                                        modePlayedToUpdate = `countries_played = ${1}`
+                                    modePercentageToUpdate = `countries_percentage = ${ parseFloat(percentCorrect) }`
+                                    modePlayedToUpdate = `countries_played = ${1}`
 
-                                        // user has records already
-                                    }else{
+                                    // user has records already
+                                }else{
 
-                                        let played = parseInt(userStats.countries_played);
+                                    let played = parseInt(userStats.countries_played);
 
-                                        modePercentageToUpdate = ` countries_percentage = ${ ( ( ( userStats.countries_played * userStats.countries_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.countries_played + 1 ) ).toFixed(2) }`
-                                        modePlayedToUpdate = ` countries_played = ${ ++played }`
+                                    modePercentageToUpdate = ` countries_percentage = ${ ( ( ( userStats.countries_played * userStats.countries_percentage ) + ( parseFloat(percentCorrect) ) ) / ( userStats.countries_played + 1 ) ).toFixed(2) }`
+                                    modePlayedToUpdate = ` countries_played = ${ ++played }`
 
-                                    }
-                                    break;
+                                }
+                                break;
 
                         }
 
                         let gamesPlayed = userStats.games_played === null ? 1 : ++userStats.games_played;
 
-/*                        let updateUsersSQL = `
-                            
-                            UPDATE 
-                                users
-                            SET games_played = ${gamesPlayed} 
-                            WHERE id = ${userId};
-                            
-                            UPDATE 
-                                users
-                            SET ${modePlayedToUpdate}
-                            WHERE id = ${userId};  
-                                                        
-                            UPDATE 
-                                users
-                            SET ${modePercentageToUpdate}
-                            WHERE id = ${userId};                               
-                        `*/
+                        /*                        let updateUsersSQL = `
+
+                                                    UPDATE
+                                                        users
+                                                    SET games_played = ${gamesPlayed}
+                                                    WHERE id = ${userId};
+
+                                                    UPDATE
+                                                        users
+                                                    SET ${modePlayedToUpdate}
+                                                    WHERE id = ${userId};
+
+                                                    UPDATE
+                                                        users
+                                                    SET ${modePercentageToUpdate}
+                                                    WHERE id = ${userId};
+                                                `*/
 
                         let gamesPlayedQuery = ` UPDATE 
                                 users
