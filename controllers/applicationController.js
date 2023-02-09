@@ -420,8 +420,21 @@ let postStreak = async (req, resp) => {
             
         `
 
+        console.log(currentDay.toLocaleDateString())
+        console.log(lastLoggedIn.toLocaleDateString())
+
         // user logged in one day after day, don't update
-        if(  currentDay !== lastLoggedIn && daysDifference(currentDay, lastLoggedIn) === 1 ){
+
+        // (made localDateString() -> 1/1/00 otherwise it will make both
+        /*
+
+            current - 2023-02-09T15:22:57.154Z
+            last - 2023-02-09T05:00:00.000Z
+
+            they are now different
+
+        */
+        if(  currentDay.toLocaleDateString() !== lastLoggedIn.toLocaleDateString() && daysDifference(currentDay, lastLoggedIn) === 1 ){
 
             // get current streak;
             let currentStreak = await query(getDailyStreakSQL).then(results => results[0].daily_streak)
