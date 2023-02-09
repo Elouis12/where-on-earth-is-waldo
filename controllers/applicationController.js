@@ -1,6 +1,7 @@
 let path = require('path');
 const jwt = require('./JWTAuthController');
 let {db} = require('../config/db');
+let {query} = require('../models/userModel.js');
 const dotEnv = require("dotenv");
 dotEnv.config();
 
@@ -383,40 +384,52 @@ let getUserStats = (req, resp)=>{
 }
 
 
-let postStreak = (req, resp)=>{
+let postStreak = async (req, resp) => {
 
-    let {daily_streak, refreshToken} = req.body;
+    let {daily_streak, lastLoggedIn, refreshToken} = req.body;
 
 
-    try{
+    try {
 
-        let userId = parseInt( jwt.verifyJWT(
+        let userId = parseInt(jwt.verifyJWT(
             refreshToken,
             process.env.JWT_REFRESH_SECRET
-        ).id );
+        ).id);
 
-        let sql =  `
+        let setDailyStreaksSQL = `
         
             UPDATE users
             SET daily_streak = ${daily_streak}
             WHERE id = ${userId}
             
         `
+        let setLastLoggedInSQL = `
+        
+            UPDATE users
+            SET last_logged_in = '${lastLoggedIn}'
+            WHERE id = ${userId}
+            
+        `
+        let getDailyStreakSQL = `
+        
+            SELECT daily_streak
+            FROM users
+            WHERE id = ${userId}
+            
+        `
+        await query(setDailyStreaksSQL);
+        await query(setLastLoggedInSQL);
+        await query(getDailyStreakSQL)
+            .then((results)=>{
 
-        db.query(sql, (error, results)=>{
+                return resp.status(201).json(results[0].daily_streak);
 
-            if(error){
+            })
+            .catch((e)=>{ console.log(e) });
 
-                return resp.status(401).json('streak not updated');
-            }else{
 
-                return resp.status(201).json(daily_streak);
 
-            }
-
-        })
-
-    }catch (e) {
+    } catch (e) {
 
         console.log(e);
     }

@@ -213,11 +213,24 @@ export class Stats{
         let currentDay = new Date(new Date().toLocaleDateString());
         let lastDayPlayed = new Date(this.#last_date_played);
 
+        // to see if user logged in within < 24 hours
         const daysDifference = (currentDay, lastDayPlayed) =>{
             let difference = currentDay.getTime() - lastDayPlayed.getTime();
             let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
             return TotalDays;
         }
+
+            // user logged in one day after day, don't update
+            if(  currentDay !== lastDayPlayed && daysDifference(currentDay, lastDayPlayed) === 1 ){
+
+                 ++this.#daily_streak;
+             //
+            }else if( daysDifference(currentDay, lastDayPlayed) > 1 ){
+
+                this.#daily_streak = 0;
+
+            }
+
 
         // update streaks
         let streaksCount =   await fetch( '/save-streaks',
@@ -228,7 +241,8 @@ export class Stats{
                         'Content-type' : 'application/json'
                     },
                     body : JSON.stringify({
-                        daily_streak: ( daysDifference(currentDay, lastDayPlayed) === 1 ? ++this.#daily_streak : 0 ),
+                        daily_streak: this.#daily_streak,
+                        lastLoggedIn: currentDay.toLocaleDateString(),
                         refreshToken: localStorage.getItem('refreshToken')
                     })
                 }
@@ -238,7 +252,7 @@ export class Stats{
 
 
         streaksText.innerText = streaksCount;
-
+        
 
         dateText.innerText = new Date().toLocaleDateString();
 
