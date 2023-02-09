@@ -386,7 +386,9 @@ let getUserStats = (req, resp)=>{
 
 let postStreak = async (req, resp) => {
 
-    let {daily_streak, lastLoggedIn, refreshToken} = req.body;
+    let {refreshToken} = req.body;
+
+
 
 
     try {
@@ -396,13 +398,54 @@ let postStreak = async (req, resp) => {
             process.env.JWT_REFRESH_SECRET
         ).id);
 
-        let setDailyStreaksSQL = `
+
+        // get last played and current day
+
+        let currentDay = new Date(new Date().toLocaleDateString());
+
+        let lastLoggedInSQL = `SELECT last_logged_in FROM users WHERE id = ${userId} `
+        let lastLoggedIn = new Date(await query(lastLoggedInSQL).then(results => results[0].last_logged_in));
+
+
+        // to see if user logged in within < 24 hours
+        const daysDifference = (currentDay, lastLoggedIn) =>{
+            let difference = currentDay.getTime() - lastLoggedIn.getTime();
+            let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+            return TotalDays;
+        }
+
+        let setDailyStreaksSQL;
+
+        // user logged in one day after day, don't update
+        if(  currentDay !== lastLoggedIn && daysDifference(currentDay, lastLoggedIn) === 1 ){
+
+            // increase in streaks
+            setDailyStreaksSQL = `
         
-            UPDATE users
-            SET daily_streak = ${daily_streak}
-            WHERE id = ${userId}
+                UPDATE users
+                SET daily_streak = ${daily_streak+1}
+                WHERE id = ${userId}
             
-        `
+            `
+            // update the streaks
+            await query(setDailyStreaksSQL);
+
+        }else if( daysDifference(currentDay, lastLoggedIn) > 1 ){
+
+            // set to 0
+            setDailyStreaksSQL = `
+        
+                UPDATE users
+                SET daily_streak = ${0}
+                WHERE id = ${userId}
+            
+            `
+            // update the streaks
+            await query(setDailyStreaksSQL);
+        }
+
+
+
         let setLastLoggedInSQL = `
         
             UPDATE users
@@ -417,7 +460,6 @@ let postStreak = async (req, resp) => {
             WHERE id = ${userId}
             
         `
-        await query(setDailyStreaksSQL);
         await query(setLastLoggedInSQL);
         await query(getDailyStreakSQL)
             .then((results)=>{
