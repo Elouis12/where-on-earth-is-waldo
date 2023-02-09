@@ -389,8 +389,6 @@ let postStreak = async (req, resp) => {
     let {refreshToken} = req.body;
 
 
-
-
     try {
 
         let userId = parseInt(jwt.verifyJWT(
