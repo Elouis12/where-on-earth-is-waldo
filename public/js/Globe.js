@@ -298,8 +298,8 @@ export class Globe {
                         });
 
 
-
-                        // grab the positions of the current point
+// ADDING WALDO IMAGE
+/*                        // grab the positions of the current point
 
                         let currentPosition = intersects[0].object.position;
 
@@ -318,10 +318,12 @@ export class Globe {
                         pointOfInterestMesh.position.set( currentPosition.x, currentPosition.y, currentPosition.z )
 
                         this.earth.remove(intersects[0].object);
-                        this.earth.add( pointOfInterestMesh );
+                        this.earth.add( pointOfInterestMesh );*/
 
-                        // intersects[0].object.userData.selected = true;
-                        // intersects[0].object.material.color.setHex(this.#blackHexValue);
+                        // set for already selected countries
+                        intersects[0].object.userData.selected = true;
+                        // set color of already used countries
+                        intersects[0].object.material.color.setHex(this.#blackHexValue);
 
 
                     }
