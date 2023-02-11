@@ -264,12 +264,23 @@ export class Globe {
             const intersects = raycaster.intersectObjects(this.#countryObjects);
 
 
-            // if black already
+
+            // IF ON THE CORRECT SCREEN THEN RETURN
+            // because ex. us and canada are left, user click us correctly, only option left is canad
+            // if user clicks canada while on the 'waldo has been found in US' screen it will give it correct
+            // so prevent it by disabling other objects from being clicked
+            if( !document.getElementById('next-round-button').classList.contains('hide') ){
+
+                return;
+            }
+
+            // IF BLACK ALREADY
             if (intersects.length > 0 && intersects[0].object.userData.selected) {
 
                 return;
 
             }
+
 
             if (intersects.length > 0 && intersects[0].object.userData.country) {
 
@@ -285,10 +296,14 @@ export class Globe {
 
                         this.earth.remove(intersects[0].object);
 
+                    // USER IS PLAYING REGULAR MODE
                     }else{
 
 
-                        // const waldoGeometry = new SphereGeometry(0.25, 20, 20);
+
+
+// ADDING WALDO IMAGE
+/*                                           // const waldoGeometry = new SphereGeometry(0.25, 20, 20);
                         const waldoGeometry = new BoxGeometry(0.25, 10, 10);
                         // const waldoGeometry = new SphereGeometry(0.1, 20, 20);
                         const waldoMaterial = new MeshPhongMaterial({
@@ -296,10 +311,7 @@ export class Globe {
                             map: await new TextureLoader().load("./assets/images/waldo.png"),
                             transparent: true
                         });
-
-
-// ADDING WALDO IMAGE
-/*                        // grab the positions of the current point
+     // grab the positions of the current point
 
                         let currentPosition = intersects[0].object.position;
 
@@ -324,7 +336,6 @@ export class Globe {
                         intersects[0].object.userData.selected = true;
                         // set color of already used countries
                         intersects[0].object.material.color.setHex(this.#blackHexValue);
-
 
                     }
 
@@ -410,37 +421,37 @@ export class Globe {
             const intersects = raycaster.intersectObjects(this.#countryObjects);
 
 
-            // if dot is red (blinking) or white color
-            if (intersects.length > 0 &&
-                (
-                    intersects[0].object.material.color.getHex() === this.#redHexValue ||
-                    // intersects[0].object.material.color.getHex() === this.#lessWhiteHexValue
-                    intersects[0].object.material.color.getHex() === this.#whiteHexValue
-                )
+            // IF ON THE CORRECT SCREEN THEN RETURN
+            // because ex. us and canada are left, user click us correctly, only option left is canad
+            // if user clicks canada while on the 'waldo has been found in US' screen it will give it correct
+            // so prevent it by disabling other objects from being clicked
+            if( !document.getElementById('next-round-button').classList.contains('hide') ){
+
+                this.pauseGlobeRotation = false;
+                document.body.style.cursor = "default"; // make default pointer
+                return;
+            }
+
+            // IF USER SELECTS A DOT NOT YET CORRECT
+            if (
+                intersects.length > 0
+                    &&
+                !intersects[0].object.userData.selected
             ) {
 
                 this.pauseGlobeRotation = true; // to pause the globe's rotation when user hovers to try to make decision
                 document.body.style.cursor = "pointer"; // make pointer
-                return;
+
+                // MAKE BLACK
+                intersects[0].object.material.color.setHex(this.#blackHexValue);
+
 
             }else{
 
                 this.pauseGlobeRotation = false; // continue the globe rotation
-            }
-
-            // highlight black when white
-            if (intersects.length > 0 && !intersects[0].object.userData.selected) {
-
-
-                intersects[0].object.material.color.setHex(this.#blackHexValue);
-
-                document.body.style.cursor = "pointer"; // make pointer
-
-                // put back to white
-            } else {
-
                 document.body.style.cursor = "default"; // change back to default
 
+                // PUT BACK TO WHITE
                 this.#countryObjects.forEach((country) => {
 
                     if (!country.userData.selected) {  // set to back to white if the user did not get it correct already
@@ -453,9 +464,7 @@ export class Globe {
                     }
 
                 });
-
             }
-
         });
 
     }
@@ -806,7 +815,10 @@ export class Globe {
                 map: this.textures.map,
                 roughnessMap: this.textures.spec,
                 bumpMap: this.textures.bump,
-                bumpScale: 0.05,
+                bumpScale: 0.25,
+                // bumpScale: 1,
+                // bumpScale: 0.5,
+                // bumpScale: 0.05,
                 envMap : this.textures.envMap,
                 envMapIntensity: 0.4,
                 sheen: 1,

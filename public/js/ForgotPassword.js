@@ -23,6 +23,7 @@ async function resetPassword(){
         .catch( (e)=>{ console.log(e) } )
 
 
+    // user was sent email
     if( message === 'restricted' ){
 
         // reset/remove icon and messages
@@ -64,6 +65,8 @@ async function resetPassword(){
         document.getElementById("password-reset-text").classList.remove('hide')
 
     }
+
+
 
 }
 

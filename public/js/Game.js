@@ -360,7 +360,6 @@ export class Game{
             await this.#stats.saveStats(this.#getGameMode(), this.getExtraGameMode(), this.getCountryCount(), percentageCorrect, new Date().toLocaleDateString() );
 
             nextRoundButton.setAttribute("value", `Waldo Has Finally Been Captured in ${ country.country }!`/*`You've Found Waldo ( in ${ country.country } and ) in All Countries!`*/);
-            // foundSpan.classList.remove("hide"); // keep the total user found
 
         // USER GOT A COUNTRY
         }else{

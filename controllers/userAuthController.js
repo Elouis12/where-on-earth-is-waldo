@@ -448,6 +448,8 @@ let deleteLogout = (req, resp) => {
 
 let sendEmail = async (receiver, subject, body) => {
 
+    console.log(process.env.EMAIL_USERNAME);
+
     let transporter = await nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         auth: {
@@ -465,7 +467,11 @@ let sendEmail = async (receiver, subject, body) => {
 
     await transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log(error.name);
+            console.log(error);
+            // console.log(error.name);
+
+            // throw Error(error);
+
         } else {
             console.log('Email sent: ' + info.response);
         }
@@ -790,17 +796,6 @@ let resetPassword = async (req, resp) => {
                         // token is not valid or has not yet been added
                     } else {
 
-                        // add token to db to prevent user from always sending request for passwords until the 30 minutes are up
-                        let sql = `
-                            
-                            UPDATE users 
-                            SET request_token = '${requestToken}' 
-                            WHERE email = '${email}'
-                        
-                        `;
-
-                        await query(sql);
-
                         const body = mjml(`
                             <mjml>
                             
@@ -842,9 +837,28 @@ let resetPassword = async (req, resp) => {
                             `)
 
 
-                        await sendEmail(email, "Request to Reset Password", body.html);
+                        await sendEmail(email, "Request to Reset Password", body.html)
+                            .then(async () => {
 
-                        return resp.status(200).json({success: 'success'})
+
+                                // add token to db to prevent user from always sending request for passwords until the 30 minutes are up
+                                let sql = `
+                            
+                                    UPDATE users 
+                                    SET request_token = '${requestToken}' 
+                                    WHERE email = '${email}'
+                                
+                                `;
+
+                                await query(sql);
+
+
+                                return resp.status(200).json({success: 'success'})
+
+                            })
+                            .catch( (e)=>{ console.log(e); return resp.status(401).json({error: 'error'}) } );
+
+
                     }
 
                 })
