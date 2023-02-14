@@ -408,6 +408,7 @@ let postStreak = async (req, resp) => {
         const daysDifference = (currentDay, lastLoggedIn) =>{
             let difference = currentDay.getTime() - lastLoggedIn.getTime();
             let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+
             return TotalDays;
         }
 
@@ -432,7 +433,6 @@ let postStreak = async (req, resp) => {
 
         */
 
-
         if(  currentDay.toLocaleDateString() !== lastLoggedIn.toLocaleDateString() && daysDifference(currentDay, lastLoggedIn) === 1 ){
 
             // get current streak;
@@ -449,6 +449,7 @@ let postStreak = async (req, resp) => {
             // update the streaks
             await query(setDailyStreaksSQL);
 
+        // user came back after more than 24 hours
         }else if( daysDifference(currentDay, lastLoggedIn) > 1 ){
 
             // set to 0
@@ -464,7 +465,6 @@ let postStreak = async (req, resp) => {
         }
 
 
-
         let setLastLoggedInSQL = `
         
             UPDATE users
@@ -475,6 +475,7 @@ let postStreak = async (req, resp) => {
 
         // update last logged in with current day
         await query(setLastLoggedInSQL);
+
 
         // update daily streak and send to client
         await query(getDailyStreakSQL)

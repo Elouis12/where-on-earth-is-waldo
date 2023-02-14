@@ -219,7 +219,7 @@ export class Stats{
                     'Content-type' : 'application/json'
                 },
                 body : JSON.stringify({
-                    refreshToken: localStorage.getItem('refreshToken')
+                refreshToken: localStorage.getItem('refreshToken')
                 })
             }
         )
