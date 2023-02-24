@@ -436,7 +436,7 @@ export class Globe {
             if (
                 intersects.length > 0
                     &&
-                !intersects[0].object.userData.selected
+                ( !intersects[0].object.userData.earth && !intersects[0].object.userData.selected )
             ) {
 
                 this.pauseGlobeRotation = true; // to pause the globe's rotation when user hovers to try to make decision

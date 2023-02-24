@@ -187,14 +187,7 @@ let postRegister = async (req, resp) => {
 
     } catch (e) {
 
-        if (e.code === 11000) { // duplicate key in mongoose
-
-            return resp.status(400).json({status: 'error', error: 'Username already in use'});
-
-        } else { // something else besides duplicate key (ex. connection error )
-
-            throw e;
-        }
+        return resp.status(400).json({status: 'error', error: 'Username already in use'});
 
     }
 
@@ -281,7 +274,6 @@ let postLogin = async (req, resp) => {
 
         db.query(verifyUserSQL, (error, results) => {
 
-            console.log('ok')
             if (error) {
 
                 return resp.json({error: 'email not verified'});
@@ -447,8 +439,6 @@ let deleteLogout = (req, resp) => {
 
 
 let sendEmail = async (receiver, subject, body) => {
-
-    console.log(process.env.EMAIL_USERNAME);
 
     let transporter = await nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
