@@ -12,7 +12,7 @@ export class SocketAPI {
 
        let sessionID = await fetch(
 
-           'http://localhost:5000/session/validID',
+           '/session/validID',
            {
                method : 'POST',
                headers: { "Content-Type": "application/json" },
@@ -62,7 +62,7 @@ export class SocketAPI {
 
        let roomNameValid = await fetch(
 
-           'http://localhost:5000/session/valid-room-name',
+           '/session/valid-room-name',
            {
                method : 'POST',
                headers: { "Content-Type": "application/json" },
@@ -92,7 +92,7 @@ export class SocketAPI {
 
         let roomValid = await fetch(
 
-            'http://localhost:5000/session/valid-room',
+            '/session/valid-room',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },
@@ -117,7 +117,7 @@ export class SocketAPI {
 
         let roomIsFull = await fetch(
 
-            'http://localhost:5000/session/room-full',
+            '/session/room-full',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },
@@ -144,7 +144,7 @@ export class SocketAPI {
 
         let started = await fetch(
 
-            'http://localhost:5000/session/game-started',
+            '/session/game-started',
             {
                 method : 'POST',
                 headers: { "Content-Type": "application/json" },

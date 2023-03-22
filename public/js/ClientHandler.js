@@ -236,7 +236,7 @@ export class ClientHandler {
 
         // reduce the count
 /*        await fetch(
-            'http://localhost:5000/session/reduce-user-count',
+            '/session/reduce-user-count',
             {
                 method: 'POST',
                 headers: {"Content-Type": "application/json"},
