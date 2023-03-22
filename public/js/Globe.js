@@ -42,6 +42,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.m
 
 /* CLASSES IMPORTS */
 import {Game} from "./Game.js";
+import * as socket from "https://cdn.socket.io/4.5.4/socket.io.min.js";
 
 
 export class Globe {
@@ -92,27 +93,58 @@ export class Globe {
 
     }
 
+
     addButtons() {
 
 
-        document.getElementById("start-button").addEventListener("click", () => {
+        // add event to all start buttons
+        let startButtons = document.getElementsByClassName('start-button');
 
-            this.game.start(); // start the game
+        for( let x = 0; x < startButtons.length; x++ ){
 
-            // add dots
 
-            // if user wants to add all points to the globe
-            if( !this.game.userAddedAllCountries() ){
+            startButtons[x].addEventListener("click", async (e) => {
 
-                this.addPoints(this.game.getAllCountries(), this.game.getAllCountries().length);
+                /*if( !this.game.start() /!*user cannot start the game due to 0 country count*!/ ){
 
-            }else{
+                    return;
+                }*/
 
-                this.addPoints(this.game.getSelectedCountries(), this.game.getCountryCount(), true);
+                // if starting from the session page, remove the waiting elements
+                if (e.target.getAttribute("id") === "session-start-button") {
 
-            }
 
-        });
+                    // send message to server socket to let all other client know to start
+                    let socket = io();
+
+                    let sessionID = window.location.href.split("=")[1];
+
+                    await socket.emit("start-session", sessionID);
+
+                    document.getElementById("session-wait-div").classList.add('hide');
+                    document.getElementById("session-wait-div").classList.remove('session-wait-div');
+
+                }
+
+                this.game.start()
+
+                // add dots
+
+                // if user wants to add all points to the globe
+                if (!this.game.userAddedAllCountries()) {
+
+                    this.addPoints(this.game.getAllCountries(), this.game.getAllCountries().length);
+
+                } else {
+
+                    this.addPoints(this.game.getSelectedCountries(), this.game.getCountryCount(), true);
+
+                }
+
+            });
+
+
+        }
 
 
         document.getElementById("get-hint-button").addEventListener("click", () => {
@@ -265,11 +297,14 @@ export class Globe {
 
 
 
-            // IF ON THE CORRECT SCREEN THEN RETURN
+            // IF ON THE CORRECT SCREEN THEN RETURN OR FOR MULTIPLAYER, IF WE SHOW THE WINNER SCREEN
             // because ex. us and canada are left, user click us correctly, only option left is canad
             // if user clicks canada while on the 'waldo has been found in US' screen it will give it correct
             // so prevent it by disabling other objects from being clicked
-            if( !document.getElementById('next-round-button').classList.contains('hide') ){
+            if( !document.getElementById('next-round-button').classList.contains('hide')
+                    ||
+                !document.getElementById('winner-container').classList.contains('hideVisibility')
+                ){
 
                 return;
             }
@@ -336,6 +371,29 @@ export class Globe {
                         intersects[0].object.userData.selected = true;
                         // set color of already used countries
                         intersects[0].object.material.color.setHex(this.#blackHexValue);
+
+                        // multiplayer game has started
+                        if(  window.location.href.includes("id") ){
+
+                            let socket = io();
+
+                            let gameOver = this.game.getSelectedCountries().length === 0;
+
+                            let playerScores = this.game.getPlayerScores();
+
+                            let sessionID = window.location.href.split("=")[1];
+
+
+                            // get players will send error if not doing multiplayer
+                            socket.emit('update-scores',
+                                {
+                                    sessionID : sessionID,
+                                    scores : playerScores,
+                                    gameOver : gameOver
+                                }
+                            );
+
+                        }
 
                     }
 

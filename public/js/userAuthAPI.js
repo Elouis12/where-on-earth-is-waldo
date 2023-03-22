@@ -291,7 +291,7 @@ export class UserAuthAPI{
     }
 
 
-    // for when resetting password
+    // for when resetting password from email
     async verifyResetToken(){
 
         let resetToken = window.location.href.split('=')[1];

@@ -1,0 +1,149 @@
+/*
+https://www.sliderrevolution.com/resources/css-dropdown-menu/*/
+
+:root{
+
+    --color-light: rgba(0,0,0,0.4);
+
+    --color-dark: #181a1e;
+}
+#players-container li {
+
+    background-color: white;
+;}
+
+
+#players-container {
+    width : 20%;
+    background: #d9d9d9;
+    margin : auto;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+}
+
+#players-container label span {
+    padding : 10px;
+    background : #181a1e;
+    color : white;
+    font-size : 1.2em;
+    font-variant : small-caps;
+    cursor : pointer;
+    display: block;
+}
+
+#players-container label span::after {
+    float: right;
+    right: 10%;
+    content: "+";
+}
+
+.slide {
+    clear:both;
+    width:100%;
+    height:0px;
+    overflow: hidden;
+    text-align: center;
+    transition: all 1s ease;
+}
+
+.slide li { padding : 30px;}
+
+#touch {position: absolute; opacity: 0; height: 0px;}
+
+#touch:checked + .slide {height: 100%;}
+
+/* display only the first player */
+#touch:not(:checked) + .slide {height: 100%}
+#touch:not(:checked) + .slide > li:not(:first-child) {display: none}
+
+
+#players-container .slide li{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.player-score{
+
+    font-variant : small-caps;
+
+    background: #181a1e;
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+
+.current-player{
+
+    color: #8395ca;
+    background: #e3e7f3;
+    padding: 3px;
+    border-radius: 5px;
+
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+}
+
+.other-players{
+
+    color: #181a1e;
+    background: white;
+    padding: 3px;
+    border-radius: 5px;
+
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+}
+
+.first-place{
+
+    background: #ebffeb;
+    color: #90ee90;
+    padding: 3px;
+    border-radius: 5px;
+
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+}
+
+/* WINNER SCREEN */
+
+#winner-container{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 50%;
+    margin: auto;
+}
+
+#winner{
+
+    margin-right: 10px;
+    background: #ebffeb;
+    color: #90ee90;
+    padding: 3px;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+}
+
+#winner-text{
+
+    /*color: #8395ca;*/
+    /*background: #e3e7f3;*/
+    padding: 3px;
+    border-radius: 5px;
+    color: white;
+
+    /*font-variant : small-caps;*/
+    font-size: small;
+
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+}

@@ -33,18 +33,36 @@
 
 }
 
+.session-settings-box{
+
+    position: absolute;
+    transform: scale(0) !important;
+}
+
 .settings-box {
 
     position: absolute;
-    top: 50%;
+    top: 70%;
     left: 50%;
     width : 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -70%);
     /*background: #d9d9d9;*/
     /*background: #e3e7f3;*/
     border-radius: 5px;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 80%;
 }
+
+
+.settings-box .settings-boxes{
+
+    width: 100%;
+}
+
 
 .settings-modes-div:first-child >.settings-box-title,
 .settings-modes-div:first-child
@@ -151,14 +169,51 @@ input[id="country-count"]{
 
 /* SETTINGS */
 
-#start-button{
+.play-button-div{
+
+/*    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);*/
+
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+
+}
+.play-button-div #create-session-button{
+
+    background-color: #1877F2;
+    color: #fff;
+}
+.play-button-div #create-session-button:hover{
+
+    background-color: #fff;
+    color: #1877F2;
+}
+
+.play-button-div #join-session-button{
+
+    background: #90ee90;
+    color: white;
+}
+
+.play-button-div #join-session-button:hover{
+
+    background: white;
+    color: #90ee90;
+}
+
+
+/*#start-button{
 
     position: absolute;
     top: 90%;
     left: 50%;
     transform: translateX(-50%);
 
-}
+}*/
 
 /*ul*/.slide > li:hover  .settings-info{
 

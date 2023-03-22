@@ -142,6 +142,7 @@ body{
     align-items: center;
     margin-bottom: 10px;
 }
+
 .hints-container{
 
     display: flex;
@@ -158,8 +159,6 @@ body{
     /*background: blue;*/
     height: 250px;
     width: 380px;
-
-
 }
 
 #hints-header{

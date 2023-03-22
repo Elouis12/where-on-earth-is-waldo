@@ -26,6 +26,7 @@
     "nodemailer": "^6.9.0",
     "nodemon": "^2.0.19",
     "promise-mysql2": "^1.0.0",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^4.6.1"
   }
 }

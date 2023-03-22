@@ -15,6 +15,12 @@ router.get('/play', applicationController.getPlayPage );
 
 router.get('/stats', applicationController.getStatsPage );
 
+// SOCKET - refactor later
+// router.get('/play/session', applicationController.getCreatorSessionPage)
+router.get('/session', applicationController.getCreatorSessionPage)
+router.get('/play/join/', applicationController.getJoinSessionPage)
+router.post('/create-session', applicationController.createSession)
+
 router.get('/register', /*JWTAuthController.authenticateJWT,*/ applicationController.getRegisterPage )
 
 router.get('/login', /*JWTAuthController.authenticateJWT,*/ applicationController.getLoginPage )

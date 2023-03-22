@@ -17,12 +17,15 @@
     <!--  SCRIPT  -->
     <script src='https://cdn.jsdelivr.net/npm/webxr-polyfill@latest/build/webxr-polyfill.js'></script>
 
-    <script type="module" src="./js/play.js"></script>
-    <script type="text/javascript" src="js/playSettings.js"></script>
-
+    <script type="module" src="/js/play.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script type="text/javascript" src="/js/playSettings.js"></script>
 
 </head>
 <body>
+
+
+
 
 <!--  NAV BAR  -->
 <nav id="navbar">
@@ -46,185 +49,194 @@
 <!-- SETTINGS -->
 <section id="settings-box" class="settings-box hide">
 
-    <!-- DIFFICULTY -->
-    <!--    <div class="settings-modes-div" >
+    <div class="settings-boxes">
 
-            &lt;!&ndash;            <label for="touch">&ndash;&gt;
-            <span class="settings-box-title">
-                    <span class="settings-mode">Difficulty</span>
-                    <span id="settings-difficulty">
+        <!-- DIFFICULTY -->
+        <!--    <div class="settings-modes-div" >
+
+                &lt;!&ndash;            <label for="touch">&ndash;&gt;
+                <span class="settings-box-title">
+                        <span class="settings-mode">Difficulty</span>
+                        <span id="settings-difficulty">
+                            <span>Easy | 3 Hints</span>
+                            <span>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </span>
+                        </span>
+                    </span>
+                &lt;!&ndash;            </label>&ndash;&gt;
+                <input type="checkbox" >&lt;!&ndash;id="touch"&ndash;&gt;
+
+                <ul id="difficulty-ul" class="slide">
+                    <li value="0" onclick="changeText(this)">
                         <span>Easy | 3 Hints</span>
-                        <span>
+                        <div>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-regular fa-star"></i>
                             <i class="fa-regular fa-star"></i>
-                        </span>
-                    </span>
-                </span>
-            &lt;!&ndash;            </label>&ndash;&gt;
-            <input type="checkbox" >&lt;!&ndash;id="touch"&ndash;&gt;
+                        </div>
+                    </li>
+                    <li value="1" onclick="changeText(this)">
+                        <span>Medium | 2 Hints</span>
+                        <div>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                    </li>
+                    <li value="2" onclick="changeText(this)">
+                        <span>Hard | 1 Hint</span>
+                        <div>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>-->
 
-            <ul id="difficulty-ul" class="slide">
-                <li value="0" onclick="changeText(this)">
-                    <span>Easy | 3 Hints</span>
-                    <div>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                </li>
-                <li value="1" onclick="changeText(this)">
-                    <span>Medium | 2 Hints</span>
-                    <div>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-regular fa-star"></i>
-                    </div>
-                </li>
-                <li value="2" onclick="changeText(this)">
-                    <span>Hard | 1 Hint</span>
-                    <div>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                </li>
-            </ul>
-        </div>-->
+        <!-- GAME MODE -->
+        <div class="settings-modes-div">
 
-    <!-- GAME MODE -->
-    <div class="settings-modes-div">
-
-        <!--            <label for="touch">-->
-        <span class="settings-box-title">
+            <!--            <label for="touch">-->
+            <span class="settings-box-title">
                 <span class="settings-mode">Game Mode</span>
                 <span id="settings-game-mode">
                      <span>Hints</span>
                     <i title="guess the country with limited hints" class="fa-solid fa-magnifying-glass"></i>
                 </span>
             </span>
-        <!--            </label>-->
-        <input type="checkbox" ><!--id="touch"-->
+            <!--            </label>-->
+            <input type="checkbox" ><!--id="touch"-->
 
-        <ul id="game-modes-ul" class="slide">
-            <li onclick="changeText(this)" class="selected-mode">
-                <span>Hints</span>
-                <i title="guess the country with limited hints" class="fa-solid fa-magnifying-glass"></i>
-                <span class="hide settings-info">Find Waldo with limited facts about the country</span>
-            </li>
-            <li onclick="changeText(this)" >
-                <span>Flags</span>
-                <i class="fa-solid fa-flag"></i>
-                <span class="hide settings-info">Find Waldo with the country's flag</span>
-            </li>
-            <li onclick="changeText(this)" >
-                <span>Countries</span>
-                <i class="fa-solid fa-earth-americas"></i>
-                <span class="hide settings-info">Find Waldo with his given location</span>
-            </li>
-            <li onclick="changeText(this)" >
-                <span>Capitals</span>
-                <i class="fa-solid fa-building-columns"></i>
-                <span class="hide settings-info">Find Waldo with the country's given capital</span>
-            </li>
-        </ul>
-    </div>
+            <ul id="game-modes-ul" class="slide">
+                <li onclick="changeText(this)" class="selected-mode">
+                    <span>Hints</span>
+                    <i title="guess the country with limited hints" class="fa-solid fa-magnifying-glass"></i>
+                    <span class="hide settings-info">Find Waldo with limited facts about the country</span>
+                </li>
+                <li onclick="changeText(this)" >
+                    <span>Flags</span>
+                    <i class="fa-solid fa-flag"></i>
+                    <span class="hide settings-info">Find Waldo with the country's flag</span>
+                </li>
+                <li onclick="changeText(this)" >
+                    <span>Countries</span>
+                    <i class="fa-solid fa-earth-americas"></i>
+                    <span class="hide settings-info">Find Waldo with his given location</span>
+                </li>
+                <li onclick="changeText(this)" >
+                    <span>Capitals</span>
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span class="hide settings-info">Find Waldo with the country's given capital</span>
+                </li>
+            </ul>
+        </div>
 
-    <!-- EXTRA GAME MODE -->
-    <div class="settings-modes-div">
+        <!-- EXTRA GAME MODE -->
+        <div class="settings-modes-div">
 
-        <!--            <label for="touch">-->
-        <span class="settings-box-title">
+            <!--            <label for="touch">-->
+            <span class="settings-box-title">
                 <span class="settings-mode">Extra Game Mode</span>
                 <span id="settings-extra-game-mode">
                     <span>Regular</span>
                     <i class="fa-solid fa-earth-europe"></i>
                 </span>
         </span>
-        <!--            </label>-->
-        <input type="checkbox" ><!--id="touch"-->
+            <!--            </label>-->
+            <input type="checkbox" ><!--id="touch"-->
 
-        <ul id="extra-game-modes-ul" class="slide">
-            <li onclick="changeText(this)" class="selected-mode">
-                <span>Regular</span>
-                <i class="fa-solid fa-earth-europe"></i>
-                <span class="hide settings-info">Waldo's previous location(s) stays on the globe after finding him</span>
-<!--                <span class="hide settings-info">Find Waldo with the country's given capital</span>-->
-            </li>
-            <li onclick="changeText(this)">
-                <span>Elimination</span>
-                <i class="fa-solid fa-circle-xmark"></i>
-                <span class="hide settings-info">Waldo's previous location(s) is removed from the globe after finding him</span>
-            </li>
-        </ul>
-    </div>
+            <ul id="extra-game-modes-ul" class="slide">
+                <li onclick="changeText(this)" class="selected-mode">
+                    <span>Regular</span>
+                    <i class="fa-solid fa-earth-europe"></i>
+                    <span class="hide settings-info">Waldo's previous location(s) stays on the globe after finding him</span>
+                    <!--                <span class="hide settings-info">Find Waldo with the country's given capital</span>-->
+                </li>
+                <li onclick="changeText(this)">
+                    <span>Elimination</span>
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    <span class="hide settings-info">Waldo's previous location(s) is removed from the globe after finding him</span>
+                </li>
+            </ul>
+        </div>
 
-    <!-- CUSTOM COUNTRIES -->
-    <div class="settings-modes-div">
+        <!-- CUSTOM COUNTRIES -->
+        <div class="settings-modes-div">
 
-        <!--            <label for="touch">-->
-        <span class="settings-box-title">
+            <!--            <label for="touch">-->
+            <span class="settings-box-title">
                 <span class="settings-mode">Custom</span>
                 <span id="settings-country-options">
                     <span>Countries</span>
                     <i class="fa-solid fa-earth-europe"></i>
                 </span>
         </span>
-        <!--            </label>-->
-        <input type="checkbox" ><!--id="touch"-->
+            <!--            </label>-->
+            <input type="checkbox" ><!--id="touch"-->
 
 
-        <ul id="country-options-ul" class="slide">
+            <ul id="country-options-ul" class="slide">
 
-            <!-- SELECT ALL OPTION-->
-            <li id="select-all-country-li">
-                <p>Select All</p>
-                <div class="item">
-                    <div class="toggle-pill-color">
-                        <input type="checkbox" id="select-all-country-checkbox" name="check" onclick="selectAllCountries()">
-                        <label for="select-all-country-checkbox"></label>
+                <!-- SELECT ALL OPTION-->
+                <li id="select-all-country-li">
+                    <p>Select All</p>
+                    <div class="item">
+                        <div class="toggle-pill-color">
+                            <input type="checkbox" id="select-all-country-checkbox" name="check" onclick="selectAllCountries()">
+                            <label for="select-all-country-checkbox"></label>
+                        </div>
+                    </div>
+                </li>
+                <!-- SEARCH OPTION-->
+                <li>
+                    <input id="search-box" type="text" placeholder="Search Country" oninput="search(this)">
+                </li>
+
+            </ul>
+
+        </div>
+        <div class="settings-modes-div">
+
+            <div id="country-count-settings-box-title" class="settings-box-title">
+                <span class="settings-mode">Country Count</span>
+
+                <!-- COUNTRY COUNT INPUT -->
+                <div class="country-count-container" >
+                    <p>Country Count</p>
+                    <input size="1" maxlength="3" id="country-count" type="text" value="0" >
+                    <span id="country-count-message"></span>
+                </div>
+
+                <!-- ADD ONLY SELECTED COUNTRIES -->
+                <div class="country-count-container">
+                    <p>Add Only Selected Countries To Globe</p>
+                    <div class="item">
+                        <div id="add-selected-country-color" class="toggle-pill-color">
+                            <input type="checkbox" id="add-selected-country-checkbox" name="check">
+                            <label id="add-selected-country-label" for="add-selected-country-checkbox"></label>
+                        </div>
                     </div>
                 </div>
-            </li>
-            <!-- SEARCH OPTION-->
-            <li>
-                <input id="search-box" type="text" placeholder="Search Country" oninput="search(this)">
-            </li>
 
-        </ul>
-
-    </div>
-    <div class="settings-modes-div">
-
-        <div id="country-count-settings-box-title" class="settings-box-title">
-            <span class="settings-mode">Country Count</span>
-
-            <!-- COUNTRY COUNT INPUT -->
-            <div class="country-count-container" >
-                <p>Country Count</p>
-                <input size="1" maxlength="3" id="country-count" type="text" value="0" >
-                <span id="country-count-message"></span>
-            </div>
-
-            <!-- ADD ONLY SELECTED COUNTRIES -->
-            <div class="country-count-container">
-                <p>Add Only Selected Countries To Globe</p>
-                <div class="item">
-                    <div id="add-selected-country-color" class="toggle-pill-color">
-                        <input type="checkbox" id="add-selected-country-checkbox" name="check">
-                        <label id="add-selected-country-label" for="add-selected-country-checkbox"></label>
-                    </div>
-                </div>
             </div>
 
         </div>
 
+    </div>
 
 
+    <div class="play-button-div">
+
+        <input id="start-button" class="start-button btn" type="button" value="Find Waldo">
+        <input id="create-session-button" class="btn" type="button" onclick="playWithFriends()" value="Create Game">
+        <input id="join-session-button" class="btn" type="button" onClick="window.location.href = '/play/join'" value="Join Game">
     </div>
 
 </section>
-
 
 
 <!-- HINTS -->
@@ -272,22 +284,28 @@
 
         </div>
 
-
     </div>
-
 
     <div id="hints-div" class="hints-div"> </div>
 
 </div>
 
-<!-- LOADING SCREEN -->
+<!-- WAITING SCREEN FOR USERS -->
+<div id="session-wait-div" class="session-wait-div hide" >
 
+    <h1>0 / 10</h1>
+    <input id="session-start-button" class="start-button btn" type="button" value="Find Waldo">
+
+</div>
+
+<!-- LOADING SCREEN -->
 <div id="loader-container" class="loader-container">
     <div id="loader" class="loader"></div>
 </div>
 
 
-<input id="start-button" class="btn hide" type="button" value="Find Waldo">
+
+
 
 </body>
 </html>

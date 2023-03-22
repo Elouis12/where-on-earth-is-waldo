@@ -220,3 +220,164 @@ function search(element){
     }
 
 }
+
+
+async function playWithFriends() {
+
+    let gameOptions = {};
+
+    let gameMode = document.getElementById('settings-game-mode').children[0].innerText;
+    let extraGameMode = document.getElementById('settings-extra-game-mode').children[0].innerText;
+
+    gameOptions.gameMode = gameMode;
+    gameOptions.extraGameMode = extraGameMode;
+
+    let countryCount = document.getElementById('country-count').value;
+
+    // get all countries highlighted
+    let countries = document.getElementsByClassName('select-country');
+
+    // user selected a country count
+    if (parseInt(countryCount) > 0) {
+
+        gameOptions.countryCount = countryCount;
+
+    // user selected countries
+    } else if( countries.length > 0) {
+
+        let countriesArray = [];
+
+
+        // add them to the array
+        for (let x = 0; x < countries.length; x++) {
+
+            countriesArray[x] = countries[x].children[0].innerHTML;
+        }
+
+        gameOptions.countriesArray = countriesArray;
+
+    // tell user that count cannot be less than 1 or greater than 9
+    }else{
+
+        let messageParagraph = document.getElementById("country-count-message");
+
+        messageParagraph.innerText = `Count cannot be less than 1 or greater than ${ document.getElementsByClassName('country').length }`;
+        return; // user cannot successfully start game
+    }
+
+    let selectAllCountriesBox = document.getElementById("add-selected-country-checkbox");
+
+    gameOptions.addAllCountries = selectAllCountriesBox.checked;
+
+
+    localStorage.setItem("game-options", JSON.stringify(gameOptions));
+
+
+    console.log(localStorage.getItem('game-options'))
+
+    let getSessionID = await fetch(
+
+        "http://localhost:5000/create-session",
+        {
+            method: 'POST',
+            headers : {
+
+                'Content-type' : 'application/json'
+            },
+            body : JSON.stringify({
+                gameOptions: localStorage.getItem('game-options')
+            })
+        }
+    ).then(
+        resp => resp.json()
+    ).catch(
+        (e)=> console.log(e)
+    );
+
+    // take user to session
+    // window.location.href = `/play/session?id=${getSessionID}`;
+    window.location.href = `/session?id=${getSessionID}`;
+
+}
+
+// set options for creator and players in settings when connected
+function setOptions(){
+
+    let gameOptions = JSON.parse(localStorage.getItem('game-options'));
+
+    let gameModes = document.getElementById('game-modes-ul');
+
+    // select game mode
+    for( let x = 0; x < gameModes.children.length; x++ ){
+
+        if( gameModes.children[x].children[0].innerText === gameOptions.gameMode ){
+
+            gameModes.children[x].click();
+        }
+    }
+
+    // select extra game mode
+    let extraGameModes = document.getElementById('extra-game-modes-ul');
+
+    // select game mode
+    for( let x = 0; x < extraGameModes.children.length; x++ ){
+
+        if( extraGameModes.children[x].children[0].innerText === gameOptions.extraGameMode ){
+
+            extraGameModes.children[x].click();
+        }
+    }
+
+
+    // select country count or countries
+    let countryCountInput = document.getElementById('country-count');
+
+    // user selected a country count
+    if( gameOptions.countryCount && parseInt(gameOptions.countryCount) > 0 ){
+
+        countryCountInput.value = gameOptions.countryCount;
+
+    // user selected countries
+    }else{
+
+        // countries may not load in time to go through all
+        let checkAllCountriesLoaded = setInterval(()=>{
+
+            if( document.getElementById('country-options-ul').children.length >= 11 ){
+
+                // get all countries highlighted
+                let countries = document.getElementById('country-options-ul');
+
+                // skips search option li and select all toggle
+                for(  let x = 2; x < countries.children.length; x++ ){
+
+                    for( let y = 0; y < gameOptions.countriesArray.length; y++ ){
+
+                        if( countries.children[x].children[0].innerText === gameOptions.countriesArray[y] ){
+
+                            countries.children[x].click();
+
+                        }
+                    }
+
+                }
+
+                clearInterval(checkAllCountriesLoaded);
+
+            }
+        })
+
+    }
+
+    if( gameOptions.addAllCountries ){
+
+        let selectAllCountriesBox = document.getElementById("add-selected-country-checkbox");
+
+        selectAllCountriesBox.click();
+    }
+
+}
+
+
+
+

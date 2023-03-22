@@ -23,6 +23,7 @@ async function main(){
             // show actual screen
             document.getElementById("settings-box").classList.remove("hide");
             document.getElementById("start-button").classList.remove("hide");
+            document.getElementById("create-session-button").classList.remove("hide");
 
             document.getElementById("loader-container").classList.add("hide");
             document.getElementById("loader-container").classList.remove("loader-container");
@@ -32,23 +33,23 @@ async function main(){
             // load nav content
             let navMenu = document.getElementById('nav-menu');
 
-            // if user exits, display their name and remove sign up button
-            if( userInfo.length > 0 ){
+            // if user exists, display their name and remove sign up button
+            if( userInfo.length > 0 && navMenu != null ){
 
                 navMenu.innerHTML = `
                 
-                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../favicon.ico" alt=""></li>
+                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../assets/images/favicon.ico" alt=""></li>
                 <li id="stats-nav-item" class="nav-items" onclick="window.location ='/stats'">Stats</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
                 <li id="settings-nav-item" class="nav-items" onclick="window.location ='/settings'">Settings</li>
             
                 `;
 
-            }else{
+            }else /*if( userInfo.length <= 0 && navMenu != null )*/{
 
                 navMenu.innerHTML = `
                 
-                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../favicon.ico" alt=""></li>
+                <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../assets/images/favicon.ico" alt=""></li>
                 <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
                 <li id="login-nav-item" class="nav-items" onclick="window.location ='/login'">Login</li>
                 <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>

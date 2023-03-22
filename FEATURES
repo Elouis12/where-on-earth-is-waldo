@@ -58,3 +58,106 @@ ADDING 30 MINUTE INTERVAL FOR PASSWORD RESET REQUES
            if regular time - when user makes request at hour 12 and 30 minutes later it is at hour 1
 
            both ways we have to make checks to see, so tokens would be better
+
+
+
+
+ADDING MULTIPLAYER
+
+    FUNCTIONAL REQUIREMENTS
+
+        * user needs to be able to send unique link to up to x amount of people
+        * the link should be able to use a special token to see if valid link with the game options as the creator of the session
+        * have the sender be the only one to start the session
+        * minimum of 2 people are needed to start a session
+        * invalidate the link after x minutes of no new joiners
+        * on each connected user's screens, they should see everyone's progress
+        * there should be a timer
+        * have separate section in stats page to track multiplayer game's played
+        * creator is able to close the session
+        * if someone besides the creator ends the session, (as long as there's 2 people, creator and someone else ) the session continues
+        * if someone ends a session and the creator is left, the game resets the time of inactivity (from no one joining) before invalidating the link
+        * once someone is done and exits, it will save their stats
+        * show how many people are currently joined
+        * if the user is not logged in, they must give a name
+        * if the user is logged in, use their username
+        * users can create a session
+        * users can join a session
+
+
+    NON FUNCTIONAL REQUIREMENTS
+
+        * session id should be x characters long with a combination of numbers and letters
+        * when creator makes a session, store each unique session id's into a db with all the other information, creator, etc
+        * when a session is completely over, delete it from the db ( if 1 million people create sessions of 2 characters, there's a possibility we'll run out of combinations )
+        * when a user connects to a session, make API call to the db for that row and take the user to the play page with the info inserted
+        * when a user joins, update the column for the joined, that way it can validate if users are full
+
+CRC CARDS
+
+    CLASS
+
+
+        Server
+                [] responsibility
+                    * listen to client requests
+                    * establish connection when endpoint is connected
+
+                [] collaboration
+                    * ClientHandler
+
+                [] attributes
+
+                    * players[]
+                    * playerCount
+
+                [] methods
+
+                    isFull() - checks if session is full
+
+
+        ClientHandler -
+
+                [] responsibility
+                    * handle the connection of each
+
+                [] collaboration
+                    * Server
+
+                [] attributes
+
+                    * player
+
+                [] methods
+
+                    *
+
+
+// TO DO
+
+* remove checking for full room after testing and ready to finalize everything
+in applicationcontrollers.js and in serversocket.js
+
+
+* update scores, since the updating occurs when user clicks correct dot
+update the user's score there (globe.js in the intersect functions),
+then, maybe create a socket that goes to the server and say (update-score)
+it passess all of the users and their scores, sends it to the server, sorts them, and broadcasts to all sockets that are for the players and updates the order
+
+
+* there's an issue where each element has id="player-score"
+the issue is, it gets the first player score so if we have
+
+player 1 : 1 / 10
+player 2 : 0 / 10
+
+and player 2 got 1 right, it will only update player 2s
+
+
+* check if logged out user did not put same name as logged in user
+
+
+
+**** MAKE SURE LOGGED OUT USER DOES NOT PICK ANY USERNAMES IN THE DATA BASE CURRENTLY FOR REGISTERED USERS
+
+*** RETURN ACTUAL COUNT OF CURRENT USERS AND MAX USERS WHEN A USER EXITS

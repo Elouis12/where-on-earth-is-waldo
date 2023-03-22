@@ -2,6 +2,7 @@ let path = require('path');
 const jwt = require('./JWTAuthController');
 let {db} = require('../config/db');
 let {query} = require('../models/userModel.js');
+let {createSession} = require('../controllers/socketController');
 const dotEnv = require("dotenv");
 dotEnv.config();
 
@@ -495,6 +496,35 @@ let postStreak = async (req, resp) => {
 
 }
 
+
+let getCreatorSessionPage = async (req, resp) => {
+
+
+    if( req.query.issue === "game-started" ){
+
+        resp.sendFile(path.resolve(__dirname, '../public/session-started.html'));
+
+    }/*else if ( req.query.issue === "full" ){
+
+        resp.sendFile(path.resolve(__dirname, '../public/session-full.html'));
+
+    }*/else if( req.query.issue === "invalid" ){
+
+        resp.sendFile(path.resolve(__dirname, '../public/session-invalid.html'));
+
+    } else {
+
+        resp.sendFile(path.resolve(__dirname, '../public/session.html'));
+
+    }
+}
+
+let getJoinSessionPage = (req, resp)=>{
+
+    // resp.sendFile( path.resolve( __dirname, '../public/joinSession.html') );
+    resp.sendFile( path.resolve( __dirname, '../public/html/joinSession.html') );
+}
+
 module.exports = {
 
     getHomePage,
@@ -508,6 +538,9 @@ module.exports = {
     get404Page,
     postUserStats,
     getUserStats,
-    postStreak
+    postStreak,
+    getCreatorSessionPage,
+    getJoinSessionPage,
+    createSession,
 
 }

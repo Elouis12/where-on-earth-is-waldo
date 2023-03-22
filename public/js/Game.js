@@ -51,6 +51,7 @@ export class Game{
         let navBarContainer = document.getElementById("navbar-container");
         let settingsSection = document.getElementById("settings-box");
         let startButton = document.getElementById("start-button");
+        let sessionStartButton = document.getElementById("session-start-button");
 
          let listOfCountries = document.getElementsByClassName("select-country");
 
@@ -76,7 +77,7 @@ export class Game{
              let messageParagraph = document.getElementById("country-count-message");
 
              messageParagraph.innerText = `Count cannot be less than 1 or greater than ${ this.getSelectedCountries().length }`;
-             return;
+             return false; // user cannot successfully start game
          }
 
 
@@ -129,10 +130,13 @@ export class Game{
          // display / hide the elements
          settingsSection.style.visibility = "hidden";
          startButton.style.visibility = "hidden";
+         sessionStartButton.style.visibility = "hidden";
          hintsContainer.style.display = "flex";
          navBarContainer.style.visibility = "hidden";
 
 
+         // user can successfully start game
+         return true;
 
     }
 
@@ -702,6 +706,33 @@ export class Game{
         return arr;
     }
 
+/* RETURNS PLAYER SCORES { username : score } */
+
+    getPlayerScores(){
+
+
+        // update the specific player's score on list of players
+        let playerScore = document.getElementById(localStorage.getItem('session-name'));
+        let foundCountDiv = document.getElementById("found-count");
+        playerScore.innerText = foundCountDiv.innerText;
+
+        // get all the others including current player
+        let players = document.getElementsByClassName('player-name');
+        let scores = document.getElementsByClassName('player-score');
+
+        let playerScores = [];
+
+        for( let x = 0; x < players.length; x++ ){
+
+            // add to object
+            playerScores.push( { username : players[x].innerText, score : scores[x].innerText } )
+
+
+        }
+
+        return playerScores;
+
+    }
 }
 
 

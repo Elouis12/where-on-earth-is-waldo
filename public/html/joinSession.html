@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Join | Where on Earth is Waldo?</title>
+  <link type="text/css" rel="stylesheet" href="/css/session.css" />
+  <link type="text/css" rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <script type="module">
+
+    import {displayNameInput, joinSession, updateNav} from "../js/JoinSession.js";
+
+    document.getElementById('join-button').addEventListener('click', await joinSession);
+
+    window.addEventListener('load', await displayNameInput);
+
+    await updateNav();
+
+  </script>
+
+</head>
+<body>
+
+<main class="container">
+
+  <!--  NAV BAR  -->
+  <nav id="navbar">
+
+    <div id="menu-container">
+      <!--            <input id="toggle-button"  class="day" type="button" >-->
+    </div>
+
+    <div id="navbar-container">
+      <ul id="nav-menu">
+        <li id="home-nav-item" class="" onclick="window.location ='/'"><img class="home-img" src="../favicon.ico" alt=""></li>
+        <li id="signup-nav-item" class="nav-items" onclick="window.location ='/register'">Sign Up</li>
+        <li id="about-nav-item" class="nav-items" onclick="window.location ='/about'">About</li>
+      </ul>
+    </div>
+
+  </nav>
+
+  <form class="join-container">
+
+    <div class="join-items">
+
+      <div class="join-items-header">
+        <h1 class="header-title">Join</h1>
+      </div>
+
+      <div class="input-container">
+
+        <div class="input-container-items" >
+
+          <div class="icon-container">
+            <i class="fa-solid fa-user"></i>
+          </div>
+
+          <input id="join-input" class="join-input" type="text" placeholder="Session Number" />
+
+          <div class="issue-container">
+            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+            <span class="issue-message hideVisibility"></span>
+          </div>
+
+        </div>
+
+        <div class="input-container-items" >
+
+          <div class="icon-container">
+            <i class="fa-solid fa-user"></i>
+          </div>
+
+          <input id="name-input" class="join-input" type="text" placeholder="User Name" />
+
+          <div class="issue-container">
+            <i class="fa-solid fa-exclamation-circle hideVisibility"></i>
+            <span class="issue-message hideVisibility"></span>
+          </div>
+
+        </div>
+
+        <input id="join-button" type="button" class="join-button" value="Join">
+
+      </div>
+
+    </div>
+
+  </form>
+
+</main>
+
+</body>
+</html>
