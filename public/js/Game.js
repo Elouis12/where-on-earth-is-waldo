@@ -577,7 +577,8 @@ export class Game{
 
         // SET HINTS LEFT COUNT
         remainingHintsCount.innerHTML =
-            hintsDiv.children.length === this.#countriesQueue[0].facts.length ? // hints div is filled up with the facts
+            // hintsDiv.children.length === this.#countriesQueue[0].facts.length ? // hints div is filled up with the facts
+            hintsDiv.children.length === this.getSelectedCountries()[0].facts.length ? // hints div is filled up with the facts
                 0 // put 0
                 :
                 ( this.#countriesQueue[0].facts.length - hintsDiv.children.length ) - 1 ; // -1 because we put 1 hint into the div already
