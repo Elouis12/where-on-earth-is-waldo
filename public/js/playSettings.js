@@ -277,7 +277,7 @@ async function playWithFriends() {
 
     let getSessionID = await fetch(
 
-        "http://localhost:5000/create-session",
+        "/create-session",
         {
             method: 'POST',
             headers : {
