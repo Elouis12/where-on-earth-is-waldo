@@ -372,28 +372,29 @@ export class Globe {
                         // set color of already used countries
                         intersects[0].object.material.color.setHex(this.#blackHexValue);
 
-                        // multiplayer game has started
-                        if(  window.location.href.includes("id") ){
+                    }
 
-                            let socket = io();
+                    // regardless if elimination mode, regular mode, or any mode
+                    // multiplayer game has started
+                    if(  window.location.href.includes("id") ){
 
-                            let gameOver = this.game.getSelectedCountries().length === 0;
+                        let socket = io();
 
-                            let playerScores = this.game.getPlayerScores();
+                        let gameOver = this.game.getSelectedCountries().length === 0;
 
-                            let sessionID = window.location.href.split("=")[1];
+                        let playerScores = this.game.getPlayerScores();
+
+                        let sessionID = window.location.href.split("=")[1];
 
 
-                            // get players will send error if not doing multiplayer
-                            socket.emit('update-scores',
-                                {
-                                    sessionID : sessionID,
-                                    scores : playerScores,
-                                    gameOver : gameOver
-                                }
-                            );
-
-                        }
+                        // get players will send error if not doing multiplayer
+                        socket.emit('update-scores',
+                            {
+                                sessionID : sessionID,
+                                scores : playerScores,
+                                gameOver : gameOver
+                            }
+                        );
 
                     }
 
