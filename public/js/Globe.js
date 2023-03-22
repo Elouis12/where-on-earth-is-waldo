@@ -303,7 +303,11 @@ export class Globe {
             // so prevent it by disabling other objects from being clicked
             if( !document.getElementById('next-round-button').classList.contains('hide')
                     ||
-                !document.getElementById('winner-container').classList.contains('hideVisibility')
+
+                (   document.getElementById("winner-container") !== null
+                        &&
+                    !document.getElementById('winner-container').classList.contains('hideVisibility')
+                )
                 ){
 
                 return;
@@ -416,7 +420,8 @@ export class Globe {
                     this.game.updateAttemptsCountDiv();
 
                     // show the blinking text
-                    if (this.game.timesWrong === 3) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
+                    // of current country
+                    if (/*this.game.timesWrong === 3*/  this.game.getSelectedCountries()[0]["attempts"] === 0 ) {  // that way when it increases the count to 4 it won't re-loop the array and set the color again
 
                         document.getElementById("show-answer").classList.remove("hide");
                         document.getElementById("found-span").classList.add("hide");

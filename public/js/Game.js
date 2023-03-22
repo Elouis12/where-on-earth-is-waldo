@@ -404,6 +404,7 @@ export class Game{
         this.#countriesQueue = countriesData.slice(); // now that its set
         this.#countriesTemp = countriesData.slice(); // now that its set
 
+
         const setListToCountries = document.getElementById("country-options-ul");
 
         for( let x = 0; x < this.#countriesQueue.length; x+=1 ){
@@ -431,6 +432,12 @@ export class Game{
 
             }
 
+            // SET ATTEMPTS
+            if( true /*difficulty == easy use 3 hints*/ ){
+
+                this.#countriesTemp[x]["attempts"] = 3;
+            }
+
         }
 
     }
@@ -445,7 +452,7 @@ export class Game{
         this.#hideBlinkingText();
 
         this.#resetAttempts();
-        this.updateAttemptsCountDiv();
+
 
 
         let foundSpan = document.getElementById("found-span");
@@ -466,6 +473,9 @@ export class Game{
 
         this.#displayTextAccordingToGameMode( this.#getGameMode() );
 
+
+        // once everything is updated and next country is populated
+        this.updateAttemptsCountDiv();
 
     }
 
@@ -488,7 +498,6 @@ export class Game{
         this.#hideBlinkingText();
 
         this.#resetAttempts();
-        this.updateAttemptsCountDiv();
 
 
         let foundSpan = document.getElementById("found-span");
@@ -515,6 +524,10 @@ export class Game{
             this.#displayTextAccordingToGameMode( this.#getGameMode() );
 
         }
+
+        // once everything is populated
+        this.updateAttemptsCountDiv();
+
 
     }
 
@@ -658,7 +671,8 @@ export class Game{
 
         let attemptSpan = document.getElementById("attempt-count");
 
-        attemptSpan.innerText = 3 - this.timesWrong;
+        // attemptSpan.innerText = 3 - this.timesWrong;
+        attemptSpan.innerText = this.getSelectedCountries()[0]["attempts"];
     }
 
     #updateFoundCountDiv(){
