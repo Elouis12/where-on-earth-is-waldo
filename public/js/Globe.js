@@ -417,6 +417,9 @@ export class Globe {
 
                     this.game.timesWrong++;
 
+                    // reduce attempts
+                    --this.game.getSelectedCountries()[0]["attempts"];
+
                     this.game.updateAttemptsCountDiv();
 
                     // show the blinking text
