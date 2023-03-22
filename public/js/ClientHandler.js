@@ -107,14 +107,15 @@ export class ClientHandler {
 
             }
 
-            // winner, let globe know to stop dots form being clicked,
-            // let users who are logged in save their win, if they win
-            if( data.gameOver ){
+            // if who ever send the update request (after getting a correct choice)
+            // check the sender against the first person
+            // if the sender is the first person and the game is over, make them
+
+            if(  ( data.scores[0].username === data.sender ) && data.gameOver ){
 
                 // send user who won
                 this.#socket.emit("winner", { sessionID : this.#sessionID, username : data.scores[0].username } );
 
-                // send an event to remove all users in current session and the session itself
             }
 
         })

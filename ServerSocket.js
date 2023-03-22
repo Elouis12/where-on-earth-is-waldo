@@ -250,7 +250,7 @@ let establishSocketConnection = (server)=>{
             console.log("game over? " + data.gameOver);
 
             // send back the sorted scores to all client sockets
-            io.to(sessionID).emit('sorted-scores', { scores : data.scores, gameOver : data.gameOver});
+            io.to(sessionID).emit('sorted-scores', { scores : data.scores, gameOver : data.gameOver, sender : data.sender });
         })
 
 

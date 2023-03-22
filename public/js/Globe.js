@@ -380,6 +380,16 @@ export class Globe {
 
                         let socket = io();
 
+                        /*
+                            game over is when first place person finished all their boxes
+
+                            add an additional protperty called sender
+
+                            so in function that checks for winners we can
+
+                            check if the sender matches who's 1st, if it matches, check aslo that the gameOver value is true (array.szie == 0)
+
+                        */
                         let gameOver = this.game.getSelectedCountries().length === 0;
 
                         let playerScores = this.game.getPlayerScores();
@@ -392,7 +402,8 @@ export class Globe {
                             {
                                 sessionID : sessionID,
                                 scores : playerScores,
-                                gameOver : gameOver
+                                gameOver : gameOver,
+                                sender : localStorage.getItem("session-name")
                             }
                         );
 

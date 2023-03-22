@@ -161,3 +161,9 @@ and player 2 got 1 right, it will only update player 2s
 **** MAKE SURE LOGGED OUT USER DOES NOT PICK ANY USERNAMES IN THE DATA BASE CURRENTLY FOR REGISTERED USERS
 
 *** RETURN ACTUAL COUNT OF CURRENT USERS AND MAX USERS WHEN A USER EXITS
+
+* possible issue on why number of clients does not update correctly
+
+    client 1 : establish a connection but takes too long to load and send 0 + 1 = 1 connected
+    client 2 : established, since client 2 did not connect yet, it sends 1 but once client 1 finishes it reupdates it to 1?
+    probably not
